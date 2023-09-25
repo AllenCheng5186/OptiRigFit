@@ -4,15 +4,17 @@ public class Cpu {
     private String name;
     private int basePower;
     private double price;
-    private CpuManufacturer manufacturer;
+    private CpuMfr cpuMfr;
     private boolean integratedGraphics;
+    private int score;
 
-    public Cpu(String name, int basePower, double price, CpuManufacturer manufacturer) {
+    public Cpu(String name, int basePower, double price, CpuMfr manufacturer, int score) {
         this.name = name;
         this.basePower = basePower;
         this.price = price;
-        this.manufacturer = manufacturer;
+        this.cpuMfr = manufacturer;
         this.integratedGraphics = !name.contains("F");
+        this.score = score;
     }
 
 
@@ -29,11 +31,15 @@ public class Cpu {
         return price;
     }
 
-    public CpuManufacturer getManufacturer() {
-        return manufacturer;
+    public CpuMfr getCpuMfr() {
+        return cpuMfr;
     }
 
     public boolean hasIntegratedGraphics() {
         return integratedGraphics;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

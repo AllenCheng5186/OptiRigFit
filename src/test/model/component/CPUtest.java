@@ -1,7 +1,7 @@
 package model.component;
 
 import model.component.Cpu.Cpu;
-import model.component.Cpu.CpuManufacturer;
+import model.component.Cpu.CpuMfr;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,24 +13,26 @@ public class CPUtest {
 
     @BeforeEach
     void setUpBeforeEachTest() {
-        testCpuWithIG = new Cpu("i9-13900K", 125, 758.00, CpuManufacturer.INTEL);
-        testCpuWithoutIG = new Cpu("i9-13900KF", 125, 718.00, CpuManufacturer.INTEL);
+        testCpuWithIG = new Cpu("i9-13900K", 150, 949.00, CpuMfr.INTEL, 62014);
+        testCpuWithoutIG = new Cpu("i9-13900KF", 125, 718.00, CpuMfr.INTEL, 59017);
     }
 
     @Test
     void testConstructor() {
         //test CPU i9-13900K
         assertEquals("i9-13900K", testCpuWithIG.getName());
-        assertEquals(125, testCpuWithIG.getBasePower());
-        assertEquals(758.00, testCpuWithIG.getPrice());
-        assertEquals(CpuManufacturer.INTEL, testCpuWithIG.getManufacturer());
+        assertEquals(150, testCpuWithIG.getBasePower());
+        assertEquals(949.00, testCpuWithIG.getPrice());
+        assertEquals(CpuMfr.INTEL, testCpuWithIG.getCpuMfr());
         assertTrue(testCpuWithIG.hasIntegratedGraphics());
+        assertEquals(62014, testCpuWithIG.getScore());
         //test CPU i9-13900KF
         assertEquals("i9-13900KF", testCpuWithoutIG.getName());
         assertEquals(125, testCpuWithoutIG.getBasePower());
         assertEquals(718.00, testCpuWithoutIG.getPrice());
-        assertEquals(CpuManufacturer.INTEL, testCpuWithoutIG.getManufacturer());
+        assertEquals(CpuMfr.INTEL, testCpuWithoutIG.getCpuMfr());
         assertFalse(testCpuWithoutIG.hasIntegratedGraphics());
+        assertEquals(59017, testCpuWithoutIG.getScore());
     }
 
 }
