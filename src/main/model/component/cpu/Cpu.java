@@ -1,4 +1,4 @@
-package model.component.Cpu;
+package model.component.cpu;
 
 public class Cpu {
     private String name;

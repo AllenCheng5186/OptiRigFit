@@ -1,7 +1,7 @@
 package model.component;
 
-import model.component.Cpu.Cpu;
-import model.component.Cpu.CpuMfr;
+import model.component.cpu.Cpu;
+import model.component.cpu.CpuMfr;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
