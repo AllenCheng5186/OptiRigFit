@@ -21,6 +21,12 @@ public class MotherboardList {
         Collections.sort(listAllMotherboard);
     }
 
+    // getter
+    public List<Motherboard> getListAllMotherboard() {
+        return listAllMotherboard;
+    }
+
+
     public void addAllZ790Motherboard1(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus ROG MAXIMUS Z690 APEX",
                         LGA1700, ATX, 96, 2, 1483.65),
