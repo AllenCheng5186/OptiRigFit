@@ -26,7 +26,8 @@ public class MotherboardList {
         return listAllMotherboard;
     }
 
-
+    //MODIFIES: List<Motherboard>
+    // EFFECTS: add all ASUS LGA1700 Chipset Motherboard to given list
     public void addAllZ790Motherboard1(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus ROG MAXIMUS Z690 APEX",
                         LGA1700, ATX, 96, 2, 1483.65),
