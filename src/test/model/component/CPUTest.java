@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CPUtest {
+public class CPUTest {
     private Cpu testCpuWithIG;
     private Cpu testCpuWithoutIG;
 
@@ -25,14 +25,14 @@ public class CPUtest {
         assertEquals(949.00, testCpuWithIG.getPrice());
         assertEquals(CpuMfr.INTEL, testCpuWithIG.getCpuMfr());
         assertTrue(testCpuWithIG.hasIntegratedGraphics());
-        assertEquals(62014, testCpuWithIG.getScore());
+        assertEquals(62014, testCpuWithIG.getBenchMark());
         //test CPU i9-13900KF
         assertEquals("i9-13900KF", testCpuWithoutIG.getName());
         assertEquals(125, testCpuWithoutIG.getBasePower());
         assertEquals(718.00, testCpuWithoutIG.getPrice());
         assertEquals(CpuMfr.INTEL, testCpuWithoutIG.getCpuMfr());
         assertFalse(testCpuWithoutIG.hasIntegratedGraphics());
-        assertEquals(59017, testCpuWithoutIG.getScore());
+        assertEquals(59017, testCpuWithoutIG.getBenchMark());
     }
 
 }

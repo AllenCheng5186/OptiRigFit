@@ -7,7 +7,15 @@ PC performance.
 
 ### Table of Contents
 - [User Stories Records](#user-story)
+- [Data Sources](#data-sources)
 
 
 ## User Story
-
+ 
+## Data Sources
+- Prices Reference: (CAD$)：https://amazon.ca 
+- CPU:
+  - Intel: https://ark.intel.com/content/www/us/en/ark.html#@PanelLabel122139
+  - AMD: https://www.amd.com/en/products/specifications/processors
+- Motherboard:
+  

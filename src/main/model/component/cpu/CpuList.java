@@ -5,15 +5,42 @@ import java.util.Collections;
 import java.util.List;
 
 public class CpuList {
+
     private List<Cpu> listAllCpu;
 
+    //EFFECTS: construct a CpuList object which store the list of CPUs on sale,
+    // which sorted along CPU's benchmark
     public CpuList() {
         this.listAllCpu = new ArrayList<>();
         addListIntel13Cpu(listAllCpu);
         addListIntel12Cpu(listAllCpu);
         addListAmdCpu(listAllCpu);
+        Collections.sort(listAllCpu);
     }
 
+    //REQUIRE: upperPrice > downPrice
+    //EFFECTS: return a list of CPUs those prices in the given interval
+    public List<Cpu> filterCPUsPriceInterval(List<Cpu> cpuList, double upperPrice, double downPrice) {
+        List<Cpu> priceWithinIntervalCpus = new ArrayList<>();
+        for (Cpu cpu : cpuList) {
+            if (upperPrice >= cpu.getPrice() && cpu.getPrice() >= downPrice) {
+                priceWithinIntervalCpus.add(cpu);
+            }
+        }
+
+        return priceWithinIntervalCpus;
+    }
+
+
+
+
+    // getter
+    public List<Cpu> getListAllCpu() {
+        return listAllCpu;
+    }
+
+    //MODIFIES: List<Cpu>
+    //EFFECTS: add the list of 13th Intel Core CPUs to the given list
     public void addListIntel13Cpu(List<Cpu> listAllCpu) {
         // 13th Intel Core CPU
         Cpu cpu13900ks = new Cpu("i9-13900KS", 150, 949.00, CpuMfr.INTEL, 62014);
@@ -36,6 +63,8 @@ public class CpuList {
                 cpu13700, cpu13600k, cpu13600kf, cpu13500, cpu13400f, cpu13400, cpu13100, cpu13100f);
     }
 
+    //MODIFIES: List<Cpu>
+    //EFFECTS: add the list of 12th Intel Core CPUs to the given list
     public void addListIntel12Cpu(List<Cpu> listAllCpu) {
         // 12th Intel Core CPU
         Cpu cpu12900ks = new Cpu("i9-12900KS", 150, 587.99, CpuMfr.INTEL, 44307);
@@ -58,6 +87,8 @@ public class CpuList {
                 cpu12700, cpu12600k, cpu12600kf, cpu12500, cpu12500, cpu12400f, cpu12400, cpu12100, cpu12100f);
     }
 
+    //MODIFIES: List<Cpu>
+    //EFFECTS: add the list of AMD 7000 series Ryzen CPUs to the given list
     public void addListAmdCpu(List<Cpu> listAllCpu) {
         // AMD 7000 Series
         Cpu cpu7950x = new Cpu("R9-7950X", 170, 749.99, CpuMfr.AMD, 63380);

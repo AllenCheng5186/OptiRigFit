@@ -1,22 +1,30 @@
 package model.component.cpu;
 
-public class Cpu {
+public class Cpu implements Comparable<Cpu> {
     private String name;
     private int basePower;
     private double price;
     private CpuMfr cpuMfr;
     private boolean integratedGraphics;
-    private int score;
+    private int benchMark;
 
-    public Cpu(String name, int basePower, double price, CpuMfr manufacturer, int score) {
+    //EFFECTS: construct a CPU object with given name, baser power,
+    // price, manufacturer and benchmark
+    public Cpu(String name, int basePower, double price, CpuMfr manufacturer, int benchMark) {
         this.name = name;
         this.basePower = basePower;
         this.price = price;
         this.cpuMfr = manufacturer;
         this.integratedGraphics = !name.contains("F");
-        this.score = score;
+        this.benchMark = benchMark;
     }
 
+    //EFFECTS: return the difference between CPU object given benchmark
+    // and this object's benchmark for sorting CPUs in list of CPUs
+    @Override
+    public int compareTo(Cpu o) {
+        return o.getBenchMark() - this.benchMark;
+    }
 
     // getter
     public String getName() {
@@ -39,7 +47,8 @@ public class Cpu {
         return integratedGraphics;
     }
 
-    public int getScore() {
-        return score;
+    public int getBenchMark() {
+        return benchMark;
     }
+
 }
