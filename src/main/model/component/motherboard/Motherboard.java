@@ -23,11 +23,11 @@ public class Motherboard implements Comparable<Motherboard> {
     @Override
     public int compareTo(Motherboard o) {
         if (o.getPrice() > this.price) {
-            return -1;
+            return 1;
         } else if (o.getPrice() == this.price) {
             return 0;
         } else {
-            return 1;
+            return -1;
         }
     }
 

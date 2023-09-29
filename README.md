@@ -25,6 +25,7 @@ Java Desktop App
   - AMD 7000 series Ryzen Desktop CPU
 - Motherboard:
   - ASUS: LGA1700 Z690 H670 B660 Z790 H770 B760
+  - ASUS: AM5 X670 B650 B620 on sale
 
 
 ## User Story

@@ -5,20 +5,55 @@ import java.util.Collections;
 import java.util.List;
 
 import static model.component.motherboard.FormSize.*;
+import static model.component.motherboard.Socket.AM5;
 import static model.component.motherboard.Socket.LGA1700;
 
 public class MotherboardList {
     private List<Motherboard> listAllMotherboard;
 
+    //EFFECTS: construct a MotherboardList object which contains all motherboard objects
     public MotherboardList() {
         listAllMotherboard = new ArrayList<>();
-        addAllZ790Motherboard1(listAllMotherboard);
-        addAllZ790Motherboard2(listAllMotherboard);
-        addAllZ790Motherboard3(listAllMotherboard);
-        addAllZ790Motherboard4(listAllMotherboard);
-        addAllZ790Motherboard5(listAllMotherboard);
-        addAllZ790Motherboard6(listAllMotherboard);
-        Collections.sort(listAllMotherboard);
+        addAllLGA1700Motherboard1(listAllMotherboard);
+        addAllLGA1700Motherboard2(listAllMotherboard);
+        addAllLGA1700Motherboard3(listAllMotherboard);
+        addAllLGA1700Motherboard4(listAllMotherboard);
+        addAllLGA1700Motherboard5(listAllMotherboard);
+        addAllLGA1700Motherboard6(listAllMotherboard);
+        addAllAM5Motherboards1(listAllMotherboard);
+        addAllAM5Motherboards2(listAllMotherboard);
+
+        sortMotherboardsByDecreasePrice(listAllMotherboard);
+    }
+
+    //MODIFIES: List<Motherboard>
+    //EFFECTS: filter the given list of motherboards that only has right socket
+    public List<Motherboard> filterRightSocketMotherboard(List<Motherboard> listOfMotherboard, Socket socket) {
+        List<Motherboard> rightSocketMotherboards = new ArrayList<>();
+        for (Motherboard motherboard : listOfMotherboard) {
+            if (motherboard.getSocket() == socket) {
+                rightSocketMotherboards.add(motherboard);
+            }
+        }
+        return rightSocketMotherboards;
+    }
+
+    //MODIFIES: List<Motherboard>
+    //EFFECTS: filter the given list of motherboards those are same as given form factor
+    public List<Motherboard> filterRightFormSizeMotherboards(List<Motherboard> listOfMotherboard, FormSize formSize) {
+        List<Motherboard> rightFromSizeMotherboards = new ArrayList<>();
+        for (Motherboard motherboard : listOfMotherboard) {
+            if (motherboard.getFormSize() == formSize) {
+                rightFromSizeMotherboards.add(motherboard);
+            }
+        }
+        return rightFromSizeMotherboards;
+    }
+
+    //MODIFIES: List<Motherboard>
+    //EFFECTS: sort the given list of motherboard by price from high to low
+    public void sortMotherboardsByDecreasePrice(List<Motherboard> listOfMotherboard) {
+        Collections.sort(listOfMotherboard);
     }
 
     // getter
@@ -27,8 +62,8 @@ public class MotherboardList {
     }
 
     //MODIFIES: List<Motherboard>
-    // EFFECTS: add all ASUS LGA1700 Chipset Motherboard to given list
-    public void addAllZ790Motherboard1(List<Motherboard> listOfMotherboard) {
+    // EFFECTS: add all ASUS LGA1700 and AM5 Chipset Motherboards to given list
+    public void addAllLGA1700Motherboard1(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus ROG MAXIMUS Z690 APEX",
                         LGA1700, ATX, 96, 2, 522.39),
                 new Motherboard("Asus ROG MAXIMUS Z690 EXTREME",
@@ -53,33 +88,33 @@ public class MotherboardList {
                         LGA1700, ATX, 192, 4, 499.00));
     }
 
-    public void addAllZ790Motherboard2(List<Motherboard> listOfMotherboard) {
+    public void addAllLGA1700Motherboard2(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard,
                 new Motherboard("Asus ROG STRIX Z790-A GAMING WIFI",
-                        LGA1700, ATX, 192, 4, 458.99),
+                        LGA1700, ATX, 192, 4, 395.00),
                 new Motherboard("Asus TUF GAMING Z790-PLUS D4",
-                        LGA1700, ATX, 128, 4, 447.78),
+                        LGA1700, ATX, 128, 4, 299.99),
                 new Motherboard("Asus ROG STRIX B660-G GAMING WIFI",
-                        LGA1700, MATX, 128, 4, 440.10),
+                        LGA1700, MATX, 128, 4, 516.94),
                 new Motherboard("Asus ROG STRIX B660-I GAMING WIFI",
-                        LGA1700, ITX, 96, 2, 427.95),
+                        LGA1700, ITX, 96, 2, 449.73),
                 new Motherboard("Asus ROG STRIX Z790-A GAMING D4",
                         LGA1700, ATX, 128, 4, 425.24),
                 new Motherboard("Asus ROG STRIX Z690-G GAMING",
-                        LGA1700, MATX, 128, 4, 404.30),
+                        LGA1700, MATX, 128, 4, 369.99),
                 new Motherboard("Asus PRIME Z790-A WIFI",
-                        LGA1700, ATX, 192, 4, 392.84),
+                        LGA1700, ATX, 192, 4, 409.00),
                 new Motherboard("Asus TUF GAMING Z690-PLUS WIFI D4",
-                        LGA1700, ATX, 128, 4, 392.23),
+                        LGA1700, ATX, 128, 4, 249.00),
                 new Motherboard("Asus TUF GAMING Z690-PLUS D4",
                         LGA1700, ATX, 128, 4, 373.53),
                 new Motherboard("Asus ROG STRIX Z790-H GAMING",
-                        LGA1700, ATX, 192, 4, 370.83),
+                        LGA1700, ATX, 192, 4, 311.99),
                 new Motherboard("Asus ROG STRIX B660-F GAMING WIFI",
                         LGA1700, ATX, 192, 4, 368.50));
     }
 
-    public void addAllZ790Motherboard3(List<Motherboard> listOfMotherboard) {
+    public void addAllLGA1700Motherboard3(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus ROG STRIX B660-A GAMING WIFI",
                         LGA1700, ATX, 128, 4, 353.31),
                 new Motherboard("Asus ROG STRIX Z690-I GAMING WIFI",
@@ -104,7 +139,7 @@ public class MotherboardList {
                         LGA1700, ATX, 192, 4, 310.49));
     }
 
-    public void addAllZ790Motherboard4(List<Motherboard> listOfMotherboard) {
+    public void addAllLGA1700Motherboard4(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus ROG STRIX B760-I GAMING",
                         LGA1700, ITX, 96, 2, 302.41),
                 new Motherboard("Asus TUF GAMING B760-PLUS WIFI",
@@ -129,7 +164,7 @@ public class MotherboardList {
                         LGA1700, MATX, 64, 2, 267.29));
     }
 
-    public void addAllZ790Motherboard5(List<Motherboard> listOfMotherboard) {
+    public void addAllLGA1700Motherboard5(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus PRIME Z790M-PLUS D4",
                         LGA1700, MATX, 128, 4, 260.55),
                 new Motherboard("Asus TUF GAMING B760M-PLUS WIFI",
@@ -154,7 +189,7 @@ public class MotherboardList {
                         LGA1700, MATX, 64, 2, 180.23));
     }
 
-    public void addAllZ790Motherboard6(List<Motherboard> listOfMotherboard) {
+    public void addAllLGA1700Motherboard6(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus PRIME H610M-D D4",
                         LGA1700, MATX, 64, 2, 165.44),
                 new Motherboard("Asus PRIME H610I-PLUS D4-CSM",
@@ -175,5 +210,44 @@ public class MotherboardList {
                         LGA1700, ATX, 192, 4, 303.74),
                 new Motherboard("Asus PRIME Z790M-PLUS",
                         LGA1700, MATX, 192, 4, 263.24));
+    }
+
+    public void addAllAM5Motherboards1(List<Motherboard> lisOfMotherboard) {
+        Collections.addAll(lisOfMotherboard, new Motherboard("Asus ROG CROSSHAIR X670E HERO",
+                AM5, ATX, 192, 4, 789.98),
+                new Motherboard("Asus ROG CROSSHAIR X670E GENE", AM5, MATX,
+                        96, 2, 799.99),
+                new Motherboard("Asus ROG STRIX X670E-E GAMING WIFI", AM5, ATX,
+                        192, 4, 638.98),
+                new Motherboard("Asus ProArt X670E-CREATOR WIFI", AM5, ATX,
+                        192, 4, 559.99),
+                new Motherboard("Asus ROG STRIX X670E-I GAMING WIFI", AM5, ITX,
+                        96, 2, 579.99),
+                new Motherboard("Asus ROG STRIX X670E-F GAMING WIFI", AM5, ATX,
+                        192, 4, 594.99),
+                new Motherboard("Asus ROG STRIX X670E-A GAMING WIFI", AM5, ATX,
+                        192,4, 529.00),
+                new Motherboard("Asus TUF GAMING X670E-PLUS WIFI", AM5, ATX,
+                        192, 4, 407.55),
+                new Motherboard("Asus ROG STRIX B650E-E GAMING WIFI", AM5, ATX,
+                        192, 4, 449.99),
+                new Motherboard("Asus PRIME X670E-PRO WIFI", AM5, ATX,
+                        192,4, 469.00),
+                new Motherboard("Asus ROG STRIX B650E-I GAMING WIFI", AM5, ITX,
+                        96, 2,429.00));
+    }
+
+    public void addAllAM5Motherboards2(List<Motherboard> lisOfMotherboard) {
+        Collections.addAll(lisOfMotherboard, new Motherboard("Asus TUF GAMING X670E-PLUS WIFI", AM5, ATX,
+                        192, 4, 429.00),
+                new Motherboard("Asus ROG STRIX B650-A GAMING WIFI", AM5, ATX,
+                        192, 4, 299.99),
+                new Motherboard("Asus PRIME X670-P WIFI", AM5, ATX,
+                        192, 4, 394.99),
+                new Motherboard("Asus ROG STRIX B650E-F GAMING WIFI", AM5, ATX,
+                        192, 4, 379.99),
+                new Motherboard("Asus TUF GAMING B650-PLUS WIFI", AM5, ATX,
+                        128, 4, 275.49),
+                new Motherboard("Asus PRIME B650M-A AX", AM5, MATX, 128, 4, 232.16));
     }
 }
