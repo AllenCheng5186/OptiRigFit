@@ -8,6 +8,8 @@ public class Motherboard implements Comparable<Motherboard> {
     private int ramSlot;
     private double price;
 
+    //EFFECTS: constructor a MotherBoard object with given name, socket factor,
+    // form factor, maximum ram capacity, number of ram slots, and selling price.
     public Motherboard(String name, Socket socket, FormSize formSize, int maxRam, int ramSlot, double price) {
         this.name = name;
         this.socket = socket;
@@ -17,11 +19,12 @@ public class Motherboard implements Comparable<Motherboard> {
         this.price = price;
     }
 
+
     @Override
     public int compareTo(Motherboard o) {
-        if (o.getPrice() - this.price < 0) {
+        if (o.getPrice() > this.price) {
             return -1;
-        } else if (o.getPrice() - this.price == 0) {
+        } else if (o.getPrice() == this.price) {
             return 0;
         } else {
             return 1;

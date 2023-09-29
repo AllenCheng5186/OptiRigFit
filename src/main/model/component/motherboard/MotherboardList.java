@@ -30,27 +30,27 @@ public class MotherboardList {
     // EFFECTS: add all ASUS LGA1700 Chipset Motherboard to given list
     public void addAllZ790Motherboard1(List<Motherboard> listOfMotherboard) {
         Collections.addAll(listOfMotherboard, new Motherboard("Asus ROG MAXIMUS Z690 APEX",
-                        LGA1700, ATX, 96, 2, 1483.65),
+                        LGA1700, ATX, 96, 2, 522.39),
                 new Motherboard("Asus ROG MAXIMUS Z690 EXTREME",
-                        LGA1700, EATX, 192, 4, 1402.64),
+                        LGA1700, EATX, 192, 4, 1484.99),
                 new Motherboard("Asus ROG MAXIMUS Z690 FORMULA",
-                        LGA1700, ATX, 192, 4, 1077.42),
+                        LGA1700, ATX, 192, 4, 693.39),
                 new Motherboard("Asus ROG MAXIMUS EVA-02 EDITION Z790 HERO",
                         LGA1700, ATX, 192, 4, 944.99),
                 new Motherboard("Asus ProArt Z690-CREATOR WIFI",
-                        LGA1700, ATX, 192, 4, 889.65),
+                        LGA1700, ATX, 192, 4, 584.99),
                 new Motherboard("Asus MAXIMUS Z690 HERO EVA",
-                        LGA1700, ATX, 128, 4, 812.31),
+                        LGA1700, ATX, 128, 4, 749.00),
                 new Motherboard("Asus ROG MAXIMUS Z790 HERO",
-                        LGA1700, ATX, 192, 4, 771.66),
+                        LGA1700, ATX, 192, 4, 789.98),
                 new Motherboard("Asus ROG STRIX Z790-E GAMING WIFI",
-                        LGA1700, ATX, 192, 4, 607.49),
+                        LGA1700, ATX, 192, 4, 559.00),
                 new Motherboard("Asus ProArt Z790-CREATOR WIFI",
-                        LGA1700, ATX, 192, 4, 593.99),
+                        LGA1700, ATX, 192, 4, 569.00),
                 new Motherboard("Asus ROG STRIX Z790-I GAMING WIFI",
-                        LGA1700, ITX, 96, 2, 585.68),
+                        LGA1700, ITX, 96, 2, 555.10),
                 new Motherboard("Asus ROG STRIX Z790-F GAMING WIFI",
-                        LGA1700, ATX, 192, 4, 499.49));
+                        LGA1700, ATX, 192, 4, 499.00));
     }
 
     public void addAllZ790Motherboard2(List<Motherboard> listOfMotherboard) {
