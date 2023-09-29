@@ -6,8 +6,25 @@ and achieve optimal PC performance.
 
 
 ### Table of Contents
+- [Database Coverage](#database-coverage-sept-28th-2023)
+- [Installation & Manual](#installation--manual)
 - [User Stories Records](#user-story)
 - [Data Sources](#data-sources)
+
+## Installation & Manual
+Java Desktop App
+- Clone the repo from the Github: https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r.git
+- Open with Intellij
+- Change to package view
+- Navigate to **ui** package under main folder in src
+- Run Main file
+
+## Database coverage (Sept 28th, 2023)
+- CPU:
+  - Intel: 12th Core Desktop CPU & 13th Core Desktop
+  - AMD 7000 series Ryzen Desktop CPU
+- Motherboard:
+  - ASUS: LGA1700 Z690 H670 B660 Z790 H770 B760
 
 
 ## User Story
