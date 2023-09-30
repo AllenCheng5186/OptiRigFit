@@ -29,14 +29,18 @@ Java Desktop App
 
 
 ## User Story
-- As a user, I want to be able to add arbitrary configurations
+- As a user, I want to be able to add arbitrary configurations(X) to saved list of configurations (Y)
 - As a suer, I want to be able to generate arbitrary recommended configurations
 - As a suer, I want to be able to add optional (extra) components
 - As a suer, I want to be able to remove optional (extra) components
 - As a suer, I want to be able to change necessary components
 - As a suer, I want to be able to customize generated configurations
+
+
 ## Data Sources
-- Prices Reference: (CAD$)：https://amazon.ca 
+- Prices Reference: (CAD$)：
+- Amazon: https://amazon.ca 
+- Canada Computer: https://canadacomputers.com
 - CPU:
   - Intel: https://ark.intel.com/content/www/us/en/ark.html#@PanelLabel122139
   - AMD: https://www.amd.com/en/products/specifications/processors

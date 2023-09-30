@@ -24,18 +24,18 @@ public class MotherboardListTest {
 
     @Test
     void testConstructor() {
-        assertEquals(82, testMotherboards.size());
+        assertEquals(80, testMotherboards.size());
         assertEquals("Asus ROG MAXIMUS Z690 EXTREME",
                 testMotherboards.get(0).getName());
         assertEquals("Asus Pro B660M-C D4-CSM",
-                testMotherboards.get(81).getName());
+                testMotherboards.get(79).getName());
     }
 
     @Test
     void testFilterRightSocketMotherboard() {
         List<Motherboard> filteredList = testMotherboardList.filterRightSocketMotherboard(
                 testMotherboards, Socket.LGA1700);
-        assertEquals(65, filteredList.size());
+        assertEquals(63, filteredList.size());
         for (Motherboard mb : filteredList) {
             assertSame(Socket.LGA1700, mb.getSocket());
         }
