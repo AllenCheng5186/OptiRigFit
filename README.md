@@ -5,11 +5,17 @@ is to ensure that **every user**, regardless of their **technical background**, 
 and achieve optimal PC performance.
 
 
-### Table of Contents
-- [Database Coverage](#database-coverage-sept-28th-2023)
+## Table of Contents
 - [Installation & Manual](#installation--manual)
+- [Database Coverage](#database-coverage-sept-28th-2023)
 - [User Stories Records](#user-story)
 - [Data Sources](#data-sources)
+
+## Project Expectation & ToDoList
+- Database of RAM, GPU upload
+- Configuration recommendation algorithm 
+- Sort item by price or performance
+- GUI
 
 ## Installation & Manual
 Java Desktop App
@@ -30,7 +36,7 @@ Java Desktop App
 
 ## User Story
 - As a user, I want to be able to add arbitrary configurations(X) to saved list of configurations (Y)
-- As a suer, I want to be able to generate arbitrary recommended configurations
+- As a suer, I want to be able to generate arbitrary recommended configurations(X)
 - As a suer, I want to be able to add optional (extra) components
 - As a suer, I want to be able to remove optional (extra) components
 - As a suer, I want to be able to change necessary components
