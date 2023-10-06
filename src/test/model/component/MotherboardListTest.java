@@ -7,8 +7,7 @@ import model.component.motherboard.Socket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,16 +67,10 @@ public class MotherboardListTest {
 
     @Test
     void testSortMotherboardsByDecreasePrice() {
-        List<Motherboard> mixedListOfMotherboard = new ArrayList<>();
-        testMotherboardList.addAllLGA1700Motherboard1(mixedListOfMotherboard);
-        testMotherboardList.addAllLGA1700Motherboard2(mixedListOfMotherboard);
-        testMotherboardList.addAllLGA1700Motherboard3(mixedListOfMotherboard);
-        testMotherboardList.addAllLGA1700Motherboard4(mixedListOfMotherboard);
-        testMotherboardList.addAllLGA1700Motherboard5(mixedListOfMotherboard);
-        testMotherboardList.addAllLGA1700Motherboard6(mixedListOfMotherboard);
-        testMotherboardList.sortMotherboardsByDecreasePrice(mixedListOfMotherboard);
+        List<Motherboard> actual = testMotherboardList.sortMotherboardsByDecreasePrice(testMotherboards);
+        assertEquals(80, actual.size());
         double lastMotherboardPrice = 99999;
-        for (Motherboard mb : mixedListOfMotherboard) {
+        for (Motherboard mb : actual) {
             assertTrue(lastMotherboardPrice >= mb.getPrice());
             lastMotherboardPrice = mb.getPrice();
         }

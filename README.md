@@ -47,8 +47,14 @@ Java Desktop App
 - Prices Reference: (CAD$)：
 - Amazon: https://amazon.ca 
 - Canada Computer: https://canadacomputers.com
+- New Egg: 
 - CPU:
   - Intel: https://ark.intel.com/content/www/us/en/ark.html#@PanelLabel122139
   - AMD: https://www.amd.com/en/products/specifications/processors
 - Motherboard:
   - ASUS: https://rog.asus.com/ca-en/motherboards-group/
+- Power Supply:
+  - Corsair: https://www.corsair.com/us/en
+  - EVGA:
+  - ASUS:
+  - Cooler Master: 
