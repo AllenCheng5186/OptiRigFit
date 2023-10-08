@@ -20,7 +20,7 @@ public class PowerSuppliesListTest {
 
     @Test
     void testConstructor() {
-        List<PowerSupply> testPSUList = testPowerSuppliesList.getPowerSuppliesOnSale();
+        List<PowerSupply> testPSUList = testPowerSuppliesList.getListAllPowerSupply();
         assertEquals(74, testPSUList.size());
         PowerSupply previousPSU = testPSUList.get(0);
         for (int i = 1; i < testPSUList.size(); i++) {
@@ -32,7 +32,7 @@ public class PowerSuppliesListTest {
 
     @Test
     void testSortByWatt() {
-        List<PowerSupply> testPSUList = testPowerSuppliesList.getPowerSuppliesOnSale();
+        List<PowerSupply> testPSUList = testPowerSuppliesList.getListAllPowerSupply();
         List<PowerSupply> actual = testPowerSuppliesList.sortByWatt(testPSUList);
         PowerSupply previousPSU = actual.get(0);
         for (int i = 1; i < actual.size(); i++) {
@@ -44,7 +44,7 @@ public class PowerSuppliesListTest {
 
     @Test
     void testFilterFormSizePSUs() {
-        List<PowerSupply> testPSUList = testPowerSuppliesList.getPowerSuppliesOnSale();
+        List<PowerSupply> testPSUList = testPowerSuppliesList.getListAllPowerSupply();
         List<PowerSupply> actual = testPowerSuppliesList.filterFormSizePSUs(FormSize.ITX, testPSUList);
         for (PowerSupply psu : actual) {
             assertEquals(FormSize.ITX, psu.getFormSize());
@@ -57,7 +57,7 @@ public class PowerSuppliesListTest {
 
     @Test
     void testFilterGreaterWattPSUs() {
-        List<PowerSupply> testPSUList = testPowerSuppliesList.getPowerSuppliesOnSale();
+        List<PowerSupply> testPSUList = testPowerSuppliesList.getListAllPowerSupply();
         List<PowerSupply> actual = testPowerSuppliesList.filterGreaterWattPSUs(550, testPSUList);
         for (PowerSupply psu : actual) {
             assertTrue(psu.getWattage() >= 550);

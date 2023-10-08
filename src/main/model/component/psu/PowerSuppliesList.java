@@ -54,7 +54,7 @@ public class PowerSuppliesList {
 
     //getter
 
-    public List<PowerSupply> getPowerSuppliesOnSale() {
+    public List<PowerSupply> getListAllPowerSupply() {
         return powerSuppliesOnSale;
     }
 
