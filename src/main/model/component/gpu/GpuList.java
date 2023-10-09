@@ -1,5 +1,7 @@
 package model.component.gpu;
 
+
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +16,23 @@ public class GpuList {
         Collections.sort(listAllGpu);
     }
 
-    //EFFECTS:
+    public List<Gpu> filterGpusInPriceInterval(List<Gpu> listOfGpu, double upperPrice, double downPrice) {
+        List<Gpu> withinBudgetGpus = new ArrayList<>();
+        for (Gpu gpu : listOfGpu) {
+            if (gpu.getPrice() >= downPrice && gpu.getPrice() <= upperPrice) {
+                withinBudgetGpus.add(gpu);
+            }
+        }
+        return withinBudgetGpus;
+    }
+
+    // getter
+
+    public List<Gpu> getListAllGpu() {
+        return listAllGpu;
+    }
+
+    //EFFECTS: add all gpu to the collection
     public void addAllNvidia3040Gpu() {
         Collections.addAll(listAllGpu, new Gpu("GeForce RTX 4090", 450, 2298.98,
                         GpuMfr.NVIDIA, 38929),
@@ -32,6 +50,7 @@ public class GpuList {
                 new Gpu("GeForce RTX 3070", 220, 649.99, GpuMfr.NVIDIA, 22482),
                 new Gpu("GeForce RTX 3060 12GB", 170, 459.99, GpuMfr.NVIDIA, 17134),
                 new Gpu("GeForce RTX 3060 8GB", 150, 388.98, GpuMfr.NVIDIA, 17134));
+
     }
 
     public void addAllAMD7000Gpu() {

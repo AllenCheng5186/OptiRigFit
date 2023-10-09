@@ -30,7 +30,7 @@ public class CpuListTest {
                 "R5-7600", "i5-12600KF", "i5-13400F", "i5-13400", "i5-12500", "i5-12400F", "i5-12400",
                 "i3-13100", "i3-13100F", "i3-12100", "i3-12100F");
         for (int i = 0; i < cpuRankList.size(); i++) {
-            assertEquals(cpuRankList.get(i), testCpuList.getListAllCpu().get(i).getName());
+            assertEquals(cpuRankList.get(i), testCpuList.getListAllCpu().get(i).getModel());
         }
     }
 

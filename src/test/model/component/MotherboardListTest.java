@@ -75,4 +75,13 @@ public class MotherboardListTest {
             lastMotherboardPrice = mb.getPrice();
         }
     }
+
+    @Test
+    void testFilterMotherboardsInPriceInterval() {
+        List<Motherboard> actual = testMotherboardList.filterMotherboardsInPriceInterval(testMotherboards,
+                300.00, 500.00);
+        for (Motherboard mb : actual) {
+            assertTrue(mb.getPrice() >= 300.00 && mb.getPrice() <= 500.00);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package model.component.psu;
 
 import model.component.motherboard.FormSize;
+import model.component.motherboard.Motherboard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class PowerSuppliesList {
         return formSizePSUs;
     }
 
-    //REQUIRE: minWatt >= 400
+    //REQUIRE: minWatt > 0
     //MODIFIES: none
     //EFFECTS: return a list of power supplies which watt is greater than given minimum value
     public List<PowerSupply> filterGreaterWattPSUs(int minWatt, List<PowerSupply> listOfPowerSupply) {
@@ -51,6 +52,18 @@ public class PowerSuppliesList {
         }
         return greaterWattPSUs;
     }
+
+    public List<PowerSupply> filterPowerSupplyInPriceInterval(List<PowerSupply> listOfPowerSupplies,
+                                                               double upperPrice, double downPrice) {
+        List<PowerSupply> withinBudgetPowerSupplies = new ArrayList<>();
+        for (PowerSupply mb : listOfPowerSupplies) {
+            if (mb.getPrice() >= downPrice && mb.getPrice() <= upperPrice) {
+                withinBudgetPowerSupplies.add(mb);
+            }
+        }
+        return withinBudgetPowerSupplies;
+    }
+
 
     //getter
 

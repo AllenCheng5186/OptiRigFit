@@ -1,7 +1,7 @@
 package model.component.cpu;
 
 public class Cpu implements Comparable<Cpu> {
-    private String name;
+    private String model;
     private int basePower;
     private double price;
     private CpuMfr cpuMfr;
@@ -10,12 +10,12 @@ public class Cpu implements Comparable<Cpu> {
 
     //EFFECTS: construct a CPU object with given name, baser power,
     // price, manufacturer and benchmark
-    public Cpu(String name, int basePower, double price, CpuMfr manufacturer, int benchMark) {
-        this.name = name;
+    public Cpu(String model, int basePower, double price, CpuMfr manufacturer, int benchMark) {
+        this.model = model;
         this.basePower = basePower;
         this.price = price;
         this.cpuMfr = manufacturer;
-        this.integratedGraphics = !name.contains("F");
+        this.integratedGraphics = !model.contains("F");
         this.benchMark = benchMark;
     }
 
@@ -27,8 +27,8 @@ public class Cpu implements Comparable<Cpu> {
     }
 
     // getter
-    public String getName() {
-        return name;
+    public String getModel() {
+        return model;
     }
 
     public int getBasePower() {

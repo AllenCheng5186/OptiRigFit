@@ -20,7 +20,7 @@ public class MotherboardList {
         listAllMotherboard = sortMotherboardsByDecreasePrice(listAllMotherboard);
     }
 
-    //MODIFIES: List<Motherboard>
+
     //EFFECTS: filter the given list of motherboards that only has right socket
     public List<Motherboard> filterRightSocketMotherboard(List<Motherboard> listOfMotherboard, Socket socket) {
         List<Motherboard> rightSocketMotherboards = new ArrayList<>();
@@ -32,13 +32,29 @@ public class MotherboardList {
         return rightSocketMotherboards;
     }
 
-    //MODIFIES: List<Motherboard>
+
     //EFFECTS: filter the given list of motherboards those are same as given form factor
     public List<Motherboard> filterRightFormSizeMotherboards(List<Motherboard> listOfMotherboard, FormSize formSize) {
         List<Motherboard> rightFromSizeMotherboards = new ArrayList<>();
-        for (Motherboard motherboard : listOfMotherboard) {
-            if (motherboard.getFormSize() == formSize) {
-                rightFromSizeMotherboards.add(motherboard);
+        if (formSize == ATX) {
+            for (Motherboard motherboard : listOfMotherboard) {
+                if (motherboard.getFormSize() != MATX) {
+                    rightFromSizeMotherboards.add(motherboard);
+                }
+            }
+        } else if (formSize == MATX) {
+            for (Motherboard motherboard : listOfMotherboard) {
+                if (motherboard.getFormSize() != ATX && motherboard.getFormSize() != EATX) {
+                    rightFromSizeMotherboards.add(motherboard);
+                }
+            }
+        } else if (formSize == EATX) {
+            rightFromSizeMotherboards = listOfMotherboard;
+        } else {
+            for (Motherboard motherboard : listOfMotherboard) {
+                if (motherboard.getFormSize() == ITX) {
+                    rightFromSizeMotherboards.add(motherboard);
+                }
             }
         }
         return rightFromSizeMotherboards;
@@ -47,9 +63,20 @@ public class MotherboardList {
     //MODIFIES: List<Motherboard>
     //EFFECTS: sort the given list of motherboard by price from high to low
     public List<Motherboard> sortMotherboardsByDecreasePrice(List<Motherboard> listOfMotherboard) {
-        List<Motherboard> sortedList = new ArrayList<>(listOfMotherboard);
-        Collections.sort(sortedList);
-        return sortedList;
+        Collections.sort(listOfMotherboard);
+        return listOfMotherboard;
+    }
+
+    //EFFECTS: return a list of motherboards which price in given budget interval
+    public List<Motherboard> filterMotherboardsInPriceInterval(List<Motherboard> listOfMotherboard,
+                                                               double upperPrice, double downPrice) {
+        List<Motherboard> withinBudgetMotherboards = new ArrayList<>();
+        for (Motherboard mb : listOfMotherboard) {
+            if (mb.getPrice() >= downPrice && mb.getPrice() <= upperPrice) {
+                withinBudgetMotherboards.add(mb);
+            }
+        }
+        return withinBudgetMotherboards;
     }
 
     // getter

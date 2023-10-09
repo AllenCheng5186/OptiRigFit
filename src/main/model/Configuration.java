@@ -19,13 +19,13 @@ public class Configuration {
     }
 
     public void printOutConfiguration() {
-        System.out.println("CPU: " + cpu.getName() + cpu.getPrice());
+        System.out.println("CPU: " + cpu.getModel() + "   " + cpu.getPrice());
         System.out.println("RAM: ");
-        System.out.println("MotherBoard: " + motherboard.getName() + motherboard.getPrice());
+        System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
         if (gpu != null) {
-            System.out.println("GPU: " + gpu.getModel() + gpu.getPrice());
+            System.out.println("GPU: " + gpu.getModel() + "   " + gpu.getPrice());
         }
-        System.out.println("Power Supply: " + powerSupply.getModel() + powerSupply.getPrice());
+        System.out.println("Power Supply: " + powerSupply.getModel() + "   " + powerSupply.getPrice());
         double configurationAggregate = cpu.getPrice() + motherboard.getPrice();
         configurationAggregate += powerSupply.getPrice() + powerSupply.getPrice();
         System.out.println("Aggregate: " + configurationAggregate);
