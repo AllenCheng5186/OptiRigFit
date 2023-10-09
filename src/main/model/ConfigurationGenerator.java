@@ -51,6 +51,8 @@ public class ConfigurationGenerator {
         this.totalBudget = totalBudget;
     }
 
+    //MODIFIES: this
+    //EFFECTS: separate total budget into budgets for each component
     public void budgetDistribution() {
         if (purpose == ENTRY_LEVEL) {
             cpuBudget = totalBudget * 0.3;
@@ -60,12 +62,19 @@ public class ConfigurationGenerator {
         } else {
             cpuBudget = totalBudget * 0.2;
             ramBudget = totalBudget * 0.1;
-            gpuBudget =  totalBudget * 0.4;
+            gpuBudget = totalBudget * 0.4;
             motherboardBudget = totalBudget * 0.15;
             psuBudget = totalBudget * 0.15;
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: main configuration generation method, collaborate with following helpers,
+    //first, get the most powerful cpu within budget interval and has the highest benchmark
+    //second, get the cpu socket and find the best motherboard that is compatible
+    //third, if it needs to have gpu, get the most powerful gpu within budget interval and has the highest benchmark
+    //fourth, calculate the lowest watt require to boot and get best psu
+    //construct above as a Configuration object
     public Configuration configGenerate() {
         budgetDistribution();
         Cpu configCpu = getConfigCpu();
@@ -76,14 +85,20 @@ public class ConfigurationGenerator {
         if (gpuBudget != 0) {
             List<Gpu> budgetFriendGpus = gpuList.filterGpusInPriceInterval(properGpus, (gpuBudget + totalBudget * 0.1),
                     gpuBudget);
-            configGpu = budgetFriendGpus.get(0);
+            if (gpuBudget > properGpus.get(0).getPrice()) {
+                configGpu = properGpus.get(0);
+            } else {
+                configGpu = budgetFriendGpus.get(0);
+            }
             minWatt += configGpu.getBasePower();
         }
         PowerSupply configPsu = getConfigPowerSupply(minWatt);
-        Configuration config = new Configuration(configCpu, configMotherboard, configGpu, configPsu);
+        Configuration config = new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
         return config;
     }
 
+    //REQUIRE: minWatt >= 400;
+    //EFFECTS: return the first power supply which above the lowest watt require to boot
     private PowerSupply getConfigPowerSupply(int minWatt) {
         List<PowerSupply> compatiblePowerSupplies = powerSuppliesList.filterGreaterWattPSUs(minWatt,
                 properPowerSupplies);
@@ -91,9 +106,15 @@ public class ConfigurationGenerator {
                 compatiblePowerSupplies);
         List<PowerSupply> budgetFriendPowerSupplies = powerSuppliesList.filterPowerSupplyInPriceInterval(
                 correctSizePowerSupplies, (psuBudget + totalBudget * 0.05), psuBudget);
-        return budgetFriendPowerSupplies.get(0);
+        if (psuBudget >= properPowerSupplies.get(properPowerSupplies.size() - 2).getPrice()) {
+            return properPowerSupplies.get(properPowerSupplies.size() - 2);
+        } else {
+            return budgetFriendPowerSupplies.get(0);
+        }
     }
 
+    //REQUIRE: cpuSocket in LGA1700 & AM5
+    //MODIFIES: return the most expensive motherboard that is compatible to the cpu socket
     private Motherboard getConfigMotherboard(Socket cpuSocket) {
         List<Motherboard> compatibleMotherboards = motherboardList.filterRightSocketMotherboard(properMotherBoards,
                 cpuSocket);
@@ -101,16 +122,27 @@ public class ConfigurationGenerator {
                 compatibleMotherboards, formSize);
         List<Motherboard> budgetFriendMotherboards = motherboardList.filterMotherboardsInPriceInterval(
                 correctSizeMotherboards, (motherboardBudget + totalBudget * 0.05), (motherboardBudget * 0.7));
-        return budgetFriendMotherboards.get(0);
+        if (motherboardBudget >= properMotherBoards.get(0).getPrice()) {
+            return properMotherBoards.get(0);
+        } else {
+            return budgetFriendMotherboards.get(0);
+        }
     }
 
+    //EFFECTS: return the most powerful cpu within budget interval and has the highest benchmark
     private Cpu getConfigCpu() {
         List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(properCPUs, (cpuBudget + totalBudget * 0.05),
                 cpuBudget);
         Collections.sort(withinBudgetCpus);
-        return withinBudgetCpus.get(0);
+        if (cpuBudget >= properCPUs.get(0).getPrice()) {
+            return properCPUs.get(0);
+        } else {
+            return withinBudgetCpus.get(0);
+        }
     }
 
+    //REQUIRE: configCpu 12 & 13th Intel core CPU or 7000 series AMD Reyzen CPU
+    //EFFECTS: return the corresponding cpu socket that is compatible with given CPU
     private Socket getCpuSocket(Cpu configCpu) {
         Socket cpuSocket = null;
         if (configCpu.getCpuMfr() == CpuMfr.INTEL) {

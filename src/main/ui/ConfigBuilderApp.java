@@ -20,7 +20,7 @@ public class ConfigBuilderApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: main method which
+    // EFFECTS: main method which the entire App control flow
     private void runConfigBuilder() {
         boolean keepGoing = true;
         String command = null;
@@ -32,18 +32,24 @@ public class ConfigBuilderApp {
             command = input.next();
             command = command.toLowerCase();
 
-            if (command.equals("q")) {
-                keepGoing = false;
-            } else if (command.equals("p")) {
-                checkOutSavedConfig();
-            } else if (command.equals("n")) {
-                callConfigGenerator();
+            switch (command) {
+                case "q":
+                    keepGoing = false;
+                    break;
+                case "p":
+                    checkOutSavedConfig();
+                    break;
+                case "n":
+                    callConfigGenerator();
+                    break;
             }
         }
 
         System.out.println("\nThanks you for using our App!");
     }
 
+    //MODIFIES: this
+    //EFFECTS: initialize user input sensor and configuration storage list
     private void init() {
         savedConfigs = new ArrayList<>();
         System.out.println("Welcome to use OptiRigFit \n"
@@ -52,6 +58,7 @@ public class ConfigBuilderApp {
         input.useDelimiter("\n");
     }
 
+    //EFFECTS: display the main function menu
     private void displayFunMenu() {
         System.out.println("\nSelect from following function:");
         System.out.println("\tn -> build new configuration");
@@ -59,6 +66,7 @@ public class ConfigBuilderApp {
         System.out.println("\tq -> quit");
     }
 
+    //EFFECTS: display user's saved configuration
     private void checkOutSavedConfig() {
         if (!savedConfigs.isEmpty()) {
             for (Configuration config : savedConfigs) {
@@ -69,6 +77,11 @@ public class ConfigBuilderApp {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: call config generator method to generator a configuration for user according
+    // to their budget, case size and purpose, try to figure out best fit configuration, fail to
+    // ask user increase their budget or loosen the restrictions on computer size and
+    // save to the list according to user's choice
     private void callConfigGenerator() {
         int budgetInput = getBudgetInput();
         Purpose usrPurpose = getUsrPurpose();
@@ -84,6 +97,8 @@ public class ConfigBuilderApp {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: helper method to associate with upper method to save user's generated configuration
     private void saveOrNot(Configuration usrConfig) {
         System.out.println("\nWould like to save this configuration?");
         System.out.println("\ty -> Yes. Save it!");
@@ -95,6 +110,7 @@ public class ConfigBuilderApp {
         }
     }
 
+    //EFFECTS: show desktop case size options to user and return their choice in terms of FormSize object
     private FormSize getUsrSizeInput() {
         System.out.println("\nWhat is the size of your computer？");
         System.out.println("\tSelect from following options:");
@@ -114,13 +130,14 @@ public class ConfigBuilderApp {
         return usrSizeInput;
     }
 
+    //EFFECTS: show purposes options to user and return their choice in terms of Purpose object
     private Purpose getUsrPurpose() {
         System.out.println("What is the primary purpose of your computer?");
         System.out.println("\nSelect from following purpose:");
         System.out.println("\tf -> Office Work (Entry-Level)");
         System.out.println("\tg -> Gaming");
         System.out.println("\tp -> Productivity, Video Editing");
-        System.out.println("\tw -> 3d modelling");
+        System.out.println("\tw -> Work Station, 3d modelling");
         String purposeInput = input.next();
         purposeInput = purposeInput.toLowerCase();
         Purpose usrPurpose = null;
@@ -136,6 +153,7 @@ public class ConfigBuilderApp {
         return usrPurpose;
     }
 
+    //EFFECTS: ask user for their budget they would like to spend for their new desktop
     private int getBudgetInput() {
         System.out.println("What were you planning on spending for your desktop?");
         return Integer.parseInt(input.next());
