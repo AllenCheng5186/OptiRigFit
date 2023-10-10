@@ -12,9 +12,10 @@ and achieve optimal PC performance.
 - [Data Sources](#data-sources)
 
 ## Project Expectation & ToDoList
-- Database of RAM, GPU upload
-- Configuration recommendation algorithm 
-- Sort item by price or performance
+- Database of RAM, GPU upload ✅
+- Configuration recommendation algorithm ✅
+- Sort item by price or performance ✅
+- console interface ✅
 - GUI
 
 ## Installation & Manual
@@ -32,15 +33,29 @@ Java Desktop App
 - Motherboard:
   - ASUS: LGA1700 Z690 H670 B660 Z790 H770 B760
   - ASUS: AM5 X670 B650 B620 on sale
+- Power Supply:
+  - ASUS: Loki Thor
+  - Corsair: SF HI
+  - EVGA
+- GPU:
+  - NVIDIA: 30 40 series desktop GPU
+  - AMD: 6000 700 series desktop GPU
+- RAM:
+  - Purchase suggestions:
+    - Max motherboard ram capacity
+    - Number of slot on motherboard
 
 
 ## User Story
 - As a user, I want to be able to add arbitrary configurations(X) to saved list of configurations (Y)
-- As a suer, I want to be able to generate arbitrary recommended configurations(X)
-- As a suer, I want to be able to add optional (extra) components
-- As a suer, I want to be able to remove optional (extra) components
-- As a suer, I want to be able to change necessary components
-- As a suer, I want to be able to customize generated configurations
+- As a user, I want to be able to generate arbitrary recommended configurations(X)
+- As a user, I want to be able to review saved configuration
+- As a user, I want to be able to add optional (extra) components
+- As a user, I want to be able to change necessary components
+- As a user, I want to be able to customize generated configurations
+- As a user, I want to be able to choose the size of computer
+- As a user, I want to be able to choose the purpose of computer
+- As a user, I want to be able to input budget
 
 
 ## Data Sources
