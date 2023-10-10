@@ -1,14 +1,15 @@
 package model.component.gpu;
 
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//represent a list of gpus, which have all method that works on a list of gpus it contains
 public class GpuList {
     private List<Gpu> listAllGpu;
 
+    //EFFECTS: construct a GpuList object to process List<Gpu>, it has a list of gpus with all model on sale
+    // and were sorted by benchmark from high to low
     public GpuList() {
         this.listAllGpu = new ArrayList<>();
         addAllNvidia3040Gpu();
@@ -16,6 +17,7 @@ public class GpuList {
         Collections.sort(listAllGpu);
     }
 
+    //EFFECTS: return a list of gpus which price in given budget interval
     public List<Gpu> filterGpusInPriceInterval(List<Gpu> listOfGpu, double upperPrice, double downPrice) {
         List<Gpu> withinBudgetGpus = new ArrayList<>();
         for (Gpu gpu : listOfGpu) {

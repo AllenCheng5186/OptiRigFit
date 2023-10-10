@@ -49,19 +49,25 @@ public class MotherboardListTest {
     @Test
     void testFilterRightFormSizeMotherboards() {
         List<Motherboard> filteredList = testMotherboardList.filterRightFormSizeMotherboards(
-                testMotherboards, FormSize.ATX);
+                testMotherboards, FormSize.ITX);
         for (Motherboard mb : filteredList) {
-            assertEquals(FormSize.ATX, mb.getFormSize());
+            assertEquals(FormSize.ITX, mb.getFormSize());
         }
         filteredList = testMotherboardList.filterRightFormSizeMotherboards(
                 testMotherboards, FormSize.MATX);
         for (Motherboard mb : filteredList) {
-            assertEquals(FormSize.MATX, mb.getFormSize());
+            assertTrue(FormSize.MATX == mb.getFormSize() || FormSize.ITX == mb.getFormSize());
         }
         filteredList = testMotherboardList.filterRightFormSizeMotherboards(
-                testMotherboards, FormSize.ITX);
+                testMotherboards, FormSize.ATX);
         for (Motherboard mb : filteredList) {
-            assertEquals(FormSize.ITX, mb.getFormSize());
+            assertNotSame(FormSize.EATX, mb.getFormSize());
+        }
+        filteredList = testMotherboardList.filterRightFormSizeMotherboards(
+                testMotherboards, FormSize.EATX);
+        for (Motherboard mb : filteredList) {
+            assertTrue(FormSize.EATX == mb.getFormSize() || FormSize.ATX == mb.getFormSize() ||
+                    FormSize.MATX == mb.getFormSize() || FormSize.ITX == mb.getFormSize());
         }
     }
 

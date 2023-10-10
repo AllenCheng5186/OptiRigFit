@@ -1,12 +1,12 @@
 package model.component.psu;
 
 import model.component.motherboard.FormSize;
-import model.component.motherboard.Motherboard;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//represent a list of power supplies, which have all method that works on a list of power supplies it contains
 public class PowerSuppliesList {
     private List<PowerSupply> powerSuppliesOnSale;
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//represent a list of cpus, which have all method that works on a list of cpus it contains
 public class CpuList {
 
     private List<Cpu> listAllCpu;
@@ -31,7 +32,17 @@ public class CpuList {
         return priceWithinIntervalCpus;
     }
 
-
+    //EFFECTS: return a list of CPUs those has integrated graphics filtered from
+    // given list
+    public List<Cpu> returnCpusHasIG(List<Cpu> cpuList) {
+        List<Cpu> cpusHasIG = new ArrayList<>();
+        for (Cpu cpu : cpuList) {
+            if (cpu.hasIntegratedGraphics()) {
+                cpusHasIG.add(cpu);
+            }
+        }
+        return cpusHasIG;
+    }
 
 
     // getter

@@ -17,6 +17,7 @@ import java.util.List;
 
 import static model.Purpose.*;
 
+// Represent a configuration generator using given budget, size preference and purpose
 public class ConfigurationGenerator {
     private CpuList cpuList;
     private List<Cpu> properCPUs;
@@ -134,6 +135,9 @@ public class ConfigurationGenerator {
         List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(properCPUs, (cpuBudget + totalBudget * 0.05),
                 cpuBudget);
         Collections.sort(withinBudgetCpus);
+        // TODO 办公配置保证核心显卡 过滤掉F
+//        if (purpose == ENTRY_LEVEL) {
+//        }
         if (cpuBudget >= properCPUs.get(0).getPrice()) {
             return properCPUs.get(0);
         } else {

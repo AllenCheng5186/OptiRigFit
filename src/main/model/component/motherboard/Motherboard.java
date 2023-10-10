@@ -1,5 +1,7 @@
 package model.component.motherboard;
 
+//represent a motherboard object with model name, compatible cpu socket, case size,
+// max ram capacity, number of ram slot and price
 public class Motherboard implements Comparable<Motherboard> {
     private String name;
     private Socket socket;

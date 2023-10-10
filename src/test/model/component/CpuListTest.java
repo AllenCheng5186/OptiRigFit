@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class CpuListTest {
@@ -41,6 +42,15 @@ public class CpuListTest {
         assertEquals(144.98, filteredCPUs.get(0).getPrice());
         assertEquals(119.00, filteredCPUs.get(1).getPrice());
         assertEquals(2, filteredCPUs.size());
+    }
+
+    @Test
+    void testReturnCpusHasIG() {
+        List<Cpu> testCpus = testCpuList.getListAllCpu();
+        List<Cpu> actualCpus = testCpuList.returnCpusHasIG(testCpus);
+        for (Cpu cpu : actualCpus) {
+            assertTrue(cpu.hasIntegratedGraphics());
+        }
     }
 
     

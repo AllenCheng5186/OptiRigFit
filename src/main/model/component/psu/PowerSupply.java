@@ -2,8 +2,7 @@ package model.component.psu;
 
 import model.component.motherboard.FormSize;
 
-import java.util.Comparator;
-
+//represent a power supply with model name, compatible case size, rated power, is modular or not and price
 public class PowerSupply implements Comparable<PowerSupply> {
 
     private String model;

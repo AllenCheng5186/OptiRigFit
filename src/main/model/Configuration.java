@@ -5,6 +5,8 @@ import model.component.gpu.Gpu;
 import model.component.motherboard.Motherboard;
 import model.component.psu.PowerSupply;
 
+// represent a configuration store cpu, motherboard, gpu (if possible), power supply
+// and ram purchase suggestion and restriction
 public class Configuration {
     private Cpu cpu;
     private Motherboard motherboard;
@@ -26,9 +28,15 @@ public class Configuration {
     public void printOutConfiguration() {
         System.out.println("CPU: " + cpu.getModel() + "   " + cpu.getPrice());
         if (motherboard.getName().contains("D4")) {
-            System.out.println("RAM: DDR4" + "   " + ramBudget);
+            System.out.println("RAM: DDR4" + "   "
+                    + "Max RAM:" + motherboard.getMaxRam()
+                    + "   " + "RAM slot: " + motherboard.getRamSlot()
+                    + "   " + ramBudget);
         } else {
-            System.out.println("RAM: DDR5" + "   " + ramBudget);
+            System.out.println("RAM: DDR5" + "   "
+                    + "Max RAM:" + motherboard.getMaxRam()
+                    + "   " + "RAM slot: " + motherboard.getRamSlot()
+                    + "   " + ramBudget);
         }
         System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
         if (gpu != null) {

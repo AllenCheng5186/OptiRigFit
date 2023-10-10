@@ -63,4 +63,15 @@ public class PowerSuppliesListTest {
             assertTrue(psu.getWattage() >= 550);
         }
     }
+
+    @Test
+    void testFilterPowerSupplyInPriceInterval() {
+        List<PowerSupply> testPSUList = testPowerSuppliesList.getListAllPowerSupply();
+        List<PowerSupply> actual = testPowerSuppliesList.filterPowerSupplyInPriceInterval(testPSUList,
+                300, 200);
+        for (PowerSupply psu : actual) {
+            assertTrue(psu.getPrice() >= 200 && psu.getPrice() <= 300);
+        }
+    }
+
 }

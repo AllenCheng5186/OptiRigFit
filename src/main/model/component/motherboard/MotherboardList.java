@@ -8,6 +8,7 @@ import static model.component.motherboard.FormSize.*;
 import static model.component.motherboard.Socket.AM5;
 import static model.component.motherboard.Socket.LGA1700;
 
+//represent a list of motherboards, which have all method that works on a list of motherboards it contains
 public class MotherboardList {
     private List<Motherboard> listAllMotherboard;
 
@@ -34,11 +35,15 @@ public class MotherboardList {
 
 
     //EFFECTS: filter the given list of motherboards those are same as given form factor
+    // ITX
+    // MATX > ITX
+    // ATX  > MATX > ITX
+    // EATX > ATX  > MATX > ITX
     public List<Motherboard> filterRightFormSizeMotherboards(List<Motherboard> listOfMotherboard, FormSize formSize) {
         List<Motherboard> rightFromSizeMotherboards = new ArrayList<>();
-        if (formSize == ATX) {
+        if (formSize == ITX) {
             for (Motherboard motherboard : listOfMotherboard) {
-                if (motherboard.getFormSize() != MATX) {
+                if (motherboard.getFormSize() == ITX) {
                     rightFromSizeMotherboards.add(motherboard);
                 }
             }
@@ -48,14 +53,14 @@ public class MotherboardList {
                     rightFromSizeMotherboards.add(motherboard);
                 }
             }
-        } else if (formSize == EATX) {
-            rightFromSizeMotherboards = listOfMotherboard;
-        } else {
+        } else if (formSize == ATX) {
             for (Motherboard motherboard : listOfMotherboard) {
-                if (motherboard.getFormSize() == ITX) {
+                if (motherboard.getFormSize() != EATX) {
                     rightFromSizeMotherboards.add(motherboard);
                 }
             }
+        } else {
+            rightFromSizeMotherboards = listOfMotherboard;
         }
         return rightFromSizeMotherboards;
     }

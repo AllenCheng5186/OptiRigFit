@@ -1,5 +1,6 @@
 package model.component.gpu;
 
+// represent a gpu with given model name, base power to boot, chip manufacturer, benchmark and price
 public class Gpu implements Comparable<Gpu> {
     private String model;
     private int basePower;
@@ -7,6 +8,8 @@ public class Gpu implements Comparable<Gpu> {
     private GpuMfr gpuMfr;
     private int benchMark;
 
+    //EFFECTS: construct a Gpu object with given model name, base power, price,
+    // chip manufacturer and benchmark
     public Gpu(String model, int basePower, double price, GpuMfr gpuMfr, int benchMark) {
         this.model = model;
         this.basePower = basePower;
@@ -15,6 +18,7 @@ public class Gpu implements Comparable<Gpu> {
         this.benchMark = benchMark;
     }
 
+    //EFFECTS: return the difference between given gpu object with this in benchmark to sort
     @Override
     public int compareTo(Gpu o) {
         return o.getBenchMark() - this.benchMark;

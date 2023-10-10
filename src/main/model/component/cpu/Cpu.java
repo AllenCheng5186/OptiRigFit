@@ -1,5 +1,6 @@
 package model.component.cpu;
 
+//represent a cpu object with given model name, base power to boot, chip manufacturer, benchmark and price
 public class Cpu implements Comparable<Cpu> {
     private String model;
     private int basePower;

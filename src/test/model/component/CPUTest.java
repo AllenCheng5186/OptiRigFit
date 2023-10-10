@@ -35,4 +35,10 @@ public class CPUTest {
         assertEquals(59017, testCpuWithoutIG.getBenchMark());
     }
 
+    @Test
+    void testCompareTo(){
+        assertEquals(-2997, testCpuWithIG.compareTo(testCpuWithoutIG));
+        assertEquals(2997, testCpuWithoutIG.compareTo(testCpuWithIG));
+    }
+
 }

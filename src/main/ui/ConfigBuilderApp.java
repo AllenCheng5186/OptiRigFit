@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// Configuration Generator App main method
 public class ConfigBuilderApp {
     private List<Configuration> savedConfigs;
     private Scanner input;
@@ -69,11 +70,35 @@ public class ConfigBuilderApp {
     //EFFECTS: display user's saved configuration
     private void checkOutSavedConfig() {
         if (!savedConfigs.isEmpty()) {
-            for (Configuration config : savedConfigs) {
-                config.printOutConfiguration();
-            }
+            showSaveConfigsOneByOne();
         } else {
             System.out.println("You do not have any saved configuration yet!");
+        }
+    }
+
+    //EFFECTS: show the save configs one by one in the list, and ask user would like
+    // to check the next one in the list
+    private void showSaveConfigsOneByOne() {
+        boolean keepCheckingNext = true;
+        String usrInput = null;
+        int nextConfigIndex = 0;
+        while (keepCheckingNext) {
+            savedConfigs.get(nextConfigIndex).printOutConfiguration();
+            if ((nextConfigIndex + 2) > savedConfigs.size()) {
+                System.out.println("\n No more saved configurations");
+                break;
+            } else {
+                System.out.println("\nWould like check out next saved configuration you had saved?");
+                System.out.println("\ty -> Yes, see next one");
+                System.out.println("\tn -> No, go back to menu");
+                usrInput = input.next();
+                usrInput = usrInput.toLowerCase();
+                if (usrInput.equals("n")) {
+                    keepCheckingNext = false;
+                } else {
+                    nextConfigIndex++;
+                }
+            }
         }
     }
 
