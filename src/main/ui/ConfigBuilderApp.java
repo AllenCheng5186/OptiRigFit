@@ -137,7 +137,7 @@ public class ConfigBuilderApp {
 
     //EFFECTS: show desktop case size options to user and return their choice in terms of FormSize object
     private FormSize getUsrSizeInput() {
-        System.out.println("\nWhat is the size of your computer？");
+        System.out.println("\nWhat is the size of your computer?");
         System.out.println("\tSelect from following options:");
         System.out.println("\t s -> small size");
         System.out.println("\t m -> middle size");
