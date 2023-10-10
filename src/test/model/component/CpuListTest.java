@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CpuListTest {
@@ -48,10 +47,20 @@ public class CpuListTest {
     void testReturnCpusHasIG() {
         List<Cpu> testCpus = testCpuList.getListAllCpu();
         List<Cpu> actualCpus = testCpuList.returnCpusHasIG(testCpus);
+        List<Cpu> cpusWithoutIG = new ArrayList<>(actualCpus);
         for (Cpu cpu : actualCpus) {
             assertTrue(cpu.hasIntegratedGraphics());
+            assertFalse(cpu.getModel().contains("F"));
         }
+        for (Cpu cpu : actualCpus) {
+            cpusWithoutIG.remove(cpu);
+        }
+        for (Cpu cpu : cpusWithoutIG) {
+            assertFalse(cpu.hasIntegratedGraphics());
+            assertTrue(cpu.getModel().contains("F"));
+        }
+
     }
 
-    
+
 }

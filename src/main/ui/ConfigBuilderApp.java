@@ -114,13 +114,18 @@ public class ConfigBuilderApp {
         ConfigurationGenerator cg = new ConfigurationGenerator(budgetInput, usrSizeInput, usrPurpose);
         try {
             Configuration usrConfig = cg.configGenerate();
-//            usrConfig.printOutConfiguration();
+            usrConfig.printOutConfiguration();
+            ConfigEditor needEdit = new ConfigEditor(cg.getCpuBudget(), cg.getGpuBudget(), cg.getMotherboardBudget(),
+                    cg.getPsuBudget(), usrConfig, cg.getFormSize(),cg.getPurpose());
+            usrConfig = needEdit.changeConfig();
+            usrConfig.printOutConfiguration();
             saveOrNot(usrConfig);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Sorry, no such configuration! :(");
             System.out.println("Please consider input higher budget or change the size!");
         }
     }
+
 
     //MODIFIES: this
     //EFFECTS: helper method to associate with upper method to save user's generated configuration

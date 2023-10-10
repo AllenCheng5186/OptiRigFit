@@ -47,27 +47,50 @@ public class MotherboardListTest {
     }
 
     @Test
-    void testFilterRightFormSizeMotherboards() {
+    void testFilterRightFormSizeMotherboardsITX() {
         List<Motherboard> filteredList = testMotherboardList.filterRightFormSizeMotherboards(
                 testMotherboards, FormSize.ITX);
         for (Motherboard mb : filteredList) {
             assertEquals(FormSize.ITX, mb.getFormSize());
+            assertSame(FormSize.ITX, mb.getFormSize());
+            assertNotSame(FormSize.MATX, mb.getFormSize());
+            assertNotSame(FormSize.ATX, mb.getFormSize());
+            assertNotSame(FormSize.EATX, mb.getFormSize());
         }
-        filteredList = testMotherboardList.filterRightFormSizeMotherboards(
+    }
+
+    @Test
+    void testFilterRightFormSizeMotherboardsMATX() {
+        List<Motherboard> filteredList = testMotherboardList.filterRightFormSizeMotherboards(
                 testMotherboards, FormSize.MATX);
         for (Motherboard mb : filteredList) {
             assertTrue(FormSize.MATX == mb.getFormSize() || FormSize.ITX == mb.getFormSize());
-        }
-        filteredList = testMotherboardList.filterRightFormSizeMotherboards(
-                testMotherboards, FormSize.ATX);
-        for (Motherboard mb : filteredList) {
+            assertNotSame(FormSize.ATX, mb.getFormSize());
             assertNotSame(FormSize.EATX, mb.getFormSize());
         }
-        filteredList = testMotherboardList.filterRightFormSizeMotherboards(
+    }
+
+    @Test
+    void testFilterRightFormSizeMotherboardsATX() {
+        List<Motherboard> filteredList = testMotherboardList.filterRightFormSizeMotherboards(
+                testMotherboards, FormSize.ATX);
+        for (Motherboard mb : filteredList) {
+            assertTrue(FormSize.MATX == mb.getFormSize()
+                    || FormSize.ITX == mb.getFormSize()
+                    || FormSize.ATX == mb.getFormSize());
+            assertNotSame(FormSize.EATX, mb.getFormSize());
+        }
+    }
+
+    @Test
+    void testFilterRightFormSizeMotherboardsEATX() {
+        List<Motherboard> filteredList = testMotherboardList.filterRightFormSizeMotherboards(
                 testMotherboards, FormSize.EATX);
         for (Motherboard mb : filteredList) {
-            assertTrue(FormSize.EATX == mb.getFormSize() || FormSize.ATX == mb.getFormSize() ||
-                    FormSize.MATX == mb.getFormSize() || FormSize.ITX == mb.getFormSize());
+            assertTrue(FormSize.EATX == mb.getFormSize()
+                    || FormSize.ATX == mb.getFormSize()
+                    || FormSize.MATX == mb.getFormSize()
+                    || FormSize.ITX == mb.getFormSize());
         }
     }
 

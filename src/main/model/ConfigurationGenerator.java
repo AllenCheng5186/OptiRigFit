@@ -96,19 +96,13 @@ public class ConfigurationGenerator {
             minWatt += configGpu.getBasePower();
         }
         PowerSupply configPsu = getConfigPowerSupply(minWatt);
-        Configuration config = new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
-        config.printOutConfiguration();
-        config = callEditorAfterEachConfigGenerated(config);
-        return config;
+//        Configuration config = new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
+//        config.printOutConfiguration();
+//        config = callEditorAfterEachConfigGenerated(config);
+        return new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
     }
 
-    private Configuration callEditorAfterEachConfigGenerated(Configuration config) {
-        ConfigEditor needEdit = new ConfigEditor(cpuBudget,gpuBudget,motherboardBudget,
-                psuBudget, config,formSize,purpose);
-        config = needEdit.changeConfig();
-        config.printOutConfiguration();
-        return config;
-    }
+
 
     //REQUIRE: minWatt >= 400;
     //EFFECTS: return the first power supply which above the lowest watt require to boot

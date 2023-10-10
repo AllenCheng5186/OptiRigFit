@@ -117,7 +117,8 @@ public class ConfigEditor {
         System.out.println("\nHere are some items you can select to replace:");
         for (int i = 0; i < withinBudgetGpus.size(); i++) {
             String gpuName = withinBudgetGpus.get(i).getModel();
-            System.out.println("\t" + i + " -> " + gpuName);
+            double gpuPrice = withinBudgetGpus.get(i).getPrice();
+            System.out.println("\t" + i + " -> " + gpuName + "   " + gpuPrice);
         }
         System.out.println("\nPlease input the number of item you would like to select");
         int usrChoice = input.nextInt();
@@ -136,7 +137,13 @@ public class ConfigEditor {
         List<PowerSupply> withinBudgetPsus = getPowerSupplies();
         for (int i = 0; i < withinBudgetPsus.size(); i++) {
             String psuName = withinBudgetPsus.get(i).getModel();
-            System.out.println("\t" + i + " -> " + psuName);
+            double psuPrice = withinBudgetPsus.get(i).getPrice();
+            boolean psuModular = withinBudgetPsus.get(i).isModular();
+            if (psuModular) {
+                System.out.println("\t" + i + " -> " + psuName + "   " + "full/semi modular" + "   " + psuPrice);
+            } else {
+                System.out.println("\t" + i + " -> " + psuName + "   " + "not modular" + "   " + psuPrice);
+            }
         }
         System.out.println("\nPlease input the number of item you would like to select");
         int usrChoice = input.nextInt();
@@ -172,7 +179,8 @@ public class ConfigEditor {
         System.out.println("\nHere are some items you can select to replace:");
         for (int i = 0; i < withinBudgetMBs.size(); i++) {
             String motherboardName = withinBudgetMBs.get(i).getName();
-            System.out.println("\t" + i + " -> " + motherboardName);
+            double motherboardPrice = withinBudgetMBs.get(i).getPrice();
+            System.out.println("\t" + i + " -> " + motherboardName + "   " + motherboardPrice);
         }
         System.out.println("\nPlease input the number of item you would like to select");
         int usrChoice = input.nextInt();
@@ -255,7 +263,8 @@ public class ConfigEditor {
         System.out.println("\nHere are some items you can select to replace:");
         for (int i = 0; i < withinBudgetCpus.size(); i++) {
             String cpuName = withinBudgetCpus.get(i).getModel();
-            System.out.println("\t" + i + " -> " + cpuName);
+            double cpuPrice = withinBudgetCpus.get(i).getPrice();
+            System.out.println("\t" + i + " -> " + cpuName + "   " + cpuPrice);
         }
         System.out.println("\nPlease input the number of item you would like to select");
         int usrChoice = input.nextInt();

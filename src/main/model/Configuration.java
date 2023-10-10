@@ -73,4 +73,5 @@ public class Configuration {
     public double getRamBudget() {
         return ramBudget;
     }
+
 }
