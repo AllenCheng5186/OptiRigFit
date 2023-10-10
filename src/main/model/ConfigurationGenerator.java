@@ -172,33 +172,18 @@ public class ConfigurationGenerator {
         return cpuList;
     }
 
-    public List<Cpu> getProperCPUs() {
-        return properCPUs;
-    }
-
     public MotherboardList getMotherboardList() {
         return motherboardList;
-    }
-
-    public List<Motherboard> getProperMotherBoards() {
-        return properMotherBoards;
     }
 
     public PowerSuppliesList getPowerSuppliesList() {
         return powerSuppliesList;
     }
 
-    public List<PowerSupply> getProperPowerSupplies() {
-        return properPowerSupplies;
-    }
-
     public GpuList getGpuList() {
         return gpuList;
     }
 
-    public List<Gpu> getProperGpus() {
-        return properGpus;
-    }
 
     public FormSize getFormSize() {
         return formSize;
