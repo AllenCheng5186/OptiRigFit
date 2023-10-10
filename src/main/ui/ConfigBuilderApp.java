@@ -114,7 +114,7 @@ public class ConfigBuilderApp {
         ConfigurationGenerator cg = new ConfigurationGenerator(budgetInput, usrSizeInput, usrPurpose);
         try {
             Configuration usrConfig = cg.configGenerate();
-            usrConfig.printOutConfiguration();
+//            usrConfig.printOutConfiguration();
             saveOrNot(usrConfig);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Sorry, no such configuration! :(");

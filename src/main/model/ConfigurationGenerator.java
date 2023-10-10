@@ -11,7 +11,9 @@ import model.component.motherboard.MotherboardList;
 import model.component.motherboard.Socket;
 import model.component.psu.PowerSuppliesList;
 import model.component.psu.PowerSupply;
+import ui.ConfigEditor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -95,6 +97,16 @@ public class ConfigurationGenerator {
         }
         PowerSupply configPsu = getConfigPowerSupply(minWatt);
         Configuration config = new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
+        config.printOutConfiguration();
+        config = callEditorAfterEachConfigGenerated(config);
+        return config;
+    }
+
+    private Configuration callEditorAfterEachConfigGenerated(Configuration config) {
+        ConfigEditor needEdit = new ConfigEditor(cpuBudget,gpuBudget,motherboardBudget,
+                psuBudget, config,formSize,purpose);
+        config = needEdit.changeConfig();
+        config.printOutConfiguration();
         return config;
     }
 
@@ -132,12 +144,15 @@ public class ConfigurationGenerator {
 
     //EFFECTS: return the most powerful cpu within budget interval and has the highest benchmark
     private Cpu getConfigCpu() {
-        List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(properCPUs, (cpuBudget + totalBudget * 0.05),
+        List<Cpu> cpusWithIG = new ArrayList<>();
+        if (purpose == ENTRY_LEVEL) {
+            cpusWithIG = cpuList.returnCpusHasIG(properCPUs);
+        } else {
+            cpusWithIG = properCPUs;
+        }
+        List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(cpusWithIG, (cpuBudget + totalBudget * 0.05),
                 cpuBudget);
         Collections.sort(withinBudgetCpus);
-        // TODO 办公配置保证核心显卡 过滤掉F
-//        if (purpose == ENTRY_LEVEL) {
-//        }
         if (cpuBudget >= properCPUs.get(0).getPrice()) {
             return properCPUs.get(0);
         } else {
@@ -155,5 +170,71 @@ public class ConfigurationGenerator {
             cpuSocket = Socket.AM5;
         }
         return cpuSocket;
+    }
+
+    // getter
+
+    public CpuList getCpuList() {
+        return cpuList;
+    }
+
+    public List<Cpu> getProperCPUs() {
+        return properCPUs;
+    }
+
+    public MotherboardList getMotherboardList() {
+        return motherboardList;
+    }
+
+    public List<Motherboard> getProperMotherBoards() {
+        return properMotherBoards;
+    }
+
+    public PowerSuppliesList getPowerSuppliesList() {
+        return powerSuppliesList;
+    }
+
+    public List<PowerSupply> getProperPowerSupplies() {
+        return properPowerSupplies;
+    }
+
+    public GpuList getGpuList() {
+        return gpuList;
+    }
+
+    public List<Gpu> getProperGpus() {
+        return properGpus;
+    }
+
+    public FormSize getFormSize() {
+        return formSize;
+    }
+
+    public Purpose getPurpose() {
+        return purpose;
+    }
+
+    public double getTotalBudget() {
+        return totalBudget;
+    }
+
+    public double getCpuBudget() {
+        return cpuBudget;
+    }
+
+    public double getRamBudget() {
+        return ramBudget;
+    }
+
+    public double getMotherboardBudget() {
+        return motherboardBudget;
+    }
+
+    public double getPsuBudget() {
+        return psuBudget;
+    }
+
+    public double getGpuBudget() {
+        return gpuBudget;
     }
 }

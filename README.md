@@ -55,6 +55,9 @@ Java Desktop App
   - ASUS: https://rog.asus.com/ca-en/motherboards-group/
 - Power Supply:
   - Corsair: https://www.corsair.com/us/en
-  - EVGA:
-  - ASUS:
-  - Cooler Master: 
+  - EVGA: https://www.evga.com/products/productlist.aspx?type=10
+  - ASUS: https://rog.asus.com/event/PSU/ASUS-Power-Supply-Units/global/index.html
+  - Cooler Master: https://www.coolermaster.com/catalog/power-supplies/
+- GPU:
+  - Nvidia: https://store.nvidia.com/en-ca/geforce/store/?page=1&limit=9&locale=en-ca&category=GPU,DESKTOP
+  - AMD: https://shop-ca-en.amd.com/
