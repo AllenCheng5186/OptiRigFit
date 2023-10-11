@@ -70,20 +70,28 @@ public class ConfigEditor {
         Configuration returnConfig = oldConfig;
         if (usrChoiceChangeComp == 1) {
             returnConfig = cpuEdit();
-            System.out.println("\nEdit successful!");
+            checkEditSuccess(returnConfig);
         } else if (usrChoiceChangeComp == 2) {
             returnConfig = motherboardEdit();
-            System.out.println("\nEdit successful!");
+            checkEditSuccess(returnConfig);
         } else if (usrChoiceChangeComp == 3) {
             returnConfig = psuEdit();
-            System.out.println("\nEdit successful!");
+            checkEditSuccess(returnConfig);
         } else if (oldConfig.getGpu() != null && usrChoiceChangeComp == 4) {
             returnConfig = gpuEdit();
-            System.out.println("\nEdit successful!");
+            checkEditSuccess(returnConfig);
         } else {
             System.out.println("Invalid input!");
         }
         return returnConfig;
+    }
+
+    private void checkEditSuccess(Configuration returnConfig) {
+        if (oldConfig == returnConfig) {
+            System.out.println("\nEdit unsuccessful! Change do not saved!");
+        } else {
+            System.out.println("\nEdit successful!");
+        }
     }
 
     private void init() {
