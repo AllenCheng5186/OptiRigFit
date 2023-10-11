@@ -56,17 +56,21 @@ public class ConfigEditor {
 
         init();
         while (keepGoing) {
-            askUsrChangeConfig();
-            usrChangeConfig = input.next();
-            usrChangeConfig = usrChangeConfig.toLowerCase();
             Configuration returnConfig = oldConfig;
-            if (usrChangeConfig.equals("n")) {
-                return returnConfig;
+            while (true) {
+                askUsrChangeConfig();
+                usrChangeConfig = input.next();
+                usrChangeConfig = usrChangeConfig.toLowerCase();
+                if (usrChangeConfig.equals("n")) {
+                    return returnConfig;
+                } else if (usrChangeConfig.equals("y")) {
+                    int usrChoiceChangeComp = askUsrChangeWhichComponent();
+                    returnConfig = componentEdit(usrChoiceChangeComp);
+                    returnConfig.printOutConfiguration();
+                } else {
+                    System.out.println("Invalid input! Input (y/n)!");
+                }
             }
-            int usrChoiceChangeComp = askUsrChangeWhichComponent();
-            returnConfig = componentEdit(usrChoiceChangeComp);
-            returnConfig.printOutConfiguration();
-
         }
         System.out.println("\nEdit configuration not successful!");
         return oldConfig;
@@ -88,14 +92,28 @@ public class ConfigEditor {
 
     //EFFECTS: return user's choice of would like to change which component
     private int askUsrChangeWhichComponent() {
-        System.out.println("\nWhich component would you like to change?");
-        System.out.println("\t1 -> CPU");
-        System.out.println("\t2 -> Motherboard");
-        System.out.println("\t3 -> Power Supply");
-        if (oldConfig.getGpu() != null) {
-            System.out.println("\t4 -> GPU");
+        while (true) {
+            System.out.println("\nWhich component would you like to change?");
+            System.out.println("\t1 -> CPU");
+            System.out.println("\t2 -> Motherboard");
+            System.out.println("\t3 -> Power Supply");
+            if (oldConfig.getGpu() != null) {
+                System.out.println("\t4 -> GPU");
+            }
+            String usrInputInt;
+            usrInputInt = input.next();
+            if (usrInputInt.equals("1")) {
+                return 1;
+            } else if (usrInputInt.equals("2")) {
+                return 2;
+            } else if (usrInputInt.equals("3")) {
+                return 3;
+            } else if (usrInputInt.equals("4") && (oldConfig.getGpu() != null)) {
+                return 4;
+            } else {
+                System.out.println("Invalid Input! Follow the instruction!");
+            }
         }
-        return input.nextInt();
     }
 
     // EFFECTS: according to user's choice of which component user would like to change,
@@ -203,7 +221,7 @@ public class ConfigEditor {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("\nThe number you input is invalid!");
         }
-        return  null;
+        return null;
     }
 
     //EFFECTS: motherboard editor, cpu socket do not changed, filter out the

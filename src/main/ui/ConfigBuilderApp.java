@@ -80,7 +80,6 @@ public class ConfigBuilderApp {
     // to check the next one in the list
     private void showSaveConfigsOneByOne() {
         boolean keepCheckingNext = true;
-        String usrInput = null;
         int nextConfigIndex = 0;
         while (keepCheckingNext) {
             savedConfigs.get(nextConfigIndex).printOutConfiguration();
@@ -88,19 +87,38 @@ public class ConfigBuilderApp {
                 System.out.println("\n No more saved configurations");
                 break;
             } else {
-                System.out.println("\nWould like check out next saved configuration you had saved?");
-                System.out.println("\ty -> Yes, see next one");
-                System.out.println("\tn -> No, go back to menu");
-                usrInput = input.next();
-                usrInput = usrInput.toLowerCase();
-                if (usrInput.equals("n")) {
-                    keepCheckingNext = false;
-                } else {
-                    nextConfigIndex++;
+                while (true) {
+                    displayCheckNextOneMenu();
+                    String usrInput = getUsrInput();
+                    if (usrInput.equals("n")) {
+                        keepCheckingNext = false;
+                        break;
+                    } else if (usrInput.equals("y")) {
+                        nextConfigIndex++;
+                        break;
+                    } else {
+                        System.out.println("Invalid input! Input (y/n)!");
+                    }
                 }
             }
         }
     }
+
+    //EFFECTS: return user input in case of character
+    private String getUsrInput() {
+        String usrInput = null;
+        usrInput = input.next();
+        usrInput = usrInput.toLowerCase();
+        return usrInput;
+    }
+
+    //EFFECTS: display the menu of asking user whether you would like to check next one (if possible)
+    private static void displayCheckNextOneMenu() {
+        System.out.println("\nWould like check out next saved configuration you had saved?");
+        System.out.println("\ty -> Yes, see next one");
+        System.out.println("\tn -> No, go back to menu");
+    }
+
 
     //MODIFIES: this
     //EFFECTS: call config generator method to generator a configuration for user according
@@ -116,7 +134,7 @@ public class ConfigBuilderApp {
             Configuration usrConfig = cg.configGenerate();
             usrConfig.printOutConfiguration();
             ConfigEditor needEdit = new ConfigEditor(cg.getCpuBudget(), cg.getGpuBudget(), cg.getMotherboardBudget(),
-                    cg.getPsuBudget(), usrConfig, cg.getFormSize(),cg.getPurpose());
+                    cg.getPsuBudget(), usrConfig, cg.getFormSize(), cg.getPurpose());
             usrConfig = needEdit.changeConfig();
             usrConfig.printOutConfiguration();
             saveOrNot(usrConfig);
@@ -130,63 +148,97 @@ public class ConfigBuilderApp {
     //MODIFIES: this
     //EFFECTS: helper method to associate with upper method to save user's generated configuration
     private void saveOrNot(Configuration usrConfig) {
-        System.out.println("\nWould like to save this configuration?");
-        System.out.println("\ty -> Yes. Save it!");
-        System.out.println("\tn -> Nope. Discard it!");
-        String saveOrNot = input.next();
-        saveOrNot = saveOrNot.toLowerCase();
-        if (saveOrNot.equals("y")) {
-            savedConfigs.add(usrConfig);
+        while (true) {
+            System.out.println("\nWould like to save this configuration?");
+            System.out.println("\ty -> Yes. Save it!");
+            System.out.println("\tn -> Nope. Discard it!");
+            String saveOrNot = input.next();
+            saveOrNot = saveOrNot.toLowerCase();
+            if (saveOrNot.equals("y")) {
+                savedConfigs.add(usrConfig);
+                break;
+            } else if (saveOrNot.equals("n")) {
+                System.out.println("Configuration does not save!");
+                break;
+            } else {
+                System.out.println("Invalid Input! Input (y/n)!");
+            }
         }
     }
 
     //EFFECTS: show desktop case size options to user and return their choice in terms of FormSize object
     private FormSize getUsrSizeInput() {
-        System.out.println("\nWhat is the size of your computer?");
-        System.out.println("\tSelect from following options:");
-        System.out.println("\t s -> small size");
-        System.out.println("\t m -> middle size");
-        System.out.println("\t l -> large size");
-        String sizeInput = input.next();
-        sizeInput = sizeInput.toLowerCase();
         FormSize usrSizeInput = null;
-        if (sizeInput.equals("s")) {
-            usrSizeInput = FormSize.ITX;
-        } else if (sizeInput.equals("m")) {
-            usrSizeInput = FormSize.ATX;
-        } else {
-            usrSizeInput = FormSize.EATX;
+        while (true) {
+            System.out.println("\nWhat is the size of your computer?");
+            System.out.println("\tSelect from following options:");
+            System.out.println("\t s -> small size");
+            System.out.println("\t m -> middle size");
+            System.out.println("\t l -> large size");
+            String sizeInput = input.next();
+            sizeInput = sizeInput.toLowerCase();
+            if (sizeInput.equals("s")) {
+                usrSizeInput = FormSize.ITX;
+                break;
+            } else if (sizeInput.equals("m")) {
+                usrSizeInput = FormSize.ATX;
+                break;
+            } else if (sizeInput.equals("l")) {
+                usrSizeInput = FormSize.EATX;
+                break;
+            } else {
+                System.out.println("Invalid Input! Input (s/m/l)!");
+            }
         }
         return usrSizeInput;
     }
 
     //EFFECTS: show purposes options to user and return their choice in terms of Purpose object
     private Purpose getUsrPurpose() {
+        Purpose usrPurpose = null;
+        while (true) {
+            displayPurposeMenu();
+            String purposeInput = input.next();
+            purposeInput = purposeInput.toLowerCase();
+            if (purposeInput.equals("f")) {
+                usrPurpose = Purpose.ENTRY_LEVEL;
+                return usrPurpose;
+            } else if (purposeInput.equals("g")) {
+                usrPurpose = Purpose.GAMING;
+                return usrPurpose;
+            } else if (purposeInput.equals("p")) {
+                usrPurpose = Purpose.PRODUCTIVITY;
+                return usrPurpose;
+            } else if (purposeInput.equals("w")) {
+                usrPurpose = Purpose.WORK_STATION;
+            } else {
+                System.out.println("Invalid Input");
+            }
+        }
+    }
+
+    //EFFECTS: display the purpose selection menu to the user
+    private static void displayPurposeMenu() {
         System.out.println("What is the primary purpose of your computer?");
         System.out.println("\nSelect from following purpose:");
         System.out.println("\tf -> Office Work (Entry-Level)");
         System.out.println("\tg -> Gaming");
         System.out.println("\tp -> Productivity, Video Editing");
         System.out.println("\tw -> Work Station, 3d modelling");
-        String purposeInput = input.next();
-        purposeInput = purposeInput.toLowerCase();
-        Purpose usrPurpose = null;
-        if (purposeInput.equals("f")) {
-            usrPurpose = Purpose.ENTRY_LEVEL;
-        } else if (purposeInput.equals("g")) {
-            usrPurpose = Purpose.GAMING;
-        } else if (purposeInput.equals("p")) {
-            usrPurpose = Purpose.PRODUCTIVITY;
-        } else {
-            usrPurpose = Purpose.WORK_STATION;
-        }
-        return usrPurpose;
     }
 
     //EFFECTS: ask user for their budget they would like to spend for their new desktop
     private int getBudgetInput() {
-        System.out.println("What were you planning on spending for your desktop?");
-        return Integer.parseInt(input.next());
+        System.out.println("What were you planning on spending for your desktop ($CAD)?");
+        String usrInput = input.next();
+
+        while (!usrInput.matches("\\d+")) {
+            System.out.println("\nInvalid Input!");
+            System.out.println("\nWhat were you planning on spending for your desktop ($CAD)?");
+            usrInput = input.next();
+        }
+        return Integer.parseInt(usrInput);
+
     }
 
 }
