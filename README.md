@@ -56,6 +56,8 @@ Java Desktop App
 - As a user, I want to be able to choose the size of computer
 - As a user, I want to be able to choose the purpose of computer
 - As a user, I want to be able to input budget
+- As a user, when I select the quit option from the application menu, I want to be reminded to save configuration list to file and have the option to do so or not.
+- As a user, when I start the application, I want to be given the option to load my configuration list from file.
 
 
 ## Data Sources

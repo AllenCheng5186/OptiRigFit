@@ -211,6 +211,7 @@ public class ConfigBuilderApp {
                 return usrPurpose;
             } else if (purposeInput.equals("w")) {
                 usrPurpose = Purpose.WORK_STATION;
+                return usrPurpose;
             } else {
                 System.out.println("Invalid Input");
             }
