@@ -1,7 +1,10 @@
 package model.component.gpu;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // represent a gpu with given model name, base power to boot, chip manufacturer, benchmark and price
-public class Gpu implements Comparable<Gpu> {
+public class Gpu implements Comparable<Gpu>, Writable {
     private String model;
     private int basePower;
     private double price;
@@ -24,6 +27,18 @@ public class Gpu implements Comparable<Gpu> {
         return o.getBenchMark() - this.benchMark;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        json.put("model", model);
+        json.put("basePower", basePower);
+        json.put("price", price);
+        json.put("gpuMfr", gpuMfr);
+        json.put("bench mark", benchMark);
+
+        return json;
+    }
 
     // getter
 

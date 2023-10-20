@@ -1,9 +1,11 @@
 package model.component.psu;
 
 import model.component.motherboard.FormSize;
+import org.json.JSONObject;
+import persistence.Writable;
 
 //represent a power supply with model name, compatible case size, rated power, is modular or not and price
-public class PowerSupply implements Comparable<PowerSupply> {
+public class PowerSupply implements Comparable<PowerSupply>, Writable {
 
     private String model;
     private FormSize formSize;
@@ -24,6 +26,19 @@ public class PowerSupply implements Comparable<PowerSupply> {
     @Override
     public int compareTo(PowerSupply o) {
         return (this.getWattage() - o.getWattage());
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        json.put("model", model);
+        json.put("formSize", formSize);
+        json.put("wattage", wattage);
+        json.put("isModular", isModular);
+        json.put("price", price);
+
+        return json;
     }
 
     // getters

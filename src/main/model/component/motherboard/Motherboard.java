@@ -1,8 +1,11 @@
 package model.component.motherboard;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 //represent a motherboard object with model name, compatible cpu socket, case size,
 // max ram capacity, number of ram slot and price
-public class Motherboard implements Comparable<Motherboard> {
+public class Motherboard implements Comparable<Motherboard>, Writable {
     private String name;
     private Socket socket;
     private FormSize formSize;
@@ -31,6 +34,20 @@ public class Motherboard implements Comparable<Motherboard> {
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        json.put("model", name);
+        json.put("socket", socket);
+        json.put("formSize", formSize);
+        json.put("maxRam", maxRam);
+        json.put("ramSlot", ramSlot);
+        json.put("price", price);
+
+        return json;
     }
 
     public String getName() {

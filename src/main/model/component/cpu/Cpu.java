@@ -1,7 +1,10 @@
 package model.component.cpu;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 //represent a cpu object with given model name, base power to boot, chip manufacturer, benchmark and price
-public class Cpu implements Comparable<Cpu> {
+public class Cpu implements Comparable<Cpu>, Writable {
     private String model;
     private int basePower;
     private double price;
@@ -25,6 +28,18 @@ public class Cpu implements Comparable<Cpu> {
     @Override
     public int compareTo(Cpu o) {
         return o.getBenchMark() - this.benchMark;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("model", model);
+        json.put("basePower", basePower);
+        json.put("price", price);
+        json.put("cpuMfr", cpuMfr);
+        json.put("integratedGraphics", integratedGraphics);
+        json.put("benchMark", benchMark);
+        return json;
     }
 
     // getter

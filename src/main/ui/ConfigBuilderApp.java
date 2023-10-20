@@ -5,18 +5,30 @@ import model.Configuration;
 import model.ConfigurationGenerator;
 import model.Purpose;
 import model.component.motherboard.FormSize;
+import org.json.JSONObject;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+import persistence.Writable;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 // Configuration Generator App main method
 public class ConfigBuilderApp {
+    private static final String JSON_STORE = "./data/configurations.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+
     private List<Configuration> savedConfigs;
     private Scanner input;
 
     // EFFECTS: runs the teller application
     public ConfigBuilderApp() {
+        this.jsonWriter = new JsonWriter(JSON_STORE);
+        this.jsonReader = new JsonReader(JSON_STORE);
         runConfigBuilder();
     }
 
@@ -43,6 +55,9 @@ public class ConfigBuilderApp {
                 case "n":
                     callConfigGenerator();
                     break;
+                case "l" :
+                    loadConfigsList();
+                    break;
             }
         }
 
@@ -63,6 +78,7 @@ public class ConfigBuilderApp {
     private void displayFunMenu() {
         System.out.println("\nSelect from following function:");
         System.out.println("\tn -> build new configuration");
+        System.out.println("\tl -> load the configurations from the file");
         System.out.println("\tp -> check out saved configurations");
         System.out.println("\tq -> quit");
     }
@@ -71,6 +87,7 @@ public class ConfigBuilderApp {
     private void checkOutSavedConfig() {
         if (!savedConfigs.isEmpty()) {
             showSaveConfigsOneByOne();
+            saveListOfConfigurations();
         } else {
             System.out.println("You do not have any saved configuration yet!");
         }
@@ -242,4 +259,52 @@ public class ConfigBuilderApp {
 
     }
 
+    // EFFECTS: ask user whether they would like to save the saved list of configurations to file
+    private void saveListOfConfigurations() {
+        while (true) {
+            System.out.println("\nWould like to save the list of configurations above to file?");
+            System.out.println("\ty -> Yep, save them.");
+            System.out.println("\tn -> Nope, discard them.");
+            String usrInput = input.next();
+            usrInput = usrInput.toLowerCase();
+            if (usrInput.equals("y")) {
+                processListConfigsSave();
+                break;
+            } else if (usrInput.equals("n")) {
+                System.out.println("\nConfigurations not save!");
+                break;
+            } else {
+                System.out.println("Invalid Input! Please input following above instruction!");
+            }
+        }
+    }
+
+    //EFFECTS: saves the saved list of configurations to file
+    private void processListConfigsSave() {
+        JSONObject json = new JSONObject();
+        try {
+            jsonWriter.open();
+            jsonWriter.write(savedConfigs);
+            jsonWriter.close();
+            System.out.println("The printed list of configurations saved to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads saved list of configurations from file
+    private void loadConfigsList() {
+        try {
+            List<Configuration> loadConfigsList = jsonReader.read();
+            System.out.println("\nLoaded saved configuration list from " + JSON_STORE);
+            for (Configuration config:loadConfigsList) {
+                savedConfigs.add(config);
+            }
+            System.out.println("The saved configurations has been added to the end of list");
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
 }

@@ -4,11 +4,13 @@ import model.component.cpu.Cpu;
 import model.component.gpu.Gpu;
 import model.component.motherboard.Motherboard;
 import model.component.psu.PowerSupply;
-import ui.ConfigEditor;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 // represent a configuration store cpu, motherboard, gpu (if possible), power supply
 // and ram purchase suggestion and restriction
-public class Configuration {
+public class Configuration implements Writable {
     private Cpu cpu;
     private Motherboard motherboard;
     private PowerSupply powerSupply;
@@ -74,4 +76,26 @@ public class Configuration {
         return ramBudget;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("ramBudget", ramBudget);
+        json.put("components", componentsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns components in this configuration as a JSON array
+    private JSONArray componentsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        jsonArray.put(cpu.toJson());
+        if (gpu != null) {
+            jsonArray.put(gpu.toJson());
+        }
+        jsonArray.put(motherboard.toJson());
+        jsonArray.put(powerSupply.toJson());
+
+
+        return jsonArray;
+    }
 }
