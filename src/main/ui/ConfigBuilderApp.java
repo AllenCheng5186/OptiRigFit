@@ -37,31 +37,37 @@ public class ConfigBuilderApp {
     private void runConfigBuilder() {
         boolean keepGoing = true;
         String command = null;
-
         init();
-
         while (keepGoing) {
-            displayFunMenu();
-            command = input.next();
-            command = command.toLowerCase();
-
-            switch (command) {
-                case "q":
-                    keepGoing = false;
-                    break;
-                case "p":
-                    checkOutSavedConfig();
-                    break;
-                case "n":
-                    callConfigGenerator();
-                    break;
-                case "l" :
-                    loadConfigsList();
-                    break;
-            }
+            keepGoing = processUsrInput(keepGoing);
         }
-
         System.out.println("\nThanks you for using our App!");
+    }
+
+    // EFFECTS: process user input, call corresponding method
+    private boolean processUsrInput(boolean keepGoing) {
+        String command;
+        displayFunMenu();
+        command = input.next();
+        command = command.toLowerCase();
+        switch (command) {
+            case "q":
+                keepGoing = false;
+                break;
+            case "p":
+                checkOutSavedConfig();
+                break;
+            case "n":
+                callConfigGenerator();
+                break;
+            case "l" :
+                loadConfigsList();
+                break;
+            case "s":
+                processListConfigsSave();
+                break;
+        }
+        return keepGoing;
     }
 
     //MODIFIES: this
@@ -79,6 +85,7 @@ public class ConfigBuilderApp {
         System.out.println("\nSelect from following function:");
         System.out.println("\tn -> build new configuration");
         System.out.println("\tl -> load the configurations from the file");
+        System.out.println("\ts -> save the configurations to the file");
         System.out.println("\tp -> check out saved configurations");
         System.out.println("\tq -> quit");
     }
@@ -87,7 +94,7 @@ public class ConfigBuilderApp {
     private void checkOutSavedConfig() {
         if (!savedConfigs.isEmpty()) {
             showSaveConfigsOneByOne();
-            saveListOfConfigurations();
+//            saveListOfConfigurations();
         } else {
             System.out.println("You do not have any saved configuration yet!");
         }
@@ -259,25 +266,25 @@ public class ConfigBuilderApp {
 
     }
 
-    // EFFECTS: ask user whether they would like to save the saved list of configurations to file
-    private void saveListOfConfigurations() {
-        while (true) {
-            System.out.println("\nWould like to save the list of configurations above to file?");
-            System.out.println("\ty -> Yep, save them.");
-            System.out.println("\tn -> Nope, discard them.");
-            String usrInput = input.next();
-            usrInput = usrInput.toLowerCase();
-            if (usrInput.equals("y")) {
-                processListConfigsSave();
-                break;
-            } else if (usrInput.equals("n")) {
-                System.out.println("\nConfigurations not save!");
-                break;
-            } else {
-                System.out.println("Invalid Input! Please input following above instruction!");
-            }
-        }
-    }
+//    // EFFECTS: ask user whether they would like to save the saved list of configurations to file
+//    private void saveListOfConfigurations() {
+//        while (true) {
+//            System.out.println("\nWould like to save the list of configurations above to file?");
+//            System.out.println("\ty -> Yep, save them.");
+//            System.out.println("\tn -> Nope, discard them.");
+//            String usrInput = input.next();
+//            usrInput = usrInput.toLowerCase();
+//            if (usrInput.equals("y")) {
+//                processListConfigsSave();
+//                break;
+//            } else if (usrInput.equals("n")) {
+//                System.out.println("\nConfigurations not save!");
+//                break;
+//            } else {
+//                System.out.println("Invalid Input! Please input following above instruction!");
+//            }
+//        }
+//    }
 
     //EFFECTS: saves the saved list of configurations to file
     private void processListConfigsSave() {

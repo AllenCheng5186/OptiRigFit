@@ -49,7 +49,7 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
-    // EFFECTS: parses workroom from JSON object and returns it
+    // EFFECTS: parses configuration list from JSON object and returns it
     private List<Configuration> parseConfigsList(JSONObject jsonObject) {
         List<Configuration> savedConfigs = new ArrayList<>();
         addThingies(savedConfigs, jsonObject);
@@ -66,8 +66,8 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES: wr
-    // EFFECTS: parses thingy from JSON object and adds it to workroom
+    // MODIFIES: savedConfigs
+    // EFFECTS: parses configuration from JSON object and adds it to the given list
     private void addConfig(List<Configuration> savedConfigs, JSONObject jsonObject) {
         double configRamBudget = jsonObject.getDouble("ramBudget");
         JSONArray jsonArrayComponent = jsonObject.getJSONArray("components");
@@ -90,6 +90,7 @@ public class JsonReader {
         }
     }
 
+    // EFFECTS: return a power supply object which parsed from JSON object
     private PowerSupply readPsuJsonObject(JSONObject compJsonObject) {
         int psuWatt = compJsonObject.getInt("wattage");
         double psuPrice = compJsonObject.getDouble("price");
@@ -99,6 +100,7 @@ public class JsonReader {
         return new PowerSupply(psuModel, psuSize, psuWatt, psuModular, psuPrice);
     }
 
+    // EFFECTS: return a cpu object which parsed from JSON object
     private Cpu readCpuJsonObject(JSONObject compJsonObject) {
         CpuMfr cpuMfr = CpuMfr.valueOf(compJsonObject.getString("cpuMfr"));
         int cpuBasePower = compJsonObject.getInt("basePower");
@@ -109,6 +111,7 @@ public class JsonReader {
         return new Cpu(cpuModel, cpuBasePower, cpuPrice, cpuMfr, cpuBenchMark);
     }
 
+    // EFFECTS: return a gpu object which parsed from JSON object (if possible)
     private Gpu readGpuJsonObject(JSONObject compJsonObject) {
         int gpuBasePower = compJsonObject.getInt("basePower");
         double gpuPrice = compJsonObject.getDouble("price");
@@ -118,6 +121,7 @@ public class JsonReader {
         return new Gpu(gpuModel, gpuBasePower, gpuPrice, gpuMfr, gpuBenchMark);
     }
 
+    // EFFECTS: return  a motherboard object which parsed from JSON object
     private Motherboard readMbJson(JSONObject compJsonObject) {
         int mbMaxRam = compJsonObject.getInt("maxRam");
         double mbPrice = compJsonObject.getDouble("price");
