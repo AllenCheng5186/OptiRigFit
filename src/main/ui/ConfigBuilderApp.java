@@ -4,16 +4,10 @@ package ui;
 import model.Configuration;
 import model.ConfigurationGenerator;
 import model.Purpose;
-import model.component.cpu.Cpu;
-import model.component.gpu.Gpu;
 import model.component.motherboard.FormSize;
-import model.component.motherboard.Motherboard;
-import model.component.psu.PowerSuppliesList;
-import model.component.psu.PowerSupply;
 import org.json.JSONObject;
 import persistence.JsonReader;
 import persistence.JsonWriter;
-import persistence.Writable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,7 +16,7 @@ import java.util.List;
 import java.util.Scanner;
 
 // Configuration Generator App main method
-public class ConfigBuilderApp {
+public class ConfigBuilderApp extends ConfigPrinter {
     private static final String JSON_STORE = "./data/configurations.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -269,64 +263,6 @@ public class ConfigBuilderApp {
         }
         return Integer.parseInt(usrInput);
 
-    }
-
-//    // EFFECTS: ask user whether they would like to save the saved list of configurations to file
-//    private void saveListOfConfigurations() {
-//        while (true) {
-//            System.out.println("\nWould like to save the list of configurations above to file?");
-//            System.out.println("\ty -> Yep, save them.");
-//            System.out.println("\tn -> Nope, discard them.");
-//            String usrInput = input.next();
-//            usrInput = usrInput.toLowerCase();
-//            if (usrInput.equals("y")) {
-//                processListConfigsSave();
-//                break;
-//            } else if (usrInput.equals("n")) {
-//                System.out.println("\nConfigurations not save!");
-//                break;
-//            } else {
-//                System.out.println("Invalid Input! Please input following above instruction!");
-//            }
-//        }
-//    }
-
-    //EFFECTS: print out configuration and total aggregate
-    public void printOutConfiguration(Configuration config) {
-        Cpu cpu = config.getCpu();
-        Motherboard motherboard = config.getMotherboard();
-        double ramBudget = config.getRamBudget();
-        Gpu gpu = config.getGpu();
-        PowerSupply powerSupply = config.getPowerSupply();
-
-        System.out.println("\nCPU: " + cpu.getModel() + "   " + cpu.getPrice());
-        motherboradInfoPrint(motherboard, ramBudget);
-        System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
-        if (gpu != null) {
-            System.out.println("GPU: " + gpu.getModel() + "   " + gpu.getPrice());
-        }
-        System.out.println("Power Supply: " + powerSupply.getModel() + "   " + powerSupply.getPrice());
-        double configurationAggregate = cpu.getPrice() + motherboard.getPrice() + powerSupply.getPrice() + ramBudget;
-        if (gpu != null) {
-            configurationAggregate += gpu.getPrice();
-        }
-        configurationAggregate = Math.round(configurationAggregate * 100.0) / 100.0;
-        System.out.println("Aggregate: " + configurationAggregate);
-    }
-
-    // EFFECTS: helper function to print info about motherboard
-    private static void motherboradInfoPrint(Motherboard motherboard, double ramBudget) {
-        if (motherboard.getName().contains("D4")) {
-            System.out.println("RAM: DDR4" + "   "
-                    + "Max RAM:" + motherboard.getMaxRam()
-                    + "   " + "RAM slot: " + motherboard.getRamSlot()
-                    + "   " + ramBudget);
-        } else {
-            System.out.println("RAM: DDR5" + "   "
-                    + "Max RAM:" + motherboard.getMaxRam()
-                    + "   " + "RAM slot: " + motherboard.getRamSlot()
-                    + "   " + ramBudget);
-        }
     }
 
     //EFFECTS: saves the saved list of configurations to file

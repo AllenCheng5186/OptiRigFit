@@ -23,7 +23,7 @@ import static model.Purpose.ENTRY_LEVEL;
 
 //Project Editor App which ui to edit generated configuration
 
-public class ConfigEditor {
+public class ConfigEditor extends ConfigPrinter {
     private static final int UPPER_DOWN_BOUNDARY_INTERVAL = 150;
 
     private Scanner input;
@@ -342,40 +342,4 @@ public class ConfigEditor {
         return oldConfig;
     }
 
-    public void printOutConfiguration(Configuration config) {
-        Cpu cpu = config.getCpu();
-        Motherboard motherboard = config.getMotherboard();
-        double ramBudget = config.getRamBudget();
-        Gpu gpu = config.getGpu();
-        PowerSupply powerSupply = config.getPowerSupply();
-
-        System.out.println("\nCPU: " + cpu.getModel() + "   " + cpu.getPrice());
-        motherboradInfoPrint(motherboard, ramBudget);
-        System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
-        if (gpu != null) {
-            System.out.println("GPU: " + gpu.getModel() + "   " + gpu.getPrice());
-        }
-        System.out.println("Power Supply: " + powerSupply.getModel() + "   " + powerSupply.getPrice());
-        double configurationAggregate = cpu.getPrice() + motherboard.getPrice() + powerSupply.getPrice() + ramBudget;
-        if (gpu != null) {
-            configurationAggregate += gpu.getPrice();
-        }
-        configurationAggregate = Math.round(configurationAggregate * 100.0) / 100.0;
-        System.out.println("Aggregate: " + configurationAggregate);
-    }
-
-    // EFFECTS: helper function to print info about motherboard
-    private static void motherboradInfoPrint(Motherboard motherboard, double ramBudget) {
-        if (motherboard.getName().contains("D4")) {
-            System.out.println("RAM: DDR4" + "   "
-                    + "Max RAM:" + motherboard.getMaxRam()
-                    + "   " + "RAM slot: " + motherboard.getRamSlot()
-                    + "   " + ramBudget);
-        } else {
-            System.out.println("RAM: DDR5" + "   "
-                    + "Max RAM:" + motherboard.getMaxRam()
-                    + "   " + "RAM slot: " + motherboard.getRamSlot()
-                    + "   " + ramBudget);
-        }
-    }
 }
