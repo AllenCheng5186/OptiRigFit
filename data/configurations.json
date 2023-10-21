@@ -1,34 +1,41 @@
 {"savedConfig": [
     {
-        "ramBudget": 300,
+        "ramBudget": 150,
         "components": [
             {
-                "cpuMfr": "AMD",
+                "cpuMfr": "INTEL",
                 "basePower": 65,
-                "price": 499,
-                "benchMark": 49350,
-                "model": "R9-7900",
+                "price": 329,
+                "benchMark": 32489,
+                "model": "i5-13500",
                 "integratedGraphics": true
             },
             {
-                "maxRam": 192,
-                "price": 449.99,
-                "model": "Asus ROG STRIX B650E-E GAMING WIFI",
-                "socket": "AM5",
+                "basePower": 295,
+                "price": 729.99,
+                "bench mark": 24461,
+                "model": "Radeon RX 7800 XT",
+                "gpuMfr": "AMD"
+            },
+            {
+                "maxRam": 128,
+                "price": 299.99,
+                "model": "Asus TUF GAMING Z790-PLUS D4",
+                "socket": "LGA1700",
                 "formSize": "ATX",
                 "ramSlot": 4
             },
             {
-                "wattage": 1200,
-                "price": 400,
-                "model": "Corsair HX1200i",
+                "wattage": 650,
+                "price": 258.08,
+                "model": "Cooler Master XG650 Plus",
                 "isModular": true,
                 "formSize": "ATX"
             }
         ]
     },
     {
-        "ramBudget": 300,
+        "ramBudget": 500,
         "components": [
             {
                 "cpuMfr": "AMD",
@@ -39,19 +46,19 @@
                 "integratedGraphics": true
             },
             {
-                "basePower": 355,
-                "price": 1348.98,
-                "bench mark": 31142,
-                "model": "Radeon RX 7900 XTX",
-                "gpuMfr": "AMD"
+                "basePower": 450,
+                "price": 2298.98,
+                "bench mark": 38929,
+                "model": "GeForce RTX 4090",
+                "gpuMfr": "NVIDIA"
             },
             {
-                "maxRam": 192,
-                "price": 594.99,
-                "model": "Asus ROG STRIX X670E-F GAMING WIFI",
+                "maxRam": 96,
+                "price": 579.99,
+                "model": "Asus ROG STRIX X670E-I GAMING WIFI",
                 "socket": "AM5",
-                "formSize": "ATX",
-                "ramSlot": 4
+                "formSize": "ITX",
+                "ramSlot": 2
             },
             {
                 "wattage": 1300,

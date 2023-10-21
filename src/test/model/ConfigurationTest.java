@@ -49,32 +49,5 @@ public class ConfigurationTest {
         assertEquals(500, testConfiguration.getRamBudget());
     }
 
-    @Test
-    void testPrintOutConfiguration() {
-        testConfiguration.printOutConfiguration();
-        //Should print out the following information in the console
-        //CPU: i9-13900KS   949.0
-        //RAM: DDR5   Max RAM:192   RAM slot: 4   500.0
-        //MotherBoard: Asus ROG MAXIMUS Z790 HERO   789.98
-        //GPU: GeForce RTX 4090   2298.98
-        //Power Supply: Corsair SF1000L    269.99
-        //Aggregate: 4807.95
 
-        testConfigurationRamD4.printOutConfiguration();
-        //Should print out the following information in the console
-        //CPU: i9-13900KS   949.0
-        //RAM: DDR4   Max RAM:128   RAM slot: 4   600.0
-        //MotherBoard: Asus TUF GAMING Z690-PLUS D4   373.53
-        //GPU: GeForce RTX 4090   2298.98
-        //Power Supply: Corsair SF1000L    269.99
-        //Aggregate: 4491.5
-
-        testConfigurationWithoutGpu.printOutConfiguration();
-        //Should print out the following information in the console
-        //CPU: i9-13900KS   949.0
-        //RAM: DDR4   Max RAM:128   RAM slot: 4   300.0
-        //MotherBoard: Asus TUF GAMING Z690-PLUS D4   373.53
-        //Power Supply: Corsair SF1000L    269.99
-        //Aggregate: 1892.52
-    }
 }

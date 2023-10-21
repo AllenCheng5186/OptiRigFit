@@ -27,32 +27,6 @@ public class Configuration implements Writable {
         this.ramBudget = ramBudget;
     }
 
-    //EFFECTS: print out configuration and total aggregate
-    public void printOutConfiguration() {
-        System.out.println("\nCPU: " + cpu.getModel() + "   " + cpu.getPrice());
-        if (motherboard.getName().contains("D4")) {
-            System.out.println("RAM: DDR4" + "   "
-                    + "Max RAM:" + motherboard.getMaxRam()
-                    + "   " + "RAM slot: " + motherboard.getRamSlot()
-                    + "   " + ramBudget);
-        } else {
-            System.out.println("RAM: DDR5" + "   "
-                    + "Max RAM:" + motherboard.getMaxRam()
-                    + "   " + "RAM slot: " + motherboard.getRamSlot()
-                    + "   " + ramBudget);
-        }
-        System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
-        if (gpu != null) {
-            System.out.println("GPU: " + gpu.getModel() + "   " + gpu.getPrice());
-        }
-        System.out.println("Power Supply: " + powerSupply.getModel() + "   " + powerSupply.getPrice());
-        double configurationAggregate = cpu.getPrice() + motherboard.getPrice() + powerSupply.getPrice() + ramBudget;
-        if (gpu != null) {
-            configurationAggregate += gpu.getPrice();
-        }
-        configurationAggregate = Math.round(configurationAggregate * 100.0) / 100.0;
-        System.out.println("Aggregate: " + configurationAggregate);
-    }
 
     //getter
 

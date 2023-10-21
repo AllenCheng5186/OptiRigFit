@@ -4,7 +4,12 @@ package ui;
 import model.Configuration;
 import model.ConfigurationGenerator;
 import model.Purpose;
+import model.component.cpu.Cpu;
+import model.component.gpu.Gpu;
 import model.component.motherboard.FormSize;
+import model.component.motherboard.Motherboard;
+import model.component.psu.PowerSuppliesList;
+import model.component.psu.PowerSupply;
 import org.json.JSONObject;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -106,7 +111,7 @@ public class ConfigBuilderApp {
         boolean keepCheckingNext = true;
         int nextConfigIndex = 0;
         while (keepCheckingNext) {
-            savedConfigs.get(nextConfigIndex).printOutConfiguration();
+            printOutConfiguration(savedConfigs.get(nextConfigIndex));
             if ((nextConfigIndex + 2) > savedConfigs.size()) {
                 System.out.println("\n No more saved configurations");
                 break;
@@ -156,11 +161,11 @@ public class ConfigBuilderApp {
         ConfigurationGenerator cg = new ConfigurationGenerator(budgetInput, usrSizeInput, usrPurpose);
         try {
             Configuration usrConfig = cg.configGenerate();
-            usrConfig.printOutConfiguration();
+            printOutConfiguration(usrConfig);
             ConfigEditor needEdit = new ConfigEditor(cg.getCpuBudget(), cg.getGpuBudget(), cg.getMotherboardBudget(),
                     cg.getPsuBudget(), usrConfig, cg.getFormSize(), cg.getPurpose());
             usrConfig = needEdit.changeConfig();
-            usrConfig.printOutConfiguration();
+            printOutConfiguration(usrConfig);
             saveOrNot(usrConfig);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Sorry, no such configuration! :(");
@@ -285,6 +290,44 @@ public class ConfigBuilderApp {
 //            }
 //        }
 //    }
+
+    //EFFECTS: print out configuration and total aggregate
+    public void printOutConfiguration(Configuration config) {
+        Cpu cpu = config.getCpu();
+        Motherboard motherboard = config.getMotherboard();
+        double ramBudget = config.getRamBudget();
+        Gpu gpu = config.getGpu();
+        PowerSupply powerSupply = config.getPowerSupply();
+
+        System.out.println("\nCPU: " + cpu.getModel() + "   " + cpu.getPrice());
+        motherboradInfoPrint(motherboard, ramBudget);
+        System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
+        if (gpu != null) {
+            System.out.println("GPU: " + gpu.getModel() + "   " + gpu.getPrice());
+        }
+        System.out.println("Power Supply: " + powerSupply.getModel() + "   " + powerSupply.getPrice());
+        double configurationAggregate = cpu.getPrice() + motherboard.getPrice() + powerSupply.getPrice() + ramBudget;
+        if (gpu != null) {
+            configurationAggregate += gpu.getPrice();
+        }
+        configurationAggregate = Math.round(configurationAggregate * 100.0) / 100.0;
+        System.out.println("Aggregate: " + configurationAggregate);
+    }
+
+    // EFFECTS: helper function to print info about motherboard
+    private static void motherboradInfoPrint(Motherboard motherboard, double ramBudget) {
+        if (motherboard.getName().contains("D4")) {
+            System.out.println("RAM: DDR4" + "   "
+                    + "Max RAM:" + motherboard.getMaxRam()
+                    + "   " + "RAM slot: " + motherboard.getRamSlot()
+                    + "   " + ramBudget);
+        } else {
+            System.out.println("RAM: DDR5" + "   "
+                    + "Max RAM:" + motherboard.getMaxRam()
+                    + "   " + "RAM slot: " + motherboard.getRamSlot()
+                    + "   " + ramBudget);
+        }
+    }
 
     //EFFECTS: saves the saved list of configurations to file
     private void processListConfigsSave() {
