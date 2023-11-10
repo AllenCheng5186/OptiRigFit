@@ -35,7 +35,7 @@
         ]
     },
     {
-        "ramBudget": 500,
+        "ramBudget": 400,
         "components": [
             {
                 "cpuMfr": "AMD",
@@ -46,18 +46,18 @@
                 "integratedGraphics": true
             },
             {
-                "basePower": 450,
-                "price": 2298.98,
-                "bench mark": 38929,
-                "model": "GeForce RTX 4090",
+                "basePower": 320,
+                "price": 1891.48,
+                "bench mark": 26750,
+                "model": "GeForce RTX 3080 12GB",
                 "gpuMfr": "NVIDIA"
             },
             {
                 "maxRam": 96,
-                "price": 579.99,
-                "model": "Asus ROG STRIX X670E-I GAMING WIFI",
+                "price": 799.99,
+                "model": "Asus ROG CROSSHAIR X670E GENE",
                 "socket": "AM5",
-                "formSize": "ITX",
+                "formSize": "MATX",
                 "ramSlot": 2
             },
             {
