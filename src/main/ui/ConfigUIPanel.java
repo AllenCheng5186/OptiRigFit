@@ -41,6 +41,7 @@ public class ConfigUIPanel extends JInternalFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO 重复加检测
                 savingList.add(config);
                 JOptionPane.showMessageDialog(null,
                         "The current configuration is saved successfully!",
