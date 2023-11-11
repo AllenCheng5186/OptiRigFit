@@ -44,8 +44,8 @@ public class ConfigBuilderAppUI extends JFrame {
             new Gpu("GeForce RTX 4090", 450, 2298.98, GpuMfr.NVIDIA, 38929),
             new PowerSupply("Corsair SF1000L ", FormSize.ITX, 1000, true, 269.99),600);
 
-        desktop.add(new ConfigUIPanel(config, savedConfigs));
-        desktop.add(new ConfigUIPanel(config, savedConfigs));
+        desktop.add(new ConfigInternalPanel(config, savedConfigs));
+        desktop.add(new ConfigInternalPanel(config, savedConfigs));
 
 
     }
