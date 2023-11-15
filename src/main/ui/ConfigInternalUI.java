@@ -56,6 +56,7 @@ public class ConfigInternalUI extends JInternalFrame {
         @Override
         public void internalFrameClosing(InternalFrameEvent e) {
             ConfigBuilderAppUI.getWorkspaceConfigIds().remove(Integer.valueOf(configId));
+            ConfigBuilderAppUI.configWindowLocationReset();
         }
     }
 

@@ -15,13 +15,14 @@ import java.util.Objects;
 public class ConfigBuilderAppUI extends JFrame {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
+    private static final int INTERNAL_WINDOWS_NEXT_GAP = 20;
+    private static int configInternalWindowX = 0;
+    private static int configInternalWindowY = 0;
     private static JDesktopPane desktop;
-    private List<Configuration> savedConfigs;
-    private ConfigsQueueInternalUI savingQueue = new ConfigsQueueInternalUI();
+    private final ConfigsQueueInternalUI savingQueue = new ConfigsQueueInternalUI();
     private static List<Integer> workspaceConfigIds = new ArrayList<>();
 
     public ConfigBuilderAppUI() {
-        savedConfigs = new ArrayList<>();
         desktop = new JDesktopPane();
         desktop.setDesktopManager(new ProxyDesktopManager(desktop.getDesktopManager()));
 
@@ -57,14 +58,6 @@ public class ConfigBuilderAppUI extends JFrame {
                 KeyStroke.getKeyStroke("control O"));
         menuBar.add(fileMenu);
 
-        JMenu systemMenu = new JMenu("View");
-        systemMenu.setMnemonic('y');
-//        addMenuItem(systemMenu, new ArmAction(),
-//                KeyStroke.getKeyStroke("control A"));
-//        addMenuItem(systemMenu, new DisarmAction(),
-//                KeyStroke.getKeyStroke("control D"));
-        menuBar.add(systemMenu);
-
         setJMenuBar(menuBar);
     }
 
@@ -99,6 +92,11 @@ public class ConfigBuilderAppUI extends JFrame {
                 desktop.add(generatedConfigUI);
                 workspaceConfigIds.add(generatedConfigUI.getConfigId());
                 generatedConfigUI.toFront();
+                configInternalWindowX += INTERNAL_WINDOWS_NEXT_GAP;
+                configInternalWindowY += INTERNAL_WINDOWS_NEXT_GAP;
+                generatedConfigUI.setLocation(configInternalWindowX, configInternalWindowY);
+                configInternalWindowX += INTERNAL_WINDOWS_NEXT_GAP;
+                configInternalWindowY += INTERNAL_WINDOWS_NEXT_GAP;
             } catch (IndexOutOfBoundsException e) {
                 JOptionPane.showMessageDialog(null,
                         "Sorry, no such configuration! :( \nPlease consider input higher budget or change the size!",
@@ -292,6 +290,11 @@ public class ConfigBuilderAppUI extends JFrame {
         // resizeFrame
     }
 
+    public static void configWindowLocationReset() {
+        configInternalWindowX -= INTERNAL_WINDOWS_NEXT_GAP;
+        configInternalWindowY -= INTERNAL_WINDOWS_NEXT_GAP;
+    }
+
     //getter
     public static JDesktopPane getDesktop() {
         return desktop;
@@ -303,6 +306,16 @@ public class ConfigBuilderAppUI extends JFrame {
 
     public ConfigsQueueInternalUI getSavingQueue() {
         return savingQueue;
+    }
+
+    public static int getConfigInternalWindowX() {
+        configInternalWindowX += INTERNAL_WINDOWS_NEXT_GAP;
+        return configInternalWindowX;
+    }
+
+    public static int getConfigInternalWindowY() {
+        configInternalWindowY += INTERNAL_WINDOWS_NEXT_GAP;
+        return configInternalWindowY;
     }
 
     public static void main(String[] args) {

@@ -82,6 +82,9 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
                     config, ConfigsQueueInternalUI.this);
             if (!ConfigBuilderAppUI.getWorkspaceConfigIds().contains(Integer.valueOf(showAgainUI.getConfigId()))) {
                 ConfigBuilderAppUI.getDesktop().add(showAgainUI);
+                showAgainUI.setLocation(ConfigBuilderAppUI.getConfigInternalWindowX(),
+                        ConfigBuilderAppUI.getConfigInternalWindowY());
+                showAgainUI.toFront();
                 ConfigBuilderAppUI.getWorkspaceConfigIds().add(showAgainUI.getConfigId());
             } else {
                 JOptionPane.showConfirmDialog(null,
@@ -122,6 +125,8 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
                 ConfigBuilderAppUI.getWorkspaceConfigIds().add(configPanel.getConfigId());
                 ConfigBuilderAppUI.getDesktop().add(configPanel);
                 configPanel.toFront();
+                configPanel.setLocation(ConfigBuilderAppUI.getConfigInternalWindowX(),
+                        ConfigBuilderAppUI.getConfigInternalWindowY());
                 addConfigToQueue(configPanel.getConfigId(), config);
             }
             JOptionPane.showConfirmDialog(null,
