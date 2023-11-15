@@ -21,11 +21,12 @@ import static model.component.motherboard.FormSize.ATX;
 import static model.component.motherboard.Socket.LGA1700;
 
 public class ConfigBuilderAppUI extends JFrame {
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
     private JFrame frame;
-    private JDesktopPane desktop;
+    private static JDesktopPane desktop;
     private List<Configuration> savedConfigs;
+    private ConfigsQueueInternalUI savingQueue = new ConfigsQueueInternalUI();
 
     public ConfigBuilderAppUI() {
         savedConfigs = new ArrayList<>();
@@ -41,6 +42,7 @@ public class ConfigBuilderAppUI extends JFrame {
 
 //        this.setIconImage(imageIcon.getImage());
         addMenu();
+        desktop.add(new ConfigsQueueInternalUI());
 
 
     }
@@ -56,11 +58,13 @@ public class ConfigBuilderAppUI extends JFrame {
                 KeyStroke.getKeyStroke("control N"));
         menuBar.add(configMenu);
 
-        JMenu codeMenu = new JMenu("File");
-        codeMenu.setMnemonic('C');
-//        addMenuItem(codeMenu, new AddCodeAction(), null);
-//        addMenuItem(codeMenu, new RemoveCodeAction(), null);
-        menuBar.add(codeMenu);
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.setMnemonic('C');
+        addMenuItem(fileMenu, new FileSavingAction(),
+                KeyStroke.getKeyStroke("control S"));
+        addMenuItem(fileMenu, new FileLoadingAction(),
+                KeyStroke.getKeyStroke("control O"));
+        menuBar.add(fileMenu);
 
         JMenu systemMenu = new JMenu("View");
         systemMenu.setMnemonic('y');
@@ -107,16 +111,19 @@ public class ConfigBuilderAppUI extends JFrame {
             ConfigurationGenerator cg = new ConfigurationGenerator(usrBudget, usrSize, usrPurpose);
             try {
                 Configuration usrConfig = cg.configGenerate();
-                desktop.add(new ConfigInternalUI(usrConfig, savedConfigs));
+                ConfigInternalUI generatedConfigUI = new ConfigInternalUI(usrConfig, savingQueue);
+                desktop.add(generatedConfigUI);
+                generatedConfigUI.toFront();
             } catch (IndexOutOfBoundsException e) {
                 JOptionPane.showMessageDialog(null,
                         "Sorry, no such configuration! :( \nPlease consider input higher budget or change the size!",
                         "Generate error!", JOptionPane.INFORMATION_MESSAGE,
                         new ImageIcon("./data/resource/ConfigInputIcon/ConfigGenerateFailIcon.png"));
             }
-
         }
 
+        // EFFECTS: display the size selection panel to user and return user's choice on
+        // size of their new config PC
         private FormSize usrSizeChoicePanel() {
             String[] sizeOptions = {"large", "middle", "small"};
             var usrSizeChoice = JOptionPane.showOptionDialog(null,
@@ -135,7 +142,7 @@ public class ConfigBuilderAppUI extends JFrame {
         }
 
         // EFFECTS: display the purpose selection panel to user and return user's choice on
-        // purpose of their new config PC working for
+        // purpose of their new config PC
         private Purpose usrPurposeChoice() {
             String[] purposeOptions = {"Work Station", "Productivity", "Gaming", "Office Work"};
             var usrPurposeChoice = JOptionPane.showOptionDialog(null,
@@ -167,7 +174,38 @@ public class ConfigBuilderAppUI extends JFrame {
         }
     }
 
+    private class FileSavingAction extends AbstractAction {
 
+        public FileSavingAction() {
+            super("Save List to file");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            savingQueue.saveToFile();
+            JOptionPane.showConfirmDialog(null, "Save to file successful!",
+                    "Config Queue Saving",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    new ImageIcon("./data/resource/checkIcon.png"));
+        }
+    }
+
+    private class FileLoadingAction extends AbstractAction {
+
+        public FileLoadingAction() {
+            super("Load file to workspace");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            savingQueue.loadFileToQueue();
+        }
+    }
+
+    //getter
+    public static JDesktopPane getDesktop() {
+        return desktop;
+    }
 
     public static void main(String[] args) {
         new ConfigBuilderAppUI();

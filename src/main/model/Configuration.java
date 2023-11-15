@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.util.Objects;
+
 // represent a configuration store cpu, motherboard, gpu (if possible), power supply
 // and ram purchase suggestion and restriction
 public class Configuration implements Writable {
@@ -71,5 +73,44 @@ public class Configuration implements Writable {
 
 
         return jsonArray;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Configuration that = (Configuration) o;
+
+        if (Double.compare(that.ramBudget, ramBudget) != 0) {
+            return false;
+        }
+        if (!cpu.equals(that.cpu)) {
+            return false;
+        }
+        if (!motherboard.equals(that.motherboard)) {
+            return false;
+        }
+        if (!powerSupply.equals(that.powerSupply)) {
+            return false;
+        }
+        return Objects.equals(gpu, that.gpu);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = cpu.hashCode();
+        result = 31 * result + motherboard.hashCode();
+        result = 31 * result + powerSupply.hashCode();
+        result = 31 * result + (gpu != null ? gpu.hashCode() : 0);
+        temp = Double.doubleToLongBits(ramBudget);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

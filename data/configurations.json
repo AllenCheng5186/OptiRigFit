@@ -1,41 +1,34 @@
 {"savedConfig": [
     {
-        "ramBudget": 150,
+        "ramBudget": 300,
         "components": [
             {
-                "cpuMfr": "INTEL",
+                "cpuMfr": "AMD",
                 "basePower": 65,
-                "price": 329,
-                "benchMark": 32489,
-                "model": "i5-13500",
+                "price": 499,
+                "benchMark": 49350,
+                "model": "R9-7900",
                 "integratedGraphics": true
             },
             {
-                "basePower": 295,
-                "price": 729.99,
-                "bench mark": 24461,
-                "model": "Radeon RX 7800 XT",
-                "gpuMfr": "AMD"
-            },
-            {
-                "maxRam": 128,
-                "price": 299.99,
-                "model": "Asus TUF GAMING Z790-PLUS D4",
-                "socket": "LGA1700",
+                "maxRam": 192,
+                "price": 449.99,
+                "model": "Asus ROG STRIX B650E-E GAMING WIFI",
+                "socket": "AM5",
                 "formSize": "ATX",
                 "ramSlot": 4
             },
             {
-                "wattage": 650,
-                "price": 258.08,
-                "model": "Cooler Master XG650 Plus",
+                "wattage": 1200,
+                "price": 400,
+                "model": "Corsair HX1200i",
                 "isModular": true,
                 "formSize": "ATX"
             }
         ]
     },
     {
-        "ramBudget": 400,
+        "ramBudget": 300,
         "components": [
             {
                 "cpuMfr": "AMD",
@@ -46,19 +39,19 @@
                 "integratedGraphics": true
             },
             {
-                "basePower": 320,
-                "price": 1891.48,
-                "bench mark": 26750,
-                "model": "GeForce RTX 3080 12GB",
-                "gpuMfr": "NVIDIA"
+                "basePower": 355,
+                "price": 1348.98,
+                "bench mark": 31142,
+                "model": "Radeon RX 7900 XTX",
+                "gpuMfr": "AMD"
             },
             {
-                "maxRam": 96,
-                "price": 799.99,
-                "model": "Asus ROG CROSSHAIR X670E GENE",
+                "maxRam": 192,
+                "price": 594.99,
+                "model": "Asus ROG STRIX X670E-F GAMING WIFI",
                 "socket": "AM5",
-                "formSize": "MATX",
-                "ramSlot": 2
+                "formSize": "ATX",
+                "ramSlot": 4
             },
             {
                 "wattage": 1300,

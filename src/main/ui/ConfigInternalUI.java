@@ -5,11 +5,10 @@ import model.Configuration;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 public class ConfigInternalUI extends JInternalFrame {
+    private static int configNum = 1;
     private Configuration config;
-    private List<Configuration> savingList;
     private JPanel innerUpperPanel;
     private JPanel innerLowerPanel;
     private static final int WIDTH = 400;
@@ -17,12 +16,15 @@ public class ConfigInternalUI extends JInternalFrame {
     private JButton editButton;
     private JButton saveButton;
     private JPanel configPanel;
+    private ConfigsQueueInternalUI savingPanel;
+    private int configId;
 
 
-    public ConfigInternalUI(Configuration config, List<Configuration> savingList) {
-        super("Configuration", true, true, false, false);
+    public ConfigInternalUI(Configuration config, ConfigsQueueInternalUI savingPanel) {
+        super("Configuration #" + configNum, true, true, false, false);
+        this.configId = configNum;
         this.config = config;
-        this.savingList = savingList;
+        this.savingPanel = savingPanel;
         setUp();
 
         setContentPane(configPanel);
@@ -30,23 +32,27 @@ public class ConfigInternalUI extends JInternalFrame {
         setSize(WIDTH, HEIGHT);
         setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        configNum++;
     }
 
 
     private class SaveButtonAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (!savingList.contains(config)) {
-                savingList.add(config);
-                JOptionPane.showMessageDialog(null,
+            if (!savingPanel.contains(configId, config)) {
+                savingPanel.addConfigToQueue(configId, config);
+                JOptionPane.showConfirmDialog(null,
                         "The current configuration is saved successfully!",
                         "Saved successfully!",
-                        JOptionPane.QUESTION_MESSAGE);
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        new ImageIcon("./data/resource/checkIcon.png"));
             } else {
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showConfirmDialog(null,
                         "The current configuration is already saved",
                         "Save fail!",
-                        JOptionPane.QUESTION_MESSAGE);
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        new ImageIcon("./data/resource/crossIcon.png"));
             }
         }
     }
@@ -96,5 +102,14 @@ public class ConfigInternalUI extends JInternalFrame {
             gpuModel = new JLabel("Integrated GPU");
         }
         innerLowerPanel.add(gpuModel);
+    }
+
+    // getter
+    public static int getConfigNum() {
+        return configNum;
+    }
+
+    public int getConfigId() {
+        return configId;
     }
 }
