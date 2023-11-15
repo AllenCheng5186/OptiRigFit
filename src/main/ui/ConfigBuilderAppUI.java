@@ -1,6 +1,8 @@
 package ui;
 
 import model.Configuration;
+import model.ConfigurationGenerator;
+import model.Purpose;
 import model.component.cpu.Cpu;
 import model.component.cpu.CpuMfr;
 import model.component.gpu.Gpu;
@@ -39,13 +41,6 @@ public class ConfigBuilderAppUI extends JFrame {
 
 //        this.setIconImage(imageIcon.getImage());
         addMenu();
-        Configuration config =  new Configuration(new Cpu("i9-13900KS", 150, 949.00, CpuMfr.INTEL, 62014),
-            new Motherboard("Asus ROG MAXIMUS Z790 HERO", LGA1700, ATX, 192, 4, 789.98),
-            new Gpu("GeForce RTX 4090", 450, 2298.98, GpuMfr.NVIDIA, 38929),
-            new PowerSupply("Corsair SF1000L ", FormSize.ITX, 1000, true, 269.99),600);
-
-        desktop.add(new ConfigInternalPanel(config, savedConfigs));
-        desktop.add(new ConfigInternalPanel(config, savedConfigs));
 
 
     }
@@ -55,11 +50,11 @@ public class ConfigBuilderAppUI extends JFrame {
      */
     private void addMenu() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu sensorMenu = new JMenu("Configuration");
-        sensorMenu.setMnemonic('N');
-        addMenuItem(sensorMenu, new AddSensorAction(),
+        JMenu configMenu = new JMenu("Configuration");
+        configMenu.setMnemonic('N');
+        addMenuItem(configMenu, new AddNewConfigAction(),
                 KeyStroke.getKeyStroke("control N"));
-        menuBar.add(sensorMenu);
+        menuBar.add(configMenu);
 
         JMenu codeMenu = new JMenu("File");
         codeMenu.setMnemonic('C');
@@ -89,39 +84,89 @@ public class ConfigBuilderAppUI extends JFrame {
      * Represents the action to be taken when the user wants to add a new
      * sensor to the system.
      */
-    private class AddSensorAction extends AbstractAction {
+    private class AddNewConfigAction extends AbstractAction {
 
-        AddSensorAction() {
+        AddNewConfigAction() {
             super("Build new config");
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
+            String usrBudgetInput = getUserBudgetInputPanel();
+            while (!usrBudgetInput.matches("\\d+")) {
+                JOptionPane.showConfirmDialog(null,
+                        "Invalid Input! Please input proper digit for budget!",
+                        "Invalid Input", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon("./data/resource/ConfigInputIcon/InvalidInputExclamation.png"));
+                usrBudgetInput = getUserBudgetInputPanel();
+            }
+            int usrBudget = Integer.parseInt(usrBudgetInput);
 
-            ImageIcon msgIcon = new ImageIcon("./data/resource/budgetIcon.png");
-            Image image = msgIcon.getImage();
-            Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
-            msgIcon = new ImageIcon(newimg);
+            Purpose usrPurpose = usrPurposeChoice();
+            FormSize usrSize = usrSizeChoicePanel();
+            ConfigurationGenerator cg = new ConfigurationGenerator(usrBudget, usrSize, usrPurpose);
+            try {
+                Configuration usrConfig = cg.configGenerate();
+                desktop.add(new ConfigInternalUI(usrConfig, savedConfigs));
+            } catch (IndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Sorry, no such configuration! :( \nPlease consider input higher budget or change the size!",
+                        "Generate error!", JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon("./data/resource/ConfigInputIcon/ConfigGenerateFailIcon.png"));
+            }
 
+        }
+
+        private FormSize usrSizeChoicePanel() {
+            String[] sizeOptions = {"large", "middle", "small"};
+            var usrSizeChoice = JOptionPane.showOptionDialog(null,
+                    "What is the size of your computer?",
+                    "Size selection",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    new ImageIcon("./data/resource/ConfigInputIcon/SizeChoiceIcon.png"),
+                    sizeOptions, null);
+            if (usrSizeChoice == 2) {
+                return FormSize.ITX;
+            } else if (usrSizeChoice == 1) {
+                return FormSize.ATX;
+            } else {
+                return FormSize.EATX;
+            }
+        }
+
+        // EFFECTS: display the purpose selection panel to user and return user's choice on
+        // purpose of their new config PC working for
+        private Purpose usrPurposeChoice() {
+            String[] purposeOptions = {"Work Station", "Productivity", "Gaming", "Office Work"};
+            var usrPurposeChoice = JOptionPane.showOptionDialog(null,
+                    "What is the primary purpose of your computer?",
+                    "What would you want your computer work for?",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    new ImageIcon("./data/resource/ConfigInputIcon/PurposeChoiceQuestionMarkIcon.png"),
+                    purposeOptions, null);
+
+            if (usrPurposeChoice == 3) {
+                return Purpose.ENTRY_LEVEL;
+            } else if (usrPurposeChoice == 2) {
+                return Purpose.GAMING;
+            } else if (usrPurposeChoice == 1) {
+                return Purpose.PRODUCTIVITY;
+            } else {
+                return Purpose.WORK_STATION;
+            }
+        }
+
+        // EFFECTS: display the budget input dialog panel to user and return user's input
+        private String getUserBudgetInputPanel() {
             UIManager.put("OptionPane.minimumSize",new Dimension(300,130));
-            String usrBudgetInput = (String) JOptionPane.showInputDialog(null,
+            return (String) JOptionPane.showInputDialog(null,
                     "Enter you budget for your desktop ($CAD)",
                     "Desktop budget",
                     JOptionPane.QUESTION_MESSAGE,
-                    msgIcon, null, 0);
-            System.out.println(usrBudgetInput);
-
-//            try {
-//                if (sensorLoc != null) {
-//                    Sensor s = new Sensor(sensorLoc, ac);
-//                    desktop.add(new SensorUI(s, AlarmControllerUI.this));
-//                }
-//            } catch (DuplicateSensorException e) {
-//                JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
+                    new ImageIcon("./data/resource/ConfigInputIcon/budgetIcon.png"), null, 0);
         }
     }
+
 
 
     public static void main(String[] args) {

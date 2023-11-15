@@ -5,10 +5,9 @@ import model.Configuration;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ConfigInternalPanel extends JInternalFrame {
+public class ConfigInternalUI extends JInternalFrame {
     private Configuration config;
     private List<Configuration> savingList;
     private JPanel innerUpperPanel;
@@ -20,7 +19,7 @@ public class ConfigInternalPanel extends JInternalFrame {
     private JPanel configPanel;
 
 
-    public ConfigInternalPanel(Configuration config, List<Configuration> savingList) {
+    public ConfigInternalUI(Configuration config, List<Configuration> savingList) {
         super("Configuration", true, true, false, false);
         this.config = config;
         this.savingList = savingList;
