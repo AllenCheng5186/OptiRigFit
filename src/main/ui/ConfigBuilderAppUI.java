@@ -3,27 +3,18 @@ package ui;
 import model.Configuration;
 import model.ConfigurationGenerator;
 import model.Purpose;
-import model.component.cpu.Cpu;
-import model.component.cpu.CpuMfr;
-import model.component.gpu.Gpu;
-import model.component.gpu.GpuMfr;
 import model.component.motherboard.FormSize;
-import model.component.motherboard.Motherboard;
-import model.component.psu.PowerSupply;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-
-import static model.component.motherboard.FormSize.ATX;
-import static model.component.motherboard.Socket.LGA1700;
+import java.util.Objects;
 
 public class ConfigBuilderAppUI extends JFrame {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
-    private JFrame frame;
     private static JDesktopPane desktop;
     private List<Configuration> savedConfigs;
     private ConfigsQueueInternalUI savingQueue = new ConfigsQueueInternalUI();
@@ -32,6 +23,7 @@ public class ConfigBuilderAppUI extends JFrame {
     public ConfigBuilderAppUI() {
         savedConfigs = new ArrayList<>();
         desktop = new JDesktopPane();
+        desktop.setDesktopManager(new ProxyDesktopManager(desktop.getDesktopManager()));
 
         setContentPane(desktop);
         setVisible(true);
@@ -40,8 +32,6 @@ public class ConfigBuilderAppUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-
-//        this.setIconImage(imageIcon.getImage());
         addMenu();
         desktop.add(new ConfigsQueueInternalUI());
 
@@ -98,17 +88,10 @@ public class ConfigBuilderAppUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent evt) {
             String usrBudgetInput = getUserBudgetInputPanel();
-            while (!usrBudgetInput.matches("\\d+")) {
-                JOptionPane.showConfirmDialog(null,
-                        "Invalid Input! Please input proper digit for budget!",
-                        "Invalid Input", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                        new ImageIcon("./data/resource/ConfigInputIcon/InvalidInputExclamation.png"));
-                usrBudgetInput = getUserBudgetInputPanel();
-            }
             int usrBudget = Integer.parseInt(usrBudgetInput);
-
             Purpose usrPurpose = usrPurposeChoice();
             FormSize usrSize = usrSizeChoicePanel();
+
             ConfigurationGenerator cg = new ConfigurationGenerator(usrBudget, usrSize, usrPurpose);
             try {
                 Configuration usrConfig = cg.configGenerate();
@@ -168,11 +151,19 @@ public class ConfigBuilderAppUI extends JFrame {
         // EFFECTS: display the budget input dialog panel to user and return user's input
         private String getUserBudgetInputPanel() {
             UIManager.put("OptionPane.minimumSize",new Dimension(300,130));
-            return (String) JOptionPane.showInputDialog(null,
+            String usrBudgetInput = (String) JOptionPane.showInputDialog(null,
                     "Enter you budget for your desktop ($CAD)",
                     "Desktop budget",
                     JOptionPane.QUESTION_MESSAGE,
                     new ImageIcon("./data/resource/ConfigInputIcon/budgetIcon.png"), null, 0);
+            while (!usrBudgetInput.matches("\\d+")) {
+                JOptionPane.showConfirmDialog(null,
+                        "Invalid Input! Please input proper digit for budget!",
+                        "Invalid Input", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon("./data/resource/ConfigInputIcon/InvalidInputExclamation.png"));
+                usrBudgetInput = getUserBudgetInputPanel();
+            }
+            return usrBudgetInput;
         }
     }
 
@@ -200,6 +191,107 @@ public class ConfigBuilderAppUI extends JFrame {
         }
     }
 
+    private class ProxyDesktopManager implements DesktopManager {
+
+        private final DesktopManager delegate;
+
+        public ProxyDesktopManager(DesktopManager delegate) {
+            this.delegate = Objects.requireNonNull(delegate);
+        }
+
+        // Check whether frame is moveable
+        private boolean checkFrameMovable(JComponent frame) {
+            if (frame instanceof JInternalFrame) {
+                return !frame.getClass().equals(getSavingQueue().getClass());
+            }
+            return true;
+        }
+
+        @Override
+        public void beginDraggingFrame(JComponent f) {
+            if (checkFrameMovable(f)) {
+                delegate.beginDraggingFrame(f);
+            }
+        }
+
+        @Override
+        public void dragFrame(JComponent f, int newX, int newY) {
+            if (checkFrameMovable(f)) {
+                delegate.dragFrame(f, newX, newY);
+            }
+        }
+
+        @Override
+        public void endDraggingFrame(JComponent f) {
+            if (checkFrameMovable(f)) {
+                delegate.endDraggingFrame(f);
+            }
+        }
+
+        @Override
+        public void beginResizingFrame(JComponent f, int direction) {
+
+        }
+
+        @Override
+        public void openFrame(JInternalFrame f) {
+            delegate.openFrame(f);
+        }
+
+        @Override
+        public void closeFrame(JInternalFrame f) {
+            delegate.closeFrame(f);
+        }
+
+        @Override
+        public void maximizeFrame(JInternalFrame f) {
+            delegate.maximizeFrame(f);
+        }
+
+        @Override
+        public void minimizeFrame(JInternalFrame f) {
+            delegate.minimizeFrame(f);
+        }
+
+        @Override
+        public void iconifyFrame(JInternalFrame f) {
+            delegate.iconifyFrame(f);
+        }
+
+        @Override
+        public void deiconifyFrame(JInternalFrame f) {
+            delegate.deiconifyFrame(f);
+        }
+
+        @Override
+        public void activateFrame(JInternalFrame f) {
+            delegate.deactivateFrame(f);
+        }
+
+        @Override
+        public void deactivateFrame(JInternalFrame f) {
+            delegate.deactivateFrame(f);
+        }
+
+        @Override
+        public void resizeFrame(JComponent f, int newX, int newY, int newWidth, int newHeight) {
+            delegate.resizeFrame(f, newX, newY, newWidth, newHeight);
+        }
+
+        @Override
+        public void endResizingFrame(JComponent f) {
+
+        }
+
+        @Override
+        public void setBoundsForFrame(JComponent f, int newX, int newY, int newWidth, int newHeight) {
+
+        }
+
+        // IMPORTANT: simply delegate all another methods like openFrame or
+        // resizeFrame
+    }
+
     //getter
     public static JDesktopPane getDesktop() {
         return desktop;
@@ -207,6 +299,10 @@ public class ConfigBuilderAppUI extends JFrame {
 
     public static List<Integer> getWorkspaceConfigIds() {
         return workspaceConfigIds;
+    }
+
+    public ConfigsQueueInternalUI getSavingQueue() {
+        return savingQueue;
     }
 
     public static void main(String[] args) {

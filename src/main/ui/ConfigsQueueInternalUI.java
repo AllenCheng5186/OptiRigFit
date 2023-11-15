@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JInternalFrame;
 
 public class ConfigsQueueInternalUI extends JInternalFrame {
     private static final int HEIGHT = 550;
@@ -21,6 +22,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
     private static List<Configuration> savingList = new ArrayList<>();
     private JPanel queuePanel;
     private JButton showButton;
+    private Boolean movable = false;
     private static final String JSON_STORE = "./data/configurations.json";
     private JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
     private JsonReader jsonReader = new JsonReader(JSON_STORE);
@@ -38,10 +40,8 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
 
         setLocation(ConfigBuilderAppUI.WIDTH - WIDTH,0);
         setContentPane(queuePanel);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         JPanel listPanel = setUpInnerListPanel();
         queuePanel.add(listPanel);
@@ -82,6 +82,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
                     config, ConfigsQueueInternalUI.this);
             if (!ConfigBuilderAppUI.getWorkspaceConfigIds().contains(Integer.valueOf(showAgainUI.getConfigId()))) {
                 ConfigBuilderAppUI.getDesktop().add(showAgainUI);
+                ConfigBuilderAppUI.getWorkspaceConfigIds().add(showAgainUI.getConfigId());
             } else {
                 JOptionPane.showConfirmDialog(null,
                         "Configuration already shows up on workspace!",

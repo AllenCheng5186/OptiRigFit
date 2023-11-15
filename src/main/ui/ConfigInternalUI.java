@@ -3,12 +3,11 @@ package ui;
 import model.Configuration;
 
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class ConfigInternalUI extends JInternalFrame {
     private static int configNum = 1;
@@ -34,18 +33,11 @@ public class ConfigInternalUI extends JInternalFrame {
         setContentPane(configPanel);
         setSize(WIDTH, HEIGHT);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        // TODO close windows event does not work
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                System.out.println("1");
-//                ConfigBuilderAppUI.getWorkspaceConfigIds().remove(Integer.valueOf(configId));
-//            }
-//        });
+        addInternalFrameListener(new CloseWindowsEvent());
 
         configNum++;
     }
+
 
     public ConfigInternalUI(String configTitle, Configuration config, ConfigsQueueInternalUI savingPanel) {
         super(configTitle, true, true, false, false);
@@ -57,15 +49,14 @@ public class ConfigInternalUI extends JInternalFrame {
         setContentPane(configPanel);
         setSize(WIDTH, HEIGHT);
         setVisible(true);
-        // TODO close windows event does not work
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                System.out.println("2");
-//                ConfigBuilderAppUI.getWorkspaceConfigIds().remove(Integer.valueOf(configId));
-//            }
-//        });
+        addInternalFrameListener(new CloseWindowsEvent());
+    }
+
+    private class CloseWindowsEvent extends InternalFrameAdapter {
+        @Override
+        public void internalFrameClosing(InternalFrameEvent e) {
+            ConfigBuilderAppUI.getWorkspaceConfigIds().remove(Integer.valueOf(configId));
+        }
     }
 
 
