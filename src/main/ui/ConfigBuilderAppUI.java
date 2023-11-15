@@ -27,6 +27,7 @@ public class ConfigBuilderAppUI extends JFrame {
     private static JDesktopPane desktop;
     private List<Configuration> savedConfigs;
     private ConfigsQueueInternalUI savingQueue = new ConfigsQueueInternalUI();
+    private static List<Integer> workspaceConfigIds = new ArrayList<>();
 
     public ConfigBuilderAppUI() {
         savedConfigs = new ArrayList<>();
@@ -113,6 +114,7 @@ public class ConfigBuilderAppUI extends JFrame {
                 Configuration usrConfig = cg.configGenerate();
                 ConfigInternalUI generatedConfigUI = new ConfigInternalUI(usrConfig, savingQueue);
                 desktop.add(generatedConfigUI);
+                workspaceConfigIds.add(generatedConfigUI.getConfigId());
                 generatedConfigUI.toFront();
             } catch (IndexOutOfBoundsException e) {
                 JOptionPane.showMessageDialog(null,
@@ -183,10 +185,6 @@ public class ConfigBuilderAppUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent evt) {
             savingQueue.saveToFile();
-            JOptionPane.showConfirmDialog(null, "Save to file successful!",
-                    "Config Queue Saving",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./data/resource/checkIcon.png"));
         }
     }
 
@@ -205,6 +203,10 @@ public class ConfigBuilderAppUI extends JFrame {
     //getter
     public static JDesktopPane getDesktop() {
         return desktop;
+    }
+
+    public static List<Integer> getWorkspaceConfigIds() {
+        return workspaceConfigIds;
     }
 
     public static void main(String[] args) {
