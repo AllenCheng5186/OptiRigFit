@@ -64,20 +64,20 @@ public class ConfigGeneratorTest {
         Configuration config1500GamingATX = testConfigGeneratorGamingATX.configGenerate();
         assertEquals("i5-13500", config1500GamingATX.getCpu().getModel());
         assertEquals(150, config1500GamingATX.getRamBudget());
-        assertEquals("Asus TUF GAMING Z790-PLUS D4", config1500GamingATX.getMotherboard().getName());
+        assertEquals("Asus TUF GAMING Z790-PLUS D4", config1500GamingATX.getMotherboard().getModel());
         assertEquals("Radeon RX 7800 XT", config1500GamingATX.getGpu().getModel());
         assertEquals("Cooler Master XG650 Plus", config1500GamingATX.getPowerSupply().getModel());
 
         Configuration config1000EntryLevelITX = testConfigGeneratorEntryLevelITX.configGenerate();
         assertEquals("i5-13500", config1000EntryLevelITX.getCpu().getModel());
         assertEquals(200.0, config1000EntryLevelITX.getRamBudget());
-        assertEquals("Asus ROG STRIX B760-I GAMING", config1000EntryLevelITX.getMotherboard().getName());
+        assertEquals("Asus ROG STRIX B760-I GAMING", config1000EntryLevelITX.getMotherboard().getModel());
         assertEquals("Corsair SF1000L", config1000EntryLevelITX.getPowerSupply().getModel());
 
         Configuration configHighWSEATX = testConfigGeneratorHighBudget.configGenerate();
         assertEquals("R9-7950X", configHighWSEATX.getCpu().getModel());
         assertEquals(5000.0, configHighWSEATX.getRamBudget());
-        assertEquals("Asus ROG MAXIMUS Z690 EXTREME", configHighWSEATX.getMotherboard().getName());
+        assertEquals("Asus ROG MAXIMUS Z690 EXTREME", configHighWSEATX.getMotherboard().getModel());
         assertEquals("GeForce RTX 4090", configHighWSEATX.getGpu().getModel());
         assertEquals("EVGA Supernova 1300 G+", configHighWSEATX.getPowerSupply().getModel());
     }

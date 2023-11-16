@@ -19,7 +19,7 @@ public class MotherboardTest {
 
     @Test
     void testConstructor() {
-        assertEquals("Asus ROG MAXIMUS Z690 APEX", testMotherboard.getName());
+        assertEquals("Asus ROG MAXIMUS Z690 APEX", testMotherboard.getModel());
         assertEquals(LGA1700, testMotherboard.getSocket());
         assertEquals(ATX, testMotherboard.getFormSize());
         assertEquals(96, testMotherboard.getMaxRam());

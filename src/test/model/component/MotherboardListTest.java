@@ -25,9 +25,9 @@ public class MotherboardListTest {
     void testConstructor() {
         assertEquals(80, testMotherboards.size());
         assertEquals("Asus ROG MAXIMUS Z690 EXTREME",
-                testMotherboards.get(0).getName());
+                testMotherboards.get(0).getModel());
         assertEquals("Asus Pro B660M-C D4-CSM",
-                testMotherboards.get(79).getName());
+                testMotherboards.get(79).getModel());
     }
 
     @Test

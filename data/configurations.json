@@ -4,10 +4,10 @@
         "components": [
             {
                 "cpuMfr": "AMD",
-                "basePower": 65,
-                "price": 499,
-                "benchMark": 49350,
-                "model": "R9-7900",
+                "basePower": 120,
+                "price": 590,
+                "benchMark": 34718,
+                "model": "R7-7800X3D",
                 "integratedGraphics": true
             },
             {
@@ -28,49 +28,14 @@
         ]
     },
     {
-        "ramBudget": 300,
-        "components": [
-            {
-                "cpuMfr": "AMD",
-                "basePower": 170,
-                "price": 749.99,
-                "benchMark": 63380,
-                "model": "R9-7950X",
-                "integratedGraphics": true
-            },
-            {
-                "basePower": 355,
-                "price": 1348.98,
-                "bench mark": 31142,
-                "model": "Radeon RX 7900 XTX",
-                "gpuMfr": "AMD"
-            },
-            {
-                "maxRam": 192,
-                "price": 594.99,
-                "model": "Asus ROG STRIX X670E-F GAMING WIFI",
-                "socket": "AM5",
-                "formSize": "ATX",
-                "ramSlot": 4
-            },
-            {
-                "wattage": 1300,
-                "price": 449.99,
-                "model": "EVGA Supernova 1300 G+",
-                "isModular": true,
-                "formSize": "ATX"
-            }
-        ]
-    },
-    {
         "ramBudget": 350,
         "components": [
             {
                 "cpuMfr": "AMD",
                 "basePower": 170,
-                "price": 749.99,
-                "benchMark": 63380,
-                "model": "R9-7950X",
+                "price": 549.99,
+                "benchMark": 52217,
+                "model": "R9-7900X",
                 "integratedGraphics": true
             },
             {
@@ -90,8 +55,8 @@
             },
             {
                 "wattage": 1300,
-                "price": 449.99,
-                "model": "EVGA Supernova 1300 G+",
+                "price": 299.99,
+                "model": "EVGA Supernova 1300 GT",
                 "isModular": true,
                 "formSize": "ATX"
             }

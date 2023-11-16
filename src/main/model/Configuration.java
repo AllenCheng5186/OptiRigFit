@@ -52,6 +52,23 @@ public class Configuration implements Writable {
         return ramBudget;
     }
 
+    // setter
+    public void setCpu(Cpu cpu) {
+        this.cpu = cpu;
+    }
+
+    public void setMotherboard(Motherboard motherboard) {
+        this.motherboard = motherboard;
+    }
+
+    public void setPowerSupply(PowerSupply powerSupply) {
+        this.powerSupply = powerSupply;
+    }
+
+    public void setGpu(Gpu gpu) {
+        this.gpu = gpu;
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

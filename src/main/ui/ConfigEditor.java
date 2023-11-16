@@ -232,7 +232,7 @@ public class ConfigEditor extends ConfigPrinter {
         List<Motherboard> withinBudgetMBs = getMotherboards();
         System.out.println("\nHere are some items you can select to replace:");
         for (int i = 0; i < withinBudgetMBs.size(); i++) {
-            String motherboardName = withinBudgetMBs.get(i).getName();
+            String motherboardName = withinBudgetMBs.get(i).getModel();
             double motherboardPrice = withinBudgetMBs.get(i).getPrice();
             System.out.println("\t" + i + " -> " + motherboardName + "   " + motherboardPrice);
         }

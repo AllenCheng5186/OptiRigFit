@@ -62,7 +62,7 @@ public class JsonTest {
                 assertEquals(expectConfig.getGpu().getBenchMark(), actualConfig.getGpu().getBenchMark());
             }
             // Motherboard test
-            assertEquals(expectConfig.getMotherboard().getName(), actualConfig.getMotherboard().getName());
+            assertEquals(expectConfig.getMotherboard().getModel(), actualConfig.getMotherboard().getModel());
             assertEquals(expectConfig.getMotherboard().getFormSize(), actualConfig.getMotherboard().getFormSize());
             assertEquals(expectConfig.getMotherboard().getPrice(), actualConfig.getMotherboard().getPrice());
             assertEquals(expectConfig.getMotherboard().getSocket(), actualConfig.getMotherboard().getSocket());

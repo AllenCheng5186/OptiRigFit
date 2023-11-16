@@ -1,10 +1,11 @@
 package model.component.cpu;
 
+import model.component.PcComponent;
 import org.json.JSONObject;
 import persistence.Writable;
 
 //represent a cpu object with given model name, base power to boot, chip manufacturer, benchmark and price
-public class Cpu implements Comparable<Cpu>, Writable {
+public class Cpu implements Comparable<Cpu>, Writable, PcComponent {
     private String model;
     private int basePower;
     private double price;
@@ -43,6 +44,7 @@ public class Cpu implements Comparable<Cpu>, Writable {
     }
 
     // getter
+    @Override
     public String getModel() {
         return model;
     }

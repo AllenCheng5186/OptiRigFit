@@ -18,7 +18,7 @@ public class ConfigPrinter {
 
         System.out.println("\nCPU: " + cpu.getModel() + "   " + cpu.getPrice());
         motherboardInfoPrint(motherboard, ramBudget);
-        System.out.println("MotherBoard: " + motherboard.getName() + "   " + motherboard.getPrice());
+        System.out.println("MotherBoard: " + motherboard.getModel() + "   " + motherboard.getPrice());
         if (gpu != null) {
             System.out.println("GPU: " + gpu.getModel() + "   " + gpu.getPrice());
         }
@@ -33,7 +33,7 @@ public class ConfigPrinter {
 
     // EFFECTS: helper function to print info about motherboard
     private static void motherboardInfoPrint(Motherboard motherboard, double ramBudget) {
-        if (motherboard.getName().contains("D4")) {
+        if (motherboard.getModel().contains("D4")) {
             System.out.println("RAM: DDR4" + "   "
                     + "Max RAM:" + motherboard.getMaxRam()
                     + "   " + "RAM slot: " + motherboard.getRamSlot()
