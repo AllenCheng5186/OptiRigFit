@@ -161,6 +161,7 @@ public class ConfigInternalUI extends JInternalFrame {
      * to save the current configuration to the saving queue
      */
     private class SaveButtonAction extends AbstractAction {
+        //TODO save new customise to queue!
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!savingPanel.contains(configId, config)) {
@@ -191,6 +192,19 @@ public class ConfigInternalUI extends JInternalFrame {
         private JLabel mbEditLabel;
         private JLabel psuEditLabel;
         private JLabel gpuEditLabel;
+        private JFrame popupFrame;
+        private List<PcComponent> cpuOptions = new ArrayList<>(filterCpuListWithinInterval());
+        private List<String> cpuModels = convertComponentListToStringList(cpuOptions);
+        private JComboBox cpuSelection = new JComboBox<>(cpuModels.toArray());
+        private List<PcComponent> mbOptions = new ArrayList<>(getMotherboards());
+        private List<String> mbModels = convertComponentListToStringList(mbOptions);
+        private JComboBox mbSelection = new JComboBox<>(mbModels.toArray());
+        private List<PcComponent> psuOptions = new ArrayList<>(getPowerSupplies());
+        private List<String> psuModels = convertComponentListToStringList(psuOptions);
+        private JComboBox psuSelection = new JComboBox<>(psuModels.toArray());
+        private List<PcComponent> gpuOptions = new ArrayList<>(getOptionsGpus());
+        private List<String> gpuModels = convertComponentListToStringList(gpuOptions);
+        private JComboBox gpuSelection = new JComboBox<>(gpuModels.toArray());
 
         public CustomizeButtonAction() {
             super("customize the config by yourself!");
@@ -198,7 +212,7 @@ public class ConfigInternalUI extends JInternalFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JFrame popupFrame = new JFrame("Customize your own configuration!");
+            popupFrame = new JFrame("Customize your own configuration!");
             JPanel popupPanel = new JPanel();
             popupPanel.setLayout(new BoxLayout(popupPanel, BoxLayout.PAGE_AXIS));
             popupFrame.setSize(400, 300);
@@ -217,9 +231,9 @@ public class ConfigInternalUI extends JInternalFrame {
             popupPanel.add(questionMsgPanel);
             popupPanel.add(componentSelectionPanel());
 
-            JButton replaceButton = new JButton("Replace");
-            replaceButton.setText("Replace");
-            popupPanel.add(replaceButton);
+            JButton saveCustomize = new JButton(new ReplaceButtonAction());
+            saveCustomize.setText("Save");
+            popupPanel.add(saveCustomize);
         }
 
         private JPanel componentSelectionPanel() {
@@ -231,173 +245,154 @@ public class ConfigInternalUI extends JInternalFrame {
                 gpuEditLabel = new JLabel(config.getGpu().getModel(),
                         new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), SwingConstants.LEFT);
                 innerPanel.add(gpuEditLabel);
-                JButton gpuButton = new JButton(new EditGpuAction());
-                gpuButton.setText("GPU");
-                innerPanel.add(gpuButton);
+                innerPanel.add(gpuSelection);
             } else {
                 innerPanel.add(new JLabel("Integrated GPU: Inside CPU",
                         new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), SwingConstants.LEFT));
-                innerPanel.add(new Button("Unchangeable"));
+                innerPanel.add(new JComboBox<>());
             }
 
             return innerPanel;
+        }
+
+        private List<String> convertComponentListToStringList(List<PcComponent> components) {
+            List<String> componentModels = new ArrayList<>();
+            for (PcComponent component:components) {
+                componentModels.add(component.getModel() + "   $" + component.getPrice());
+            }
+            return componentModels;
         }
 
         private void addSelectionComponent(JPanel innerPanel) {
             cpuEditLabel = new JLabel(config.getCpu().getModel(),
                     new ImageIcon("data/resource/ConfigIcon/cpu_size.png"),SwingConstants.LEFT);
             innerPanel.add(cpuEditLabel);
-            JButton cpuButton = new JButton(new EditCpuAction());
-            cpuButton.setText("CPU");
-            innerPanel.add(cpuButton);
+            innerPanel.add(cpuSelection);
 
             mbEditLabel = new JLabel(config.getMotherboard().getModel(),
                     new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT);
             innerPanel.add(mbEditLabel);
-            JButton mbButton = new JButton(new EditMbAction());
-            mbButton.setText("Motherboard");
-            innerPanel.add(mbButton);
+            innerPanel.add(mbSelection);
 
             psuEditLabel = new JLabel(config.getPowerSupply().getModel(),
                     new ImageIcon("data/resource/ConfigIcon/psu_size.png"), SwingConstants.LEFT);
             innerPanel.add(psuEditLabel);
-            JButton psuButton = new JButton(new EditPsuAction());
-            psuButton.setText("Power Supply");
-            innerPanel.add(psuButton);
+            innerPanel.add(psuSelection);
         }
 
-        private class EditCpuAction extends AbstractAction {
+        // EFFECTS: filter out same socket cpus, if user's purpose is entry level,
+        // make sure cpu has integrated graphics, filter cpus that in budget interval
+        private List<Cpu> filterCpuListWithinInterval() {
 
-            public EditCpuAction() {
-                super("Choose your new CPU");
+            CpuList cpuList = new CpuList();
+            java.util.List<Cpu> correctSocketCpus = getCorrectSocketCpus(cpuList);
+            java.util.List<Cpu> cpusWithIG = new ArrayList<>();
+            if (purpose == ENTRY_LEVEL) {
+                cpusWithIG = cpuList.returnCpusHasIG(correctSocketCpus);
+            } else {
+                cpusWithIG = correctSocketCpus;
             }
+            java.util.List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(cpusWithIG,
+                    (config.getCpu().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
+                    (config.getCpu().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
+            Collections.sort(withinBudgetCpus);
+            return withinBudgetCpus;
+        }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CustomizeSelectionUI(new ArrayList<PcComponent>(filterCpuListWithinInterval()),
-                        config, cpuEditLabel, cpuDisplayLabel);
-            }
-
-            // EFFECTS: filter out same socket cpus, if user's purpose is entry level,
-            // make sure cpu has integrated graphics, filter cpus that in budget interval
-            private List<Cpu> filterCpuListWithinInterval() {
-
-                CpuList cpuList = new CpuList();
-                java.util.List<Cpu> correctSocketCpus = getCorrectSocketCpus(cpuList);
-                java.util.List<Cpu> cpusWithIG = new ArrayList<>();
-                if (purpose == ENTRY_LEVEL) {
-                    cpusWithIG = cpuList.returnCpusHasIG(correctSocketCpus);
-                } else {
-                    cpusWithIG = correctSocketCpus;
-                }
-                java.util.List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(cpusWithIG,
-                        (config.getCpu().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
-                        (config.getCpu().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
-                Collections.sort(withinBudgetCpus);
-                return withinBudgetCpus;
-            }
-
-            // EFFECTS: find the socket of cpu in the old config, filter correct socket cpus
-            private java.util.List<Cpu> getCorrectSocketCpus(CpuList cpuList) {
-                java.util.List<Cpu> cpus = cpuList.getListAllCpu();
-                Socket mbSocket = config.getMotherboard().getSocket();
-                List<Cpu> correctSocketCpus = new ArrayList<>();
-                if (mbSocket == Socket.LGA1700) {
-                    for (Cpu cpu : cpus) {
-                        if (cpu.getCpuMfr() == CpuMfr.INTEL) {
-                            correctSocketCpus.add(cpu);
-                        }
-                    }
-                } else {
-                    for (Cpu cpu : cpus) {
-                        if (cpu.getCpuMfr() == CpuMfr.AMD) {
-                            correctSocketCpus.add(cpu);
-                        }
+        // EFFECTS: find the socket of cpu in the old config, filter correct socket cpus
+        private List<Cpu> getCorrectSocketCpus(CpuList cpuList) {
+            java.util.List<Cpu> cpus = cpuList.getListAllCpu();
+            Socket mbSocket = config.getMotherboard().getSocket();
+            List<Cpu> correctSocketCpus = new ArrayList<>();
+            if (mbSocket == Socket.LGA1700) {
+                for (Cpu cpu : cpus) {
+                    if (cpu.getCpuMfr() == CpuMfr.INTEL) {
+                        correctSocketCpus.add(cpu);
                     }
                 }
-                return correctSocketCpus;
-            }
-        }
-
-        private class EditMbAction extends AbstractAction {
-
-            public EditMbAction() {
-                super("Choose your new motherboard");
-            }
-
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CustomizeSelectionUI(new ArrayList<>(getMotherboards()), config, mbEditLabel, mbDisplayLabel);
-            }
-
-            //EFFECTS: return a list of motherboards that compatible with correct cpu
-            // socket, user's preference about computer size, and within reasonable price interval
-            private List<Motherboard> getMotherboards() {
-                MotherboardList motherboardList = new MotherboardList();
-                List<Motherboard> motherboards = motherboardList.getListAllMotherboard();
-                Socket socket = Socket.LGA1700;
-                if (config.getCpu().getCpuMfr() == CpuMfr.AMD) {
-                    socket = Socket.AM5;
+            } else {
+                for (Cpu cpu : cpus) {
+                    if (cpu.getCpuMfr() == CpuMfr.AMD) {
+                        correctSocketCpus.add(cpu);
+                    }
                 }
-                List<Motherboard> compatibleMotherboards = motherboardList.filterRightSocketMotherboard(motherboards,
-                        socket);
-                List<Motherboard> correctSizeMotherboards = motherboardList.filterRightFormSizeMotherboards(
-                        compatibleMotherboards, size);
-                List<Motherboard> withinBudgetMBs = motherboardList.filterMotherboardsInPriceInterval(
-                        correctSizeMotherboards, (config.getMotherboard().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
-                        (config.getMotherboard().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
-                return withinBudgetMBs;
             }
+            return correctSocketCpus;
         }
 
-        private class EditPsuAction extends AbstractAction {
+        //EFFECTS: return a list of power supplies that watt greater than min watt the user's desktop required
+        // and price within user's budget
+        private List<PowerSupply> getPowerSupplies() {
+            PowerSuppliesList powerSuppliesList = new PowerSuppliesList();
+            List<PowerSupply> powerSupplies = powerSuppliesList.getListAllPowerSupply();
+            int minWatt = config.getPowerSupply().getWattage();
+            List<PowerSupply> compatiblePowerSupplies = powerSuppliesList.filterGreaterWattPSUs(minWatt,
+                    powerSupplies);
+            List<PowerSupply> correctSizePowerSupplies = powerSuppliesList.filterFormSizePSUs(size,
+                    compatiblePowerSupplies);
+            return powerSuppliesList.filterPowerSupplyInPriceInterval(
+                    correctSizePowerSupplies,
+                    (config.getPowerSupply().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
+                    (config.getPowerSupply().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
+        }
 
-            public EditPsuAction() {
-                super("Choose your new power supply");
+        private class ReplaceButtonAction extends AbstractAction {
+
+            public ReplaceButtonAction() {
+                super("Replace the component with current selection");
             }
 
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CustomizeSelectionUI(new ArrayList<>(getPowerSupplies()), config,psuEditLabel, psuDisplayLabel);
-            }
-
-            //EFFECTS: return a list of power supplies that watt greater than min watt the user's desktop required
-            // and price within user's budget
-            private List<PowerSupply> getPowerSupplies() {
-                PowerSuppliesList powerSuppliesList = new PowerSuppliesList();
-                List<PowerSupply> powerSupplies = powerSuppliesList.getListAllPowerSupply();
-                int minWatt = config.getPowerSupply().getWattage();
-                List<PowerSupply> compatiblePowerSupplies = powerSuppliesList.filterGreaterWattPSUs(minWatt,
-                        powerSupplies);
-                List<PowerSupply> correctSizePowerSupplies = powerSuppliesList.filterFormSizePSUs(size,
-                        compatiblePowerSupplies);
-                return powerSuppliesList.filterPowerSupplyInPriceInterval(
-                        correctSizePowerSupplies,
-                        (config.getPowerSupply().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
-                        (config.getPowerSupply().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
+                Cpu newCpu = (Cpu) cpuOptions.get(cpuSelection.getSelectedIndex());
+                Motherboard newMb = (Motherboard) mbOptions.get(mbSelection.getSelectedIndex());
+                PowerSupply newPsu = (PowerSupply) psuOptions.get(psuSelection.getSelectedIndex());
+                if (config.getGpu() != null) {
+                    Gpu newGpu = (Gpu) gpuOptions.get(gpuSelection.getSelectedIndex());
+                    config.setGpu(newGpu);
+                    gpuDisplayLabel.setText(newGpu.getModel());
+                }
+                config.setCpu(newCpu);
+                config.setMotherboard(newMb);
+                config.setPowerSupply(newPsu);
+                cpuDisplayLabel.setText(newCpu.getModel());
+                mbDisplayLabel.setText(newMb.getModel());
+                psuDisplayLabel.setText(newPsu.getModel());
+                popupFrame.setVisible(false);
             }
         }
 
-        private class EditGpuAction extends AbstractAction {
-
-            public EditGpuAction() {
-                super("Choose your new GPU");
+        //EFFECTS: return a list of motherboards that compatible with correct cpu
+        // socket, user's preference about computer size, and within reasonable price interval
+        private List<Motherboard> getMotherboards() {
+            MotherboardList motherboardList = new MotherboardList();
+            List<Motherboard> motherboards = motherboardList.getListAllMotherboard();
+            Socket socket = Socket.LGA1700;
+            if (config.getCpu().getCpuMfr() == CpuMfr.AMD) {
+                socket = Socket.AM5;
             }
+            List<Motherboard> compatibleMotherboards = motherboardList.filterRightSocketMotherboard(motherboards,
+                    socket);
+            List<Motherboard> correctSizeMotherboards = motherboardList.filterRightFormSizeMotherboards(
+                    compatibleMotherboards, size);
+            List<Motherboard> withinBudgetMBs = motherboardList.filterMotherboardsInPriceInterval(
+                    correctSizeMotherboards, (config.getMotherboard().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
+                    (config.getMotherboard().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
+            return withinBudgetMBs;
+        }
 
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        private List<Gpu> getOptionsGpus() {
+            if (config.getGpu() != null) {
                 GpuList gpuList = new GpuList();
                 List<Gpu> gpus = gpuList.getListAllGpu();
-                List<Gpu> withinBudgetGpus = gpuList.filterGpusInPriceInterval(gpus,
+                List<Gpu> withinBudgetGpus =  gpuList.filterGpusInPriceInterval(gpus,
                         (config.getGpu().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
                         (config.getGpu().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
-                new CustomizeSelectionUI(new ArrayList<>(withinBudgetGpus), config, gpuEditLabel, gpuDisplayLabel);
+                return new ArrayList<>(withinBudgetGpus);
+            } else {
+                return new ArrayList<>();
             }
-
-
         }
     }
 
