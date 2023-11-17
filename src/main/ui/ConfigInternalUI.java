@@ -20,6 +20,8 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +45,8 @@ public class ConfigInternalUI extends JInternalFrame {
     private JLabel mbDisplayLabel;
     private JLabel psuDisplayLabel;
     private JLabel gpuDisplayLabel;
+    private final DecimalFormat df = new DecimalFormat("0.00");
+    private JLabel aggregateDisplayLabel;
 
     /**
      * Constructor set up user interface for a given configuration added to workspace (desktop panel) for the first time
@@ -91,7 +95,7 @@ public class ConfigInternalUI extends JInternalFrame {
         configPanel = new JPanel();
         configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.PAGE_AXIS));
         innerLowerPanel = new JPanel();
-        innerLowerPanel.setLayout(new GridLayout(6, 2));
+        innerLowerPanel.setLayout(new GridLayout(7, 2));
 
         JPanel innerUpperPanel = new JPanel();
 
@@ -100,13 +104,19 @@ public class ConfigInternalUI extends JInternalFrame {
         configPanel.add(innerUpperPanel);
         lowerPanelLabelAdd();
 
-        JButton saveButton = new JButton(new SaveButtonAction()); //action
+        innerLowerPanel.add(new JLabel("Aggregate", SwingConstants.CENTER));
+        double aggregate = getConfigAggregate();
+        aggregateDisplayLabel = new JLabel(" $" + aggregate, SwingConstants.CENTER);
+        innerLowerPanel.add(aggregateDisplayLabel);
+
+        JButton saveButton = new JButton(new SaveButtonAction());
         saveButton.setText("save");
         innerLowerPanel.add(saveButton);
 
         JButton editButton = new JButton(new CustomizeButtonAction());
         editButton.setText("Customize");
         innerLowerPanel.add(editButton);
+
 
         configPanel.add(innerLowerPanel);
     }
@@ -122,7 +132,7 @@ public class ConfigInternalUI extends JInternalFrame {
 
         innerLowerPanel.add(new JLabel("RAM",
                 new ImageIcon("data/resource/ConfigIcon/ram_size.png"), SwingConstants.LEFT));
-        innerLowerPanel.add(new JLabel("$" + String.valueOf(config.getRamBudget())));
+        innerLowerPanel.add(new JLabel("$" + (config.getRamBudget())));
 
         innerLowerPanel.add(new JLabel("Motherboard",
                 new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT));
@@ -161,7 +171,6 @@ public class ConfigInternalUI extends JInternalFrame {
      * to save the current configuration to the saving queue
      */
     private class SaveButtonAction extends AbstractAction {
-        //TODO save new customise to queue!
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!savingPanel.contains(configId, config)) {
@@ -186,28 +195,64 @@ public class ConfigInternalUI extends JInternalFrame {
      * to change the components of configuration
      */
     private class CustomizeButtonAction extends AbstractAction {
-        private FormSize size = config.getMotherboard().getFormSize();
-        private Purpose purpose = (config.getCpu().hasIntegratedGraphics()) ? Purpose.ENTRY_LEVEL : Purpose.GAMING;
-        private JLabel cpuEditLabel;
-        private JLabel mbEditLabel;
-        private JLabel psuEditLabel;
-        private JLabel gpuEditLabel;
+        private final FormSize size = config.getMotherboard().getFormSize();
+        private final Purpose purpose = (config.getCpu().hasIntegratedGraphic()) ? Purpose.ENTRY_LEVEL : Purpose.GAMING;
         private JFrame popupFrame;
-        private List<PcComponent> cpuOptions = new ArrayList<>(filterCpuListWithinInterval());
-        private List<String> cpuModels = convertComponentListToStringList(cpuOptions);
-        private JComboBox cpuSelection = new JComboBox<>(cpuModels.toArray());
-        private List<PcComponent> mbOptions = new ArrayList<>(getMotherboards());
-        private List<String> mbModels = convertComponentListToStringList(mbOptions);
-        private JComboBox mbSelection = new JComboBox<>(mbModels.toArray());
-        private List<PcComponent> psuOptions = new ArrayList<>(getPowerSupplies());
-        private List<String> psuModels = convertComponentListToStringList(psuOptions);
-        private JComboBox psuSelection = new JComboBox<>(psuModels.toArray());
-        private List<PcComponent> gpuOptions = new ArrayList<>(getOptionsGpus());
-        private List<String> gpuModels = convertComponentListToStringList(gpuOptions);
-        private JComboBox gpuSelection = new JComboBox<>(gpuModels.toArray());
+        private final List<PcComponent> cpuOptions = new ArrayList<>(filterCpuListWithinInterval());
+        private final JComboBox<String> cpuSelection;
+        private final List<PcComponent> mbOptions = new ArrayList<>(getMotherboards());
+        private final JComboBox<String> mbSelection;
+        private final List<PcComponent> psuOptions = new ArrayList<>(getPowerSupplies());
+        private final JComboBox<String> psuSelection;
+        private final List<PcComponent> gpuOptions = new ArrayList<>(getOptionsGpus());
+        private final JComboBox<String> gpuSelection;
+        private JLabel aggregateLabel;
 
         public CustomizeButtonAction() {
             super("customize the config by yourself!");
+            this.cpuSelection = new JComboBox<>();
+            for (String cpuModel: convertComponentListToStringList(cpuOptions)) {
+                cpuSelection.addItem(cpuModel);
+            }
+            mbSelection = new JComboBox<>();
+            for (String mbModel: convertComponentListToStringList(mbOptions)) {
+                mbSelection.addItem(mbModel);
+            }
+            psuSelection = new JComboBox<>();
+            for (String psuModel:convertComponentListToStringList(psuOptions)) {
+                psuSelection.addItem(psuModel);
+            }
+            gpuSelection = new JComboBox<>();
+            for (String gpuModel:convertComponentListToStringList(gpuOptions)) {
+                gpuSelection.addItem(gpuModel);
+            }
+            cpuSelection.addActionListener(new ChangedAction(config.getCpu(), cpuSelection, cpuOptions));
+            mbSelection.addActionListener(new ChangedAction(config.getMotherboard(), mbSelection, mbOptions));
+            psuSelection.addActionListener(new ChangedAction(config.getPowerSupply(), psuSelection, psuOptions));
+            gpuSelection.addActionListener(new ChangedAction(config.getGpu(), gpuSelection, gpuOptions));
+        }
+
+        /**
+         * Represents the action to be token when user choose other component from the list
+         */
+        class ChangedAction implements ActionListener {
+            private final PcComponent oldComponent;
+            private final JComboBox<String> componentSelection;
+            private final List<PcComponent> components;
+
+            public ChangedAction(PcComponent oldComponent, JComboBox<String> componentSelection,
+                                 List<PcComponent> components) {
+                this.oldComponent = oldComponent;
+                this.componentSelection = componentSelection;
+                this.components = components;
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double newAggregate = getConfigAggregate() - oldComponent.getPrice();
+                newAggregate += components.get(componentSelection.getSelectedIndex()).getPrice();
+                aggregateLabel.setText(" $" + df.format(newAggregate));
+            }
         }
 
         @Override
@@ -215,7 +260,7 @@ public class ConfigInternalUI extends JInternalFrame {
             popupFrame = new JFrame("Customize your own configuration!");
             JPanel popupPanel = new JPanel();
             popupPanel.setLayout(new BoxLayout(popupPanel, BoxLayout.PAGE_AXIS));
-            popupFrame.setSize(400, 300);
+            popupFrame.setSize(600, 300);
             popupFrame.setLocation(ConfigBuilderAppUI.WIDTH / 2, 200);
             popupFrame.setVisible(true);
             popupFrame.setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -236,15 +281,18 @@ public class ConfigInternalUI extends JInternalFrame {
             popupPanel.add(saveCustomize);
         }
 
+        /**
+         * Helper to add component selection windows for customize function
+         * @return main panel of component customize
+         */
         private JPanel componentSelectionPanel() {
-            JPanel innerPanel = new JPanel(new GridLayout(5, 2));
+            JPanel innerPanel = new JPanel(new GridLayout(6, 2));
 
             addSelectionComponent(innerPanel);
 
             if (config.getGpu() != null) {
-                gpuEditLabel = new JLabel(config.getGpu().getModel(),
-                        new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), SwingConstants.LEFT);
-                innerPanel.add(gpuEditLabel);
+                innerPanel.add(new JLabel(config.getGpu().getModel() + config.getGpu().getPrice(),
+                        new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), SwingConstants.LEFT));
                 innerPanel.add(gpuSelection);
             } else {
                 innerPanel.add(new JLabel("Integrated GPU: Inside CPU",
@@ -252,9 +300,15 @@ public class ConfigInternalUI extends JInternalFrame {
                 innerPanel.add(new JComboBox<>());
             }
 
+            innerPanel.add(new JLabel("Aggregate", SwingConstants.CENTER));
+            double aggregate = getConfigAggregate();
+            aggregateLabel = new JLabel(" $" + df.format(aggregate), SwingConstants.CENTER);
+            innerPanel.add(aggregateLabel);
+
             return innerPanel;
         }
 
+        // EFFECTS: return a list of string represent the model of each element of component
         private List<String> convertComponentListToStringList(List<PcComponent> components) {
             List<String> componentModels = new ArrayList<>();
             for (PcComponent component:components) {
@@ -263,20 +317,21 @@ public class ConfigInternalUI extends JInternalFrame {
             return componentModels;
         }
 
+        /**
+         * Helper to visualize configuration in the customize windows
+         * @param innerPanel the customize content panel
+         */
         private void addSelectionComponent(JPanel innerPanel) {
-            cpuEditLabel = new JLabel(config.getCpu().getModel(),
-                    new ImageIcon("data/resource/ConfigIcon/cpu_size.png"),SwingConstants.LEFT);
-            innerPanel.add(cpuEditLabel);
+            innerPanel.add(new JLabel(config.getCpu().getModel() + " $" + config.getCpu().getPrice(),
+                    new ImageIcon("data/resource/ConfigIcon/cpu_size.png"), SwingConstants.LEFT));
             innerPanel.add(cpuSelection);
 
-            mbEditLabel = new JLabel(config.getMotherboard().getModel(),
-                    new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT);
-            innerPanel.add(mbEditLabel);
+            innerPanel.add(new JLabel(config.getMotherboard().getModel() + " $" + config.getMotherboard().getPrice(),
+                    new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT));
             innerPanel.add(mbSelection);
 
-            psuEditLabel = new JLabel(config.getPowerSupply().getModel(),
-                    new ImageIcon("data/resource/ConfigIcon/psu_size.png"), SwingConstants.LEFT);
-            innerPanel.add(psuEditLabel);
+            innerPanel.add(new JLabel(config.getPowerSupply().getModel() + " $" + config.getPowerSupply().getPrice(),
+                    new ImageIcon("data/resource/ConfigIcon/psu_size.png"), SwingConstants.LEFT));
             innerPanel.add(psuSelection);
         }
 
@@ -285,8 +340,8 @@ public class ConfigInternalUI extends JInternalFrame {
         private List<Cpu> filterCpuListWithinInterval() {
 
             CpuList cpuList = new CpuList();
-            java.util.List<Cpu> correctSocketCpus = getCorrectSocketCpus(cpuList);
-            java.util.List<Cpu> cpusWithIG = new ArrayList<>();
+            List<Cpu> correctSocketCpus = getCorrectSocketCpus(cpuList);
+            List<Cpu> cpusWithIG;
             if (purpose == ENTRY_LEVEL) {
                 cpusWithIG = cpuList.returnCpusHasIG(correctSocketCpus);
             } else {
@@ -325,17 +380,43 @@ public class ConfigInternalUI extends JInternalFrame {
         private List<PowerSupply> getPowerSupplies() {
             PowerSuppliesList powerSuppliesList = new PowerSuppliesList();
             List<PowerSupply> powerSupplies = powerSuppliesList.getListAllPowerSupply();
-            int minWatt = config.getPowerSupply().getWattage();
+            int minWatt = config.getCpu().getBasePower() + 150 + 100;
+            if (config.getGpu() != null) {
+                minWatt += config.getGpu().getBasePower();
+            }
             List<PowerSupply> compatiblePowerSupplies = powerSuppliesList.filterGreaterWattPSUs(minWatt,
                     powerSupplies);
-            List<PowerSupply> correctSizePowerSupplies = powerSuppliesList.filterFormSizePSUs(size,
-                    compatiblePowerSupplies);
+            List<PowerSupply> correctSizePowerSupplies = getCorrectSizePowerSupplies(compatiblePowerSupplies);
             return powerSuppliesList.filterPowerSupplyInPriceInterval(
                     correctSizePowerSupplies,
                     (config.getPowerSupply().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
                     (config.getPowerSupply().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
         }
 
+        // EFFECTS: return a list of power supplies which size is compatible with case size
+        private List<PowerSupply> getCorrectSizePowerSupplies(List<PowerSupply> compatiblePowerSupplies) {
+            List<PowerSupply> correctSizePowerSupplies = new ArrayList<>();
+            if (size == FormSize.ITX || size == FormSize.MATX) {
+                for (PowerSupply psu: compatiblePowerSupplies) {
+                    if (psu.getFormSize() == FormSize.ITX) {
+                        correctSizePowerSupplies.add(psu);
+                    }
+                }
+            } else if (size == FormSize.ATX) {
+                for (PowerSupply psu: compatiblePowerSupplies) {
+                    if (psu.getFormSize() != FormSize.EATX) {
+                        correctSizePowerSupplies.add(psu);
+                    }
+                }
+            } else {
+                correctSizePowerSupplies = new ArrayList<>(compatiblePowerSupplies);
+            }
+            return correctSizePowerSupplies;
+        }
+
+        /**
+         * Represents the action to be token when user want to save their change on configuration
+         */
         private class ReplaceButtonAction extends AbstractAction {
 
             public ReplaceButtonAction() {
@@ -360,6 +441,8 @@ public class ConfigInternalUI extends JInternalFrame {
                 mbDisplayLabel.setText(newMb.getModel());
                 psuDisplayLabel.setText(newPsu.getModel());
                 popupFrame.setVisible(false);
+                aggregateLabel.setText(" $" + df.format(getConfigAggregate()));
+                aggregateDisplayLabel.setText(" $" + df.format(getConfigAggregate()));
             }
         }
 
@@ -376,12 +459,12 @@ public class ConfigInternalUI extends JInternalFrame {
                     socket);
             List<Motherboard> correctSizeMotherboards = motherboardList.filterRightFormSizeMotherboards(
                     compatibleMotherboards, size);
-            List<Motherboard> withinBudgetMBs = motherboardList.filterMotherboardsInPriceInterval(
+            return motherboardList.filterMotherboardsInPriceInterval(
                     correctSizeMotherboards, (config.getMotherboard().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
                     (config.getMotherboard().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
-            return withinBudgetMBs;
         }
 
+        // EFFECTS: return a list of gpus that within reasonable price interval
         private List<Gpu> getOptionsGpus() {
             if (config.getGpu() != null) {
                 GpuList gpuList = new GpuList();
@@ -394,6 +477,16 @@ public class ConfigInternalUI extends JInternalFrame {
                 return new ArrayList<>();
             }
         }
+
+    }
+
+
+    // EFFECTS: calculate the total cost for the current configuration
+    private double getConfigAggregate() {
+        double aggregate = config.getCpu().getPrice() + config.getRamBudget() + config.getMotherboard().getPrice();
+        aggregate += config.getPowerSupply().getPrice();
+        aggregate += (config.getGpu() == null) ? 0 : config.getGpu().getPrice();
+        return aggregate;
     }
 
     // getter

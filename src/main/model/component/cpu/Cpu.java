@@ -104,7 +104,7 @@ public class Cpu implements Comparable<Cpu>, Writable, PcComponent {
         return cpuMfr;
     }
 
-    public boolean hasIntegratedGraphics() {
+    public boolean hasIntegratedGraphic() {
         return integratedGraphics;
     }
 

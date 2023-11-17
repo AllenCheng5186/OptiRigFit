@@ -1,100 +1,35 @@
-{"savedConfig": [
-    {
-        "ramBudget": 300,
-        "components": [
-            {
-                "cpuMfr": "AMD",
-                "basePower": 120,
-                "price": 590,
-                "benchMark": 34718,
-                "model": "R7-7800X3D",
-                "integratedGraphics": true
-            },
-            {
-                "maxRam": 192,
-                "price": 449.99,
-                "model": "Asus ROG STRIX B650E-E GAMING WIFI",
-                "socket": "AM5",
-                "formSize": "ATX",
-                "ramSlot": 4
-            },
-            {
-                "wattage": 1200,
-                "price": 400,
-                "model": "Corsair HX1200i",
-                "isModular": true,
-                "formSize": "ATX"
-            }
-        ]
-    },
-    {
-        "ramBudget": 350,
-        "components": [
-            {
-                "cpuMfr": "AMD",
-                "basePower": 170,
-                "price": 549.99,
-                "benchMark": 52217,
-                "model": "R9-7900X",
-                "integratedGraphics": true
-            },
-            {
-                "basePower": 320,
-                "price": 1599.99,
-                "bench mark": 34820,
-                "model": "GeForce RTX 4080",
-                "gpuMfr": "NVIDIA"
-            },
-            {
-                "maxRam": 192,
-                "price": 638.98,
-                "model": "Asus ROG STRIX X670E-E GAMING WIFI",
-                "socket": "AM5",
-                "formSize": "ATX",
-                "ramSlot": 4
-            },
-            {
-                "wattage": 1300,
-                "price": 299.99,
-                "model": "EVGA Supernova 1300 GT",
-                "isModular": true,
-                "formSize": "ATX"
-            }
-        ]
-    },
-    {
-        "ramBudget": 350,
-        "components": [
-            {
-                "cpuMfr": "AMD",
-                "basePower": 170,
-                "price": 749.99,
-                "benchMark": 63380,
-                "model": "R9-7950X",
-                "integratedGraphics": true
-            },
-            {
-                "basePower": 320,
-                "price": 1599.99,
-                "bench mark": 34820,
-                "model": "GeForce RTX 4080",
-                "gpuMfr": "NVIDIA"
-            },
-            {
-                "maxRam": 192,
-                "price": 638.98,
-                "model": "Asus ROG STRIX X670E-E GAMING WIFI",
-                "socket": "AM5",
-                "formSize": "ATX",
-                "ramSlot": 4
-            },
-            {
-                "wattage": 1300,
-                "price": 449.99,
-                "model": "EVGA Supernova 1300 G+",
-                "isModular": true,
-                "formSize": "ATX"
-            }
-        ]
-    }
-]}
+{"savedConfig": [{
+    "ramBudget": 300,
+    "components": [
+        {
+            "cpuMfr": "AMD",
+            "basePower": 170,
+            "price": 749.99,
+            "benchMark": 63380,
+            "model": "R9-7950X",
+            "integratedGraphics": true
+        },
+        {
+            "basePower": 320,
+            "price": 1599.99,
+            "bench mark": 34820,
+            "model": "GeForce RTX 4080",
+            "gpuMfr": "NVIDIA"
+        },
+        {
+            "maxRam": 96,
+            "price": 429,
+            "model": "Asus ROG STRIX B650E-I GAMING WIFI",
+            "socket": "AM5",
+            "formSize": "ITX",
+            "ramSlot": 2
+        },
+        {
+            "wattage": 750,
+            "price": 206.36,
+            "model": "Corsair SF750",
+            "isModular": true,
+            "formSize": "ITX"
+        }
+    ]
+}]}

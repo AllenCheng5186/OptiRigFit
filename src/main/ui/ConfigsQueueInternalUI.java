@@ -1,7 +1,6 @@
 package ui;
 
 import model.Configuration;
-import org.json.JSONObject;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -14,27 +13,30 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JInternalFrame;
 
+/**
+ * Represent user interface for configs saving queue
+ */
 public class ConfigsQueueInternalUI extends JInternalFrame {
     private static final int HEIGHT = 550;
     private static final int WIDTH = 300;
-    private static DefaultListModel<String> savedConfigs = new DefaultListModel<>();
+    private static final DefaultListModel<String> savedConfigs = new DefaultListModel<>();
     private JList<String> jsavelist;
-    private static List<Configuration> savingList = new ArrayList<>();
-    private JPanel queuePanel;
-    private JButton showButton;
-    private Boolean movable = false;
+    private static final List<Configuration> savingList = new ArrayList<>();
     private static final String JSON_STORE = "./data/configurations.json";
-    private JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
-    private JsonReader jsonReader = new JsonReader(JSON_STORE);
+    private final JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+    private final JsonReader jsonReader = new JsonReader(JSON_STORE);
 
+    /**
+     * Constructor set up user interface for the only one main queue
+     */
     public ConfigsQueueInternalUI() {
         super("Configs Saving List", false, false, false, false);
-        queuePanel = new JPanel();
+        JPanel queuePanel = new JPanel();
         queuePanel.setSize(WIDTH, HEIGHT);
         queuePanel.setVisible(true);
         queuePanel.setLayout(new BoxLayout(queuePanel, BoxLayout.PAGE_AXIS));
 
-        showButton = new JButton(new ShowConfigAction());
+        JButton showButton = new JButton(new ShowConfigAction());
         showButton.setText("Show");
         showButton.setVisible(true);
 
@@ -49,6 +51,10 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
         showButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
+    /**
+     * Helper to set up inner JList panel
+     * @return a panel with a JList for visualize saving queue
+     */
     private JPanel setUpInnerListPanel() {
         JPanel listPanel = new JPanel();
         listPanel.setSize(WIDTH, HEIGHT - 50);
@@ -60,16 +66,27 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
         return listPanel;
     }
 
+    /**
+     * Add given configuration and ID to the queue
+     * @param configId ID associate with config
+     * @param newConfig the given config
+     */
     public void addConfigToQueue(int configId, Configuration newConfig) {
         savedConfigs.addElement("Configuration #" + configId);
         savingList.add(newConfig);
 
     }
 
+    // EFFECTS: return true if there is no same configID or same config in the queue,
+    // otherwise return false
     public Boolean contains(int configId, Configuration newConfig) {
         return savedConfigs.contains(configId) || savingList.contains(newConfig);
     }
 
+    /**
+     * Represent an action to be token when user want to add closed config
+     * to the workspace (desktop panel) again
+     */
     private class ShowConfigAction extends AbstractAction {
         public ShowConfigAction() {
             super("Show selected config on workspace!");
@@ -80,7 +97,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
             Configuration config = savingList.get(jsavelist.getSelectedIndex());
             ConfigInternalUI showAgainUI = new ConfigInternalUI(jsavelist.getSelectedValue(),
                     config, ConfigsQueueInternalUI.this);
-            if (!ConfigBuilderAppUI.getWorkspaceConfigIds().contains(Integer.valueOf(showAgainUI.getConfigId()))) {
+            if (!ConfigBuilderAppUI.getWorkspaceConfigIds().contains(showAgainUI.getConfigId())) {
                 ConfigBuilderAppUI.getDesktop().add(showAgainUI);
                 showAgainUI.setLocation(ConfigBuilderAppUI.getConfigInternalWindowX(),
                         ConfigBuilderAppUI.getConfigInternalWindowY());
@@ -97,10 +114,8 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
         }
     }
 
-
-
+    // EFFECTS: save the list of configs (saving queue) to the file
     public void saveToFile() {
-        JSONObject json = new JSONObject();
         try {
             jsonWriter.open();
             jsonWriter.write(savingList);
@@ -117,6 +132,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
         }
     }
 
+    // EFFECTS: load the list of configs from file to queue and workspace (desktop panel)
     public void loadFileToQueue() {
         try {
             List<Configuration> loadConfigsList = jsonReader.read();
@@ -130,6 +146,12 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
         }
     }
 
+    /**
+     * Helper to add loaded list of configs to the queue and workspace (desktop panel)
+     * check whether same config was added to the both queue and workspace to
+     * avoid load same file multiple times
+     * @param loadConfigsList loaded list of configs
+     */
     private void addLoadedConfigsToWorkspace(List<Configuration> loadConfigsList) {
         for (Configuration config: loadConfigsList) {
             if (!ConfigBuilderAppUI.getOpenedConfigs().contains(config)) {

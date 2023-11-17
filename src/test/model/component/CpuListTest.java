@@ -49,14 +49,14 @@ public class CpuListTest {
         List<Cpu> actualCpus = testCpuList.returnCpusHasIG(testCpus);
         List<Cpu> cpusWithoutIG = new ArrayList<>(actualCpus);
         for (Cpu cpu : actualCpus) {
-            assertTrue(cpu.hasIntegratedGraphics());
+            assertTrue(cpu.hasIntegratedGraphic());
             assertFalse(cpu.getModel().contains("F"));
         }
         for (Cpu cpu : actualCpus) {
             cpusWithoutIG.remove(cpu);
         }
         for (Cpu cpu : cpusWithoutIG) {
-            assertFalse(cpu.hasIntegratedGraphics());
+            assertFalse(cpu.hasIntegratedGraphic());
             assertTrue(cpu.getModel().contains("F"));
         }
 

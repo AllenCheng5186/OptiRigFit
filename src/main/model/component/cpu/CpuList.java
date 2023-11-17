@@ -37,7 +37,7 @@ public class CpuList {
     public List<Cpu> returnCpusHasIG(List<Cpu> cpuList) {
         List<Cpu> cpusHasIG = new ArrayList<>();
         for (Cpu cpu : cpuList) {
-            if (cpu.hasIntegratedGraphics()) {
+            if (cpu.hasIntegratedGraphic()) {
                 cpusHasIG.add(cpu);
             }
         }
