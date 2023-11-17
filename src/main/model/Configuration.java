@@ -69,6 +69,10 @@ public class Configuration implements Writable {
         this.gpu = gpu;
     }
 
+    public void setRamBudget(double ramBudget) {
+        this.ramBudget = ramBudget;
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

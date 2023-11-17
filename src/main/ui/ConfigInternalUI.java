@@ -18,6 +18,7 @@ import model.component.psu.PowerSupply;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,6 +46,7 @@ public class ConfigInternalUI extends JInternalFrame {
     private JLabel mbDisplayLabel;
     private JLabel psuDisplayLabel;
     private JLabel gpuDisplayLabel;
+    private JLabel ramBudgetDisplayLabel;
     private final DecimalFormat df = new DecimalFormat("0.00");
     private JLabel aggregateDisplayLabel;
 
@@ -132,7 +134,8 @@ public class ConfigInternalUI extends JInternalFrame {
 
         innerLowerPanel.add(new JLabel("RAM",
                 new ImageIcon("data/resource/ConfigIcon/ram_size.png"), SwingConstants.LEFT));
-        innerLowerPanel.add(new JLabel("$" + (config.getRamBudget())));
+        ramBudgetDisplayLabel = new JLabel("  $" + (config.getRamBudget()));
+        innerLowerPanel.add(ramBudgetDisplayLabel);
 
         innerLowerPanel.add(new JLabel("Motherboard",
                 new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT));
@@ -144,6 +147,13 @@ public class ConfigInternalUI extends JInternalFrame {
         psuDisplayLabel = new JLabel(config.getPowerSupply().getModel() + "   $" + config.getPowerSupply().getPrice());
         innerLowerPanel.add(psuDisplayLabel);
 
+        gpuDisplayLabelAdd();
+    }
+
+    /**
+     * Helper to set up visualize gpu information while customize editing
+     */
+    private void gpuDisplayLabelAdd() {
         innerLowerPanel.add(new JLabel("Discrete GPU",
                 new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), SwingConstants.LEFT));
         if (config.getGpu() != null) {
@@ -207,7 +217,11 @@ public class ConfigInternalUI extends JInternalFrame {
         private final List<PcComponent> gpuOptions = new ArrayList<>(getOptionsGpus());
         private final JComboBox<String> gpuSelection;
         private JLabel aggregateLabel;
+        private final JTextField ramBudgetTextField;
 
+        /**
+         * Constructor set up user interface for customize function
+         */
         public CustomizeButtonAction() {
             super("customize the config by yourself!");
             this.cpuSelection = new JComboBox<>();
@@ -218,18 +232,31 @@ public class ConfigInternalUI extends JInternalFrame {
             for (String mbModel: convertComponentListToStringList(mbOptions)) {
                 mbSelection.addItem(mbModel);
             }
+
             psuSelection = new JComboBox<>();
             for (String psuModel:convertComponentListToStringList(psuOptions)) {
                 psuSelection.addItem(psuModel);
             }
+
             gpuSelection = new JComboBox<>();
             for (String gpuModel:convertComponentListToStringList(gpuOptions)) {
                 gpuSelection.addItem(gpuModel);
             }
+            ramBudgetTextField = new JTextField();
+
+            userInputAddActionListener();
+        }
+
+        /**
+         * Helper to add action listener to customize interface
+         */
+        private void userInputAddActionListener() {
             cpuSelection.addActionListener(new ChangedAction(config.getCpu(), cpuSelection, cpuOptions));
             mbSelection.addActionListener(new ChangedAction(config.getMotherboard(), mbSelection, mbOptions));
             psuSelection.addActionListener(new ChangedAction(config.getPowerSupply(), psuSelection, psuOptions));
             gpuSelection.addActionListener(new ChangedAction(config.getGpu(), gpuSelection, gpuOptions));
+            DocumentFilter filter = new CheckText();
+            ((AbstractDocument) ramBudgetTextField.getDocument()).setDocumentFilter(filter);
         }
 
         /**
@@ -252,6 +279,29 @@ public class ConfigInternalUI extends JInternalFrame {
                 double newAggregate = getConfigAggregate() - oldComponent.getPrice();
                 newAggregate += components.get(componentSelection.getSelectedIndex()).getPrice();
                 aggregateLabel.setText(" $" + df.format(newAggregate));
+            }
+        }
+
+        /**
+         * Represents the action to be token when user input value to change budget for RAM
+         */
+        private class CheckText extends DocumentFilter {
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
+                                AttributeSet attrs) throws BadLocationException {
+                super.replace(fb, offset, length, text, attrs);
+                if (ramBudgetTextField.getText().matches("\\d+")) {
+                    ramBudgetDisplayLabel.setText("  $" + ramBudgetTextField.getText());
+                    double newAggregate = getConfigAggregate() - config.getRamBudget();
+                    newAggregate += Double.parseDouble(ramBudgetTextField.getText());
+                    aggregateLabel.setText(" $" + df.format(newAggregate));
+                    aggregateDisplayLabel.setText(" $" + df.format(newAggregate));
+                    config.setRamBudget(Double.parseDouble(ramBudgetTextField.getText()));
+                } else {
+                    JOptionPane.showConfirmDialog(null,
+                            "Invalid Input! Please input proper digit for budget!",
+                            "Invalid Input", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon("./data/resource/ConfigInputIcon/InvalidInputExclamation.png"));
+                }
             }
         }
 
@@ -286,7 +336,7 @@ public class ConfigInternalUI extends JInternalFrame {
          * @return main panel of component customize
          */
         private JPanel componentSelectionPanel() {
-            JPanel innerPanel = new JPanel(new GridLayout(6, 2));
+            JPanel innerPanel = new JPanel(new GridLayout(7, 2));
 
             addSelectionComponent(innerPanel);
 
@@ -325,6 +375,11 @@ public class ConfigInternalUI extends JInternalFrame {
             innerPanel.add(new JLabel(config.getCpu().getModel() + " $" + config.getCpu().getPrice(),
                     new ImageIcon("data/resource/ConfigIcon/cpu_size.png"), SwingConstants.LEFT));
             innerPanel.add(cpuSelection);
+
+            innerPanel.add(new JLabel("Ram budget:  $" + config.getRamBudget(),
+                    new ImageIcon("data/resource/ConfigIcon/ram_size.png"), SwingConstants.LEFT));
+
+            innerPanel.add(ramBudgetTextField);
 
             innerPanel.add(new JLabel(config.getMotherboard().getModel() + " $" + config.getMotherboard().getPrice(),
                     new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT));
