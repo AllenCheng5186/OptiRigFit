@@ -120,20 +120,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
     public void loadFileToQueue() {
         try {
             List<Configuration> loadConfigsList = jsonReader.read();
-            for (Configuration config:loadConfigsList) {
-                ConfigInternalUI configPanel = new ConfigInternalUI(config, this);
-                ConfigBuilderAppUI.getWorkspaceConfigIds().add(configPanel.getConfigId());
-                ConfigBuilderAppUI.getDesktop().add(configPanel);
-                configPanel.toFront();
-                configPanel.setLocation(ConfigBuilderAppUI.getConfigInternalWindowX(),
-                        ConfigBuilderAppUI.getConfigInternalWindowY());
-                addConfigToQueue(configPanel.getConfigId(), config);
-            }
-            JOptionPane.showConfirmDialog(null,
-                    "Loaded saved configuration list from \n" + JSON_STORE,
-                    "Load successful!",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./data/resource/checkIcon.png"));
+            addLoadedConfigsToWorkspace(loadConfigsList);
         } catch (IOException e) {
             JOptionPane.showConfirmDialog(null,
                     "Unable to read from file: " + JSON_STORE,
@@ -141,5 +128,31 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
                     JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                     new ImageIcon("./data/resource/crossIcon.png"));
         }
+    }
+
+    private void addLoadedConfigsToWorkspace(List<Configuration> loadConfigsList) {
+        for (Configuration config: loadConfigsList) {
+            if (!ConfigBuilderAppUI.getOpenedConfigs().contains(config)) {
+                ConfigInternalUI configPanel = new ConfigInternalUI(config, this);
+                ConfigBuilderAppUI.getWorkspaceConfigIds().add(configPanel.getConfigId());
+                ConfigBuilderAppUI.getDesktop().add(configPanel);
+                configPanel.toFront();
+                configPanel.setLocation(ConfigBuilderAppUI.getConfigInternalWindowX(),
+                        ConfigBuilderAppUI.getConfigInternalWindowY());
+                addConfigToQueue(configPanel.getConfigId(), config);
+            } else {
+                JOptionPane.showConfirmDialog(null,
+                        "Already loaded to the workspace!",
+                        "Load fail!",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        new ImageIcon("./data/resource/crossIcon.png"));
+                return;
+            }
+        }
+        JOptionPane.showConfirmDialog(null,
+                "Loaded saved configuration list from \n" + JSON_STORE,
+                "Load successful!",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./data/resource/checkIcon.png"));
     }
 }

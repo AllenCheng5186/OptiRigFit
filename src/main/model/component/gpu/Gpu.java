@@ -41,6 +41,45 @@ public class Gpu implements Comparable<Gpu>, Writable, PcComponent {
         return json;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Gpu gpu = (Gpu) o;
+
+        if (basePower != gpu.basePower) {
+            return false;
+        }
+        if (Double.compare(gpu.price, price) != 0) {
+            return false;
+        }
+        if (benchMark != gpu.benchMark) {
+            return false;
+        }
+        if (!model.equals(gpu.model)) {
+            return false;
+        }
+        return gpuMfr == gpu.gpuMfr;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = model.hashCode();
+        result = 31 * result + basePower;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + gpuMfr.hashCode();
+        result = 31 * result + benchMark;
+        return result;
+    }
+
     // getter
 
     @Override

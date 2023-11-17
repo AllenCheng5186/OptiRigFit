@@ -42,6 +42,45 @@ public class PowerSupply implements Comparable<PowerSupply>, Writable, PcCompone
         return json;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        PowerSupply that = (PowerSupply) o;
+
+        if (wattage != that.wattage) {
+            return false;
+        }
+        if (isModular != that.isModular) {
+            return false;
+        }
+        if (Double.compare(that.price, price) != 0) {
+            return false;
+        }
+        if (!model.equals(that.model)) {
+            return false;
+        }
+        return formSize == that.formSize;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = model.hashCode();
+        result = 31 * result + formSize.hashCode();
+        result = 31 * result + wattage;
+        result = 31 * result + (isModular ? 1 : 0);
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     // getters
 
     @Override

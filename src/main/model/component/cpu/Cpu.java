@@ -43,6 +43,49 @@ public class Cpu implements Comparable<Cpu>, Writable, PcComponent {
         return json;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Cpu cpu = (Cpu) o;
+
+        if (basePower != cpu.basePower) {
+            return false;
+        }
+        if (Double.compare(cpu.price, price) != 0) {
+            return false;
+        }
+        if (integratedGraphics != cpu.integratedGraphics) {
+            return false;
+        }
+        if (benchMark != cpu.benchMark) {
+            return false;
+        }
+        if (!model.equals(cpu.model)) {
+            return false;
+        }
+        return cpuMfr == cpu.cpuMfr;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = model.hashCode();
+        result = 31 * result + basePower;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + cpuMfr.hashCode();
+        result = 31 * result + (integratedGraphics ? 1 : 0);
+        result = 31 * result + benchMark;
+        return result;
+    }
+
     // getter
     @Override
     public String getModel() {

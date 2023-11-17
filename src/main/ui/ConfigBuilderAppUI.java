@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents application's main window frame.
+ */
 public class ConfigBuilderAppUI extends JFrame {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -20,11 +23,15 @@ public class ConfigBuilderAppUI extends JFrame {
     private static int configInternalWindowY = 0;
     private static JDesktopPane desktop;
     private final ConfigsQueueInternalUI savingQueue = new ConfigsQueueInternalUI();
-    private static List<Integer> workspaceConfigIds = new ArrayList<>();
+    private static final List<Integer> workspaceConfigIds = new ArrayList<>();
+    private static final List<Configuration> openedConfigs = new ArrayList<>();
 
+    /**
+     * Constructor sets up workspace desktop windows and add menu toolbar
+     */
     public ConfigBuilderAppUI() {
         desktop = new JDesktopPane();
-        desktop.setDesktopManager(new ProxyDesktopManager(desktop.getDesktopManager()));
+        desktop.setDesktopManager(new MainDesktopManager(desktop.getDesktopManager()));
 
         setContentPane(desktop);
         setVisible(true);
@@ -61,6 +68,12 @@ public class ConfigBuilderAppUI extends JFrame {
         setJMenuBar(menuBar);
     }
 
+    /**
+     * Adds an item with given handler to the given menu
+     * @param theMenu  menu to which new item is added
+     * @param action   handler for new menu item
+     * @param accelerator    keystroke accelerator for this menu item
+     */
     private void addMenuItem(JMenu theMenu, AbstractAction action, KeyStroke accelerator) {
         JMenuItem menuItem = new JMenuItem(action);
         menuItem.setMnemonic(menuItem.getText().charAt(0));
@@ -69,8 +82,8 @@ public class ConfigBuilderAppUI extends JFrame {
     }
 
     /**
-     * Represents the action to be taken when the user wants to add a new
-     * sensor to the system.
+     * Represents the action to be taken when the user wants to generate a new
+     * configuration to the workspace.
      */
     private class AddNewConfigAction extends AbstractAction {
 
@@ -165,6 +178,10 @@ public class ConfigBuilderAppUI extends JFrame {
         }
     }
 
+    /**
+     * Represents the action to be taken when the user save the list of configuration
+     * in queue to persistence file
+     */
     private class FileSavingAction extends AbstractAction {
 
         public FileSavingAction() {
@@ -177,6 +194,10 @@ public class ConfigBuilderAppUI extends JFrame {
         }
     }
 
+    /**
+     * Represents the action to be taken when the user load the persistence file
+     * to workspace
+     */
     private class FileLoadingAction extends AbstractAction {
 
         public FileLoadingAction() {
@@ -189,11 +210,15 @@ public class ConfigBuilderAppUI extends JFrame {
         }
     }
 
-    private class ProxyDesktopManager implements DesktopManager {
+    /**
+     *  Represent the desktop manager for main desktop panel
+     *  only override the rule of checking which internal panel is movable
+     */
+    private class MainDesktopManager implements DesktopManager {
 
         private final DesktopManager delegate;
 
-        public ProxyDesktopManager(DesktopManager delegate) {
+        public MainDesktopManager(DesktopManager delegate) {
             this.delegate = Objects.requireNonNull(delegate);
         }
 
@@ -290,6 +315,8 @@ public class ConfigBuilderAppUI extends JFrame {
         // resizeFrame
     }
 
+    // MODIFIES: this
+    // EFFECTS: reset the location for next internal configInternalUI panel
     public static void configWindowLocationReset() {
         configInternalWindowX -= INTERNAL_WINDOWS_NEXT_GAP;
         configInternalWindowY -= INTERNAL_WINDOWS_NEXT_GAP;
@@ -318,6 +345,11 @@ public class ConfigBuilderAppUI extends JFrame {
         return configInternalWindowY;
     }
 
+    public static List<Configuration> getOpenedConfigs() {
+        return openedConfigs;
+    }
+
+    // starts the application
     public static void main(String[] args) {
         new ConfigBuilderAppUI();
     }

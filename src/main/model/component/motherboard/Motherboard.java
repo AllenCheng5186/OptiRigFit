@@ -52,6 +52,50 @@ public class Motherboard implements Comparable<Motherboard>, Writable, PcCompone
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Motherboard that = (Motherboard) o;
+
+        if (maxRam != that.maxRam) {
+            return false;
+        }
+        if (ramSlot != that.ramSlot) {
+            return false;
+        }
+        if (Double.compare(that.price, price) != 0) {
+            return false;
+        }
+        if (!model.equals(that.model)) {
+            return false;
+        }
+        if (socket != that.socket) {
+            return false;
+        }
+        return formSize == that.formSize;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = model.hashCode();
+        result = 31 * result + socket.hashCode();
+        result = 31 * result + formSize.hashCode();
+        result = 31 * result + maxRam;
+        result = 31 * result + ramSlot;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    // getter
+    @Override
     public String getModel() {
         return model;
     }

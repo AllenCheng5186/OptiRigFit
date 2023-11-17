@@ -26,31 +26,35 @@ import java.util.List;
 
 import static model.Purpose.ENTRY_LEVEL;
 
-
+/**
+ *  Represent user interface for configurations
+ */
 public class ConfigInternalUI extends JInternalFrame {
     private static final int UPPER_DOWN_BOUNDARY_INTERVAL = 400;
     private static int configNum = 1;
-    private Configuration config;
-    private JPanel innerUpperPanel;
+    private final Configuration config;
     private JPanel innerLowerPanel;
     private static final int WIDTH = 400;
     private static final int HEIGHT = 320;
-    private JButton editButton;
-    private JButton saveButton;
     private JPanel configPanel;
-    private ConfigsQueueInternalUI savingPanel;
+    private final ConfigsQueueInternalUI savingPanel;
     private final int configId;
     private JLabel cpuDisplayLabel;
     private JLabel mbDisplayLabel;
     private JLabel psuDisplayLabel;
     private JLabel gpuDisplayLabel;
 
-
+    /**
+     * Constructor set up user interface for a given configuration added to workspace (desktop panel) for the first time
+     * @param config the configuration
+     * @param savingPanel the config saving queue panel
+     */
     public ConfigInternalUI(Configuration config, ConfigsQueueInternalUI savingPanel) {
         super("Configuration #" + configNum, true, true, false, false);
         this.configId = configNum;
         this.config = config;
         this.savingPanel = savingPanel;
+        ConfigBuilderAppUI.getOpenedConfigs().add(config);
         setUp();
 
         setContentPane(configPanel);
@@ -61,7 +65,12 @@ public class ConfigInternalUI extends JInternalFrame {
         configNum++;
     }
 
-
+    /**
+     * Constructor set up user interface for a given configuration which added workspace (desktop panel) again
+     * @param configTitle the title associate with config at first time added
+     * @param config the configuration
+     * @param savingPanel the config saving queue panel
+     */
     public ConfigInternalUI(String configTitle, Configuration config, ConfigsQueueInternalUI savingPanel) {
         super(configTitle, true, true, false, false);
         this.configId = Integer.parseInt(configTitle.substring(configTitle.length() - 1));
@@ -75,14 +84,82 @@ public class ConfigInternalUI extends JInternalFrame {
         addInternalFrameListener(new CloseWindowsEvent());
     }
 
+    /**
+     * Helper to set up visual configuration window
+     */
+    private void setUp() {
+        configPanel = new JPanel();
+        configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.PAGE_AXIS));
+        innerLowerPanel = new JPanel();
+        innerLowerPanel.setLayout(new GridLayout(6, 2));
+
+        JPanel innerUpperPanel = new JPanel();
+
+        innerUpperPanel.add(new JLabel("Configuration",
+                new ImageIcon("data/resource/ConfigIcon/configIcon.png"), SwingConstants.CENTER));
+        configPanel.add(innerUpperPanel);
+        lowerPanelLabelAdd();
+
+        JButton saveButton = new JButton(new SaveButtonAction()); //action
+        saveButton.setText("save");
+        innerLowerPanel.add(saveButton);
+
+        JButton editButton = new JButton(new CustomizeButtonAction());
+        editButton.setText("Customize");
+        innerLowerPanel.add(editButton);
+
+        configPanel.add(innerLowerPanel);
+    }
+
+    /**
+     * Helper to set up visual configuration window
+     */
+    private void lowerPanelLabelAdd() {
+        innerLowerPanel.add(new JLabel("CPU",
+                new ImageIcon("data/resource/ConfigIcon/cpu_size.png"), SwingConstants.LEFT));
+        cpuDisplayLabel = new JLabel(config.getCpu().getModel() + "   $" + config.getCpu().getPrice());
+        innerLowerPanel.add(cpuDisplayLabel);
+
+        innerLowerPanel.add(new JLabel("RAM",
+                new ImageIcon("data/resource/ConfigIcon/ram_size.png"), SwingConstants.LEFT));
+        innerLowerPanel.add(new JLabel("$" + String.valueOf(config.getRamBudget())));
+
+        innerLowerPanel.add(new JLabel("Motherboard",
+                new ImageIcon("data/resource/ConfigIcon/mb_size.png"), SwingConstants.LEFT));
+        mbDisplayLabel = new JLabel(config.getMotherboard().getModel() + "   $" + config.getMotherboard().getPrice());
+        innerLowerPanel.add(mbDisplayLabel);
+
+        innerLowerPanel.add(new JLabel("Power Supply",
+                new ImageIcon("data/resource/ConfigIcon/psu_size.png"), SwingConstants.LEFT));
+        psuDisplayLabel = new JLabel(config.getPowerSupply().getModel() + "   $" + config.getPowerSupply().getPrice());
+        innerLowerPanel.add(psuDisplayLabel);
+
+        innerLowerPanel.add(new JLabel("Discrete GPU",
+                new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), SwingConstants.LEFT));
+        if (config.getGpu() != null) {
+            gpuDisplayLabel = new JLabel(config.getGpu().getModel() + "   $" + config.getGpu().getPrice());
+        } else {
+            gpuDisplayLabel = new JLabel("Integrated GPU");
+        }
+        innerLowerPanel.add(gpuDisplayLabel);
+    }
+
+    /**
+     * Represents action to be token when user close the internal frame of config
+     */
     private class CloseWindowsEvent extends InternalFrameAdapter {
         @Override
         public void internalFrameClosing(InternalFrameEvent e) {
             ConfigBuilderAppUI.getWorkspaceConfigIds().remove(Integer.valueOf(configId));
+            ConfigBuilderAppUI.getOpenedConfigs().remove(config);
             ConfigBuilderAppUI.configWindowLocationReset();
         }
     }
 
+    /**
+     * Represents action to be token when user click the save button
+     * to save the current configuration to the saving queue
+     */
     private class SaveButtonAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -103,6 +180,10 @@ public class ConfigInternalUI extends JInternalFrame {
         }
     }
 
+    /**
+     * Represents action to be token when user click the customize button
+     * to change the components of configuration
+     */
     private class CustomizeButtonAction extends AbstractAction {
         private FormSize size = config.getMotherboard().getFormSize();
         private Purpose purpose = (config.getCpu().hasIntegratedGraphics()) ? Purpose.ENTRY_LEVEL : Purpose.GAMING;
@@ -135,6 +216,10 @@ public class ConfigInternalUI extends JInternalFrame {
             questionMsgPanel.add(label);
             popupPanel.add(questionMsgPanel);
             popupPanel.add(componentSelectionPanel());
+
+            JButton replaceButton = new JButton("Replace");
+            replaceButton.setText("Replace");
+            popupPanel.add(replaceButton);
         }
 
         private JPanel componentSelectionPanel() {
@@ -288,12 +373,10 @@ public class ConfigInternalUI extends JInternalFrame {
                         powerSupplies);
                 List<PowerSupply> correctSizePowerSupplies = powerSuppliesList.filterFormSizePSUs(size,
                         compatiblePowerSupplies);
-                List<PowerSupply> withinBudgetPsus = powerSuppliesList.filterPowerSupplyInPriceInterval(
+                return powerSuppliesList.filterPowerSupplyInPriceInterval(
                         correctSizePowerSupplies,
                         (config.getPowerSupply().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
                         (config.getPowerSupply().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
-                System.out.println("\nHere are some items you can select to replace:");
-                return withinBudgetPsus;
             }
         }
 
@@ -318,59 +401,9 @@ public class ConfigInternalUI extends JInternalFrame {
         }
     }
 
-    private void setUp() {
-        configPanel = new JPanel();
-        configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.PAGE_AXIS));
-        innerLowerPanel = new JPanel();
-        innerLowerPanel.setLayout(new GridLayout(6, 2));
-
-        innerUpperPanel = new JPanel();
-
-        innerUpperPanel.add(new JLabel("Configuration", new ImageIcon("data/resource/ConfigIcon/configIcon.png"), 0));
-        configPanel.add(innerUpperPanel);
-        lowerPanelLabelAdd();
-
-        saveButton = new JButton(new SaveButtonAction()); //action
-        saveButton.setText("save");
-        innerLowerPanel.add(saveButton);
-
-        editButton = new JButton(new CustomizeButtonAction());
-        editButton.setText("Customize");
-        innerLowerPanel.add(editButton);
-
-        configPanel.add(innerLowerPanel);
-    }
-
-    private void lowerPanelLabelAdd() {
-        innerLowerPanel.add(new JLabel("CPU", new ImageIcon("data/resource/ConfigIcon/cpu_size.png"), 2));
-        cpuDisplayLabel = new JLabel(config.getCpu().getModel() + "   $" + config.getCpu().getPrice());
-        innerLowerPanel.add(cpuDisplayLabel);
-
-        innerLowerPanel.add(new JLabel("RAM", new ImageIcon("data/resource/ConfigIcon/ram_size.png"), 2));
-        innerLowerPanel.add(new JLabel("$" + String.valueOf(config.getRamBudget())));
-
-        innerLowerPanel.add(new JLabel("Motherboard", new ImageIcon("data/resource/ConfigIcon/mb_size.png"), 2));
-        mbDisplayLabel = new JLabel(config.getMotherboard().getModel() + "   $" + config.getMotherboard().getPrice());
-        innerLowerPanel.add(mbDisplayLabel);
-
-        innerLowerPanel.add(new JLabel("Power Supply", new ImageIcon("data/resource/ConfigIcon/psu_size.png"), 2));
-        psuDisplayLabel = new JLabel(config.getPowerSupply().getModel() + "   $" + config.getPowerSupply().getPrice());
-        innerLowerPanel.add(psuDisplayLabel);
-
-        innerLowerPanel.add(new JLabel("Discrete GPU", new ImageIcon("data/resource/ConfigIcon/gpu_size.png"), 2));
-        if (config.getGpu() != null) {
-            gpuDisplayLabel = new JLabel(config.getGpu().getModel() + "   $" + config.getGpu().getPrice());
-        } else {
-            gpuDisplayLabel = new JLabel("Integrated GPU");
-        }
-        innerLowerPanel.add(gpuDisplayLabel);
-    }
-
-
     // getter
 
     public int getConfigId() {
         return configId;
     }
-
 }
