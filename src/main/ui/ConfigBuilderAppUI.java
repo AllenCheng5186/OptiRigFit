@@ -167,7 +167,7 @@ public class ConfigBuilderAppUI extends JFrame {
                     "Desktop budget",
                     JOptionPane.QUESTION_MESSAGE,
                     new ImageIcon("./data/resource/ConfigInputIcon/budgetIcon.png"), null, 0);
-            while (!usrBudgetInput.matches("\\d+")) {
+            while (!usrBudgetInput.matches("^\\d{0,5}(\\.\\d{0,2})?")) {
                 JOptionPane.showConfirmDialog(null,
                         "Invalid Input! Please input proper digit for budget!",
                         "Invalid Input", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
@@ -222,7 +222,7 @@ public class ConfigBuilderAppUI extends JFrame {
             this.delegate = Objects.requireNonNull(delegate);
         }
 
-        // Check whether frame is moveable
+        // Check whether frame is movable
         private boolean checkFrameMovable(JComponent frame) {
             if (frame instanceof JInternalFrame) {
                 return !frame.getClass().equals(getSavingQueue().getClass());

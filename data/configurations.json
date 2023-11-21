@@ -1,35 +1,35 @@
 {"savedConfig": [{
-    "ramBudget": 300,
+    "ramBudget": 150,
     "components": [
         {
-            "cpuMfr": "AMD",
-            "basePower": 170,
-            "price": 749.99,
-            "benchMark": 63380,
-            "model": "R9-7950X",
+            "cpuMfr": "INTEL",
+            "basePower": 65,
+            "price": 329,
+            "benchMark": 32489,
+            "model": "i5-13500",
             "integratedGraphics": true
         },
         {
-            "basePower": 320,
-            "price": 1599.99,
-            "bench mark": 34820,
-            "model": "GeForce RTX 4080",
-            "gpuMfr": "NVIDIA"
+            "basePower": 295,
+            "price": 729.99,
+            "bench mark": 24461,
+            "model": "Radeon RX 7800 XT",
+            "gpuMfr": "AMD"
         },
         {
-            "maxRam": 96,
-            "price": 429,
-            "model": "Asus ROG STRIX B650E-I GAMING WIFI",
-            "socket": "AM5",
-            "formSize": "ITX",
-            "ramSlot": 2
+            "maxRam": 128,
+            "price": 299.99,
+            "model": "Asus TUF GAMING Z790-PLUS D4",
+            "socket": "LGA1700",
+            "formSize": "ATX",
+            "ramSlot": 4
         },
         {
-            "wattage": 750,
-            "price": 206.36,
-            "model": "Corsair SF750",
+            "wattage": 650,
+            "price": 258.08,
+            "model": "Cooler Master XG650 Plus",
             "isModular": true,
-            "formSize": "ITX"
+            "formSize": "ATX"
         }
     ]
 }]}

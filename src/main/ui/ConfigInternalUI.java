@@ -289,7 +289,7 @@ public class ConfigInternalUI extends JInternalFrame {
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
                                 AttributeSet attrs) throws BadLocationException {
                 super.replace(fb, offset, length, text, attrs);
-                if (ramBudgetTextField.getText().matches("\\d+")) {
+                if (ramBudgetTextField.getText().matches("^\\d{0,4}(\\.\\d{0,2})?")) {
                     ramBudgetDisplayLabel.setText("  $" + ramBudgetTextField.getText());
                     double newAggregate = getConfigAggregate() - config.getRamBudget();
                     newAggregate += Double.parseDouble(ramBudgetTextField.getText());
@@ -328,7 +328,9 @@ public class ConfigInternalUI extends JInternalFrame {
 
             JButton saveCustomize = new JButton(new ReplaceButtonAction());
             saveCustomize.setText("Save");
-            popupPanel.add(saveCustomize);
+            JPanel savePanel = new JPanel();
+            savePanel.add(saveCustomize);
+            popupPanel.add(savePanel);
         }
 
         /**
@@ -512,11 +514,10 @@ public class ConfigInternalUI extends JInternalFrame {
             }
             List<Motherboard> compatibleMotherboards = motherboardList.filterRightSocketMotherboard(motherboards,
                     socket);
-            List<Motherboard> correctSizeMotherboards = motherboardList.filterRightFormSizeMotherboards(
-                    compatibleMotherboards, size);
-            return motherboardList.filterMotherboardsInPriceInterval(
-                    correctSizeMotherboards, (config.getMotherboard().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
-                    (config.getMotherboard().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
+            return motherboardList.filterRightFormSizeMotherboards(compatibleMotherboards, size);
+//            return motherboardList.filterMotherboardsInPriceInterval(correctSizeMotherboards,
+//                    (config.getMotherboard().getPrice() + UPPER_DOWN_BOUNDARY_INTERVAL),
+//                    (config.getMotherboard().getPrice() - UPPER_DOWN_BOUNDARY_INTERVAL));
         }
 
         // EFFECTS: return a list of gpus that within reasonable price interval

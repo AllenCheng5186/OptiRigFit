@@ -2,6 +2,8 @@ package model.component;
 
 import model.component.cpu.Cpu;
 import model.component.cpu.CpuMfr;
+import model.component.gpu.Gpu;
+import model.component.gpu.GpuMfr;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,4 +43,12 @@ public class CPUTest {
         assertEquals(2997, testCpuWithoutIG.compareTo(testCpuWithIG));
     }
 
+    @Test
+    void testEquals() {
+        assertTrue(testCpuWithIG.equals(testCpuWithIG));
+        assertFalse(testCpuWithIG.equals(null));
+        assertFalse(testCpuWithIG.equals(new Gpu("a", 1, 1, GpuMfr.AMD, 1)));
+        assertTrue(testCpuWithIG.equals(new Cpu("i9-13900K", 150, 949.00, CpuMfr.INTEL, 62014)));
+        assertFalse(testCpuWithIG.equals(new Cpu("a", 2, 1, CpuMfr.AMD, 1)));
+    }
 }
