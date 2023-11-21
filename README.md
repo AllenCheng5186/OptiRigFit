@@ -9,6 +9,9 @@ and achieve optimal PC performance.
 - [Installation & Manual](#installation--manual)
 - [Database Coverage](#database-coverage-sept-28th-2023)
 - [User Stories Records](#user-story)
+- [Instructions for Grader](#instructions-for-grader)
+  1. [Generate required action related to the user story](#1generate-the-required-action-related-to-the-user-story)
+  2. [Visual component](#2-visual-component)
 - [Data Sources](#data-sources)
 
 ## Project Expectation & ToDoList
@@ -16,7 +19,7 @@ and achieve optimal PC performance.
 - Configuration recommendation algorithm ✅
 - Sort item by price or performance ✅
 - console interface ✅
-- GUI
+- GUI ✅
 
 ## Installation & Manual
 Java Desktop App
@@ -47,18 +50,52 @@ Java Desktop App
 
 
 ## User Story
-- As a user, I want to be able to add arbitrary configurations(X) to saved list of configurations (Y)
-- As a user, I want to be able to generate arbitrary recommended configurations(X)
-- As a user, I want to be able to review saved configuration
-- As a user, I want to be able to add optional (extra) components
-- As a user, I want to be able to change necessary components
-- As a user, I want to be able to customize generated configurations
-- As a user, I want to be able to choose the size of computer
-- As a user, I want to be able to choose the purpose of computer
-- As a user, I want to be able to input budget
-- As a user, when I select the quit option from the application menu, I want to be reminded to save configuration list to file and have the option to do so or not.
-- As a user, when I start the application, I want to be given the option to load my configuration list from file.
+1. As a user, I want to be able to add arbitrary configurations(X) to saved list of configurations (Y)
+2. As a user, I want to be able to generate arbitrary recommended configurations(X)
+3. As a user, I want to be able to review saved configuration
+4. As a user, I want to be able to add optional (extra) components
+5. As a user, I want to be able to change necessary components
+6. As a user, I want to be able to customize generated configurations
+7. As a user, I want to be able to choose the size of computer
+8. As a user, I want to be able to choose the purpose of computer
+9. As a user, I want to be able to input budget
+10. As a user, when I select the quit option from the application menu, I want to be reminded to save configuration list to file and have the option to do so or not.
+11. As a user, when I start the application, I want to be given the option to load my configuration list from file.
 
+## Instructions for Grader
+
+### 1.Generate the required action related to the user story
+- You can generate the first required action related to the user story "adding multiple Xs to a Y" (user story #2, 7, 8, 9) by
+  "Configuration" -> "build new config" (Keyboard shortcut: Control + N)
+  - Generate new config (user story #2, #7, #8, #9)
+    1. go to toolbar "Configuration" -> "build new config" (Keyboard shortcut: Control + N)
+    2. input valid max 5 digits budget (with max two decimal places)
+    3. select prefer purpose from four button on popup window
+    4. select prefer size from three button on popup window
+- You can generate the second required action related to the user story "adding multiple Xs to a Y" (user story #1) by
+  clicking the "save" button on each generate config internal panel which you would like to save
+  - Save arbitrary Xs to Y (user story #1)
+    1. follow above procedure of generating x as arbitrary times
+    2. click the "save" button on each generate config internal panel which you would like to save
+    3. check whether the number of config showing up on the saving queue
+- Customize your own config (user story #3)
+  1. click the "customize" button on the config internal panel on workspace
+  2. click the comb box of the component you would like to change
+  3. click the "save" button to save your change to the configuration
+- Check the saved configs again (user story #5, #6)
+  1. click the number of saved configs in the saving queue you would check to check again (closed config on workspace)
+  2. click the "show" button on the bottom of saving queue panel
+- You can save the state of my application by clicking the "file" -> "load file to workspace" option on toolbar of "file"
+  - Save Y to the file (persistence) (user story #10)
+    1. check the saving queue of item you would like to save
+    2. go to the toolbar "file" -> "save list to file" (Control + S)
+- You can reload the state of my application by clicking "save list to file" option on toolbar of "file"
+  - Load Y from the file (user story #11)
+    1. go to the toolbar "file" -> "load file to workspace" (Control + O)
+    2. loaded saved configurations would be sync to the saving queue
+### 2. Visual component
+- Relative dictionary: [./data/resource](./data/resource)
+- Github dictionary: [https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r/blob/dcdd99538e6691cc203fa92e40d5f332f1c63355/data/resource](https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r/blob/dcdd99538e6691cc203fa92e40d5f332f1c63355/data/resource)
 
 ## Data Sources
 - Prices Reference: (CAD$)：

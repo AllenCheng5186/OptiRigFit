@@ -108,7 +108,7 @@ public class ConfigInternalUI extends JInternalFrame {
 
         innerLowerPanel.add(new JLabel("Aggregate", SwingConstants.CENTER));
         double aggregate = getConfigAggregate();
-        aggregateDisplayLabel = new JLabel(" $" + aggregate, SwingConstants.CENTER);
+        aggregateDisplayLabel = new JLabel(" $" + df.format(aggregate), SwingConstants.CENTER);
         innerLowerPanel.add(aggregateDisplayLabel);
 
         JButton saveButton = new JButton(new SaveButtonAction());

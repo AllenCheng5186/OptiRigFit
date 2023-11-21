@@ -83,5 +83,6 @@ public class ConfigurationTest {
     void testHashCode() {
         assertEquals(testConfiguration.hashCode(), testConfiguration.hashCode());
         assertNotEquals(testConfiguration.hashCode(), testConfigurationRamD4.hashCode());
+        assertEquals(testConfigurationWithoutGpu.hashCode(), testConfigurationWithoutGpu.hashCode());
     }
 }
