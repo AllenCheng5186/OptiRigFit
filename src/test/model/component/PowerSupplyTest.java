@@ -63,4 +63,10 @@ public class PowerSupplyTest {
                 FormSize.ATX, 400, false, 89.99)));
         assertFalse(testPowerSupply1.equals(new Cpu("1", 1, 1, CpuMfr.AMD, 1)));
     }
+
+    @Test
+    void testHashCode() {
+        assertEquals(testPowerSupply1.hashCode(), testPowerSupply1.hashCode());
+        assertNotEquals(testPowerSupply2.hashCode(), testPowerSupply1.hashCode());
+    }
 }

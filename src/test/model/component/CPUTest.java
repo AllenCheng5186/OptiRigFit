@@ -57,4 +57,10 @@ public class CPUTest {
         assertFalse(testCpuWithIG.equals(new Cpu("i9-13900KF", 150, 949.00, CpuMfr.INTEL, 62014)));
         assertFalse(testCpuWithIG.equals(new Cpu("i9-13900K123", 150, 949.00, CpuMfr.INTEL, 62014)));
     }
+
+    @Test
+    void testHashcode() {
+        assertEquals(testCpuWithIG.hashCode(), testCpuWithIG.hashCode());
+        assertNotEquals(testCpuWithIG.hashCode(), testCpuWithoutIG.hashCode());
+    }
 }

@@ -78,4 +78,10 @@ public class ConfigurationTest {
         assertEquals(testPowerSupply, testBlankConfig.getPowerSupply());
         assertEquals(200, testBlankConfig.getRamBudget());
     }
+
+    @Test
+    void testHashCode() {
+        assertEquals(testConfiguration.hashCode(), testConfiguration.hashCode());
+        assertNotEquals(testConfiguration.hashCode(), testConfigurationRamD4.hashCode());
+    }
 }

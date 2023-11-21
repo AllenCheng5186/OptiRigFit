@@ -52,4 +52,10 @@ public class GPUTest {
         assertFalse(testGpu1.equals(new Gpu("GeForce RTX 4080", 320, 1599.99, GpuMfr.AMD, 34820)));
         assertFalse(testGpu1.equals(new Gpu("GeForce RTX 4080", 320, 1599.99, GpuMfr.NVIDIA, 34821)));
     }
+
+    @Test
+    void testHashCode() {
+        assertEquals(testGpu1.hashCode(), testGpu1.hashCode());
+        assertNotEquals(testGpu2.hashCode(), testGpu1.hashCode());
+    }
 }

@@ -56,4 +56,10 @@ public class MotherboardTest {
         assertFalse(testMotherboard.equals(new Cpu("1", 1, 1, CpuMfr.AMD, 1)));
     }
 
+    @Test
+    void testHashcode() {
+        assertEquals(testMotherboard.hashCode(), testMotherboard.hashCode());
+        assertNotEquals(testMotherboard.hashCode(), testMotherboard2.hashCode());
+    }
+
 }
