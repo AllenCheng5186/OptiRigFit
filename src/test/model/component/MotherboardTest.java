@@ -50,7 +50,7 @@ public class MotherboardTest {
                 LGA1700, ATX, 96, 1, 1483.65)));
         assertFalse(testMotherboard.equals(new Motherboard("Asus ROG MAXIMUS Z690 APEX",
                 LGA1700, ATX, 96, 2, 1483.63)));
-
+        assertFalse(testMotherboard.equals(null));
     }
 
 }

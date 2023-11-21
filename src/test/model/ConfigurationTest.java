@@ -57,6 +57,7 @@ public class ConfigurationTest {
         assertTrue(testConfiguration.equals(new Configuration(testCpu, testMotherboard, testGpu, testPowerSupply, 500)));
         assertFalse(testConfiguration.equals(testBlankConfig));
         assertFalse(testConfiguration.equals(testCpu));
+        assertFalse(testConfiguration.equals(null));
         assertFalse(testConfiguration.equals(new Configuration(null, testMotherboard, testGpu, testPowerSupply, 500)));
         assertFalse(testConfiguration.equals(new Configuration(testCpu, null, testGpu, testPowerSupply, 500)));
         assertFalse(testConfiguration.equals(new Configuration(testCpu, testMotherboard, null, testPowerSupply, 500)));

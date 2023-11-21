@@ -54,5 +54,10 @@ public class PowerSupplyTest {
                 FormSize.ATX, 400, true, 89.99)));
         assertFalse(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
                 FormSize.ATX, 400, false, 89.98)));
+        assertFalse(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
+                FormSize.MATX, 400, false, 89.99)));
+        assertTrue(testPowerSupply1.equals(null));
+        assertTrue(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
+                FormSize.ATX, 400, false, 89.99)));
     }
 }
