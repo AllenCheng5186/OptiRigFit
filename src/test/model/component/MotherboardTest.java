@@ -1,5 +1,7 @@
 package model.component;
 
+import model.component.cpu.Cpu;
+import model.component.cpu.CpuMfr;
 import model.component.motherboard.Motherboard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +53,7 @@ public class MotherboardTest {
         assertFalse(testMotherboard.equals(new Motherboard("Asus ROG MAXIMUS Z690 APEX",
                 LGA1700, ATX, 96, 2, 1483.63)));
         assertFalse(testMotherboard.equals(null));
+        assertFalse(testMotherboard.equals(new Cpu("1", 1, 1, CpuMfr.AMD, 1)));
     }
 
 }
