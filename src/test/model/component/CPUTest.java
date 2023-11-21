@@ -50,5 +50,9 @@ public class CPUTest {
         assertFalse(testCpuWithIG.equals(new Gpu("a", 1, 1, GpuMfr.AMD, 1)));
         assertTrue(testCpuWithIG.equals(new Cpu("i9-13900K", 150, 949.00, CpuMfr.INTEL, 62014)));
         assertFalse(testCpuWithIG.equals(new Cpu("a", 2, 1, CpuMfr.AMD, 1)));
+        assertFalse(testCpuWithIG.equals(new Cpu("i9-13900K", 150-1, 949.00, CpuMfr.INTEL, 62014)));
+        assertFalse(testCpuWithIG.equals(new Cpu("i9-13900K", 150, 949.00-1, CpuMfr.INTEL, 62014)));
+        assertFalse(testCpuWithIG.equals(new Cpu("i9-13900K", 150, 949.00, CpuMfr.AMD, 62014)));
+        assertFalse(testCpuWithIG.equals(new Cpu("i9-13900K", 150, 949.00, CpuMfr.INTEL, 62013)));
     }
 }

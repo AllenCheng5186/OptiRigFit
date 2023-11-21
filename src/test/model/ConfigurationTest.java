@@ -23,6 +23,7 @@ public class ConfigurationTest {
     private Motherboard testMotherboard;
     private Gpu testGpu;
     private PowerSupply testPowerSupply;
+    private Configuration testBlankConfig;
 
     @BeforeEach
     void setUpBeforeEachTest() {
@@ -38,6 +39,7 @@ public class ConfigurationTest {
         testConfigurationRamD4 = new Configuration(testCpu,testMotherboardD4, testGpu, testPowerSupply, 600);
         testConfigurationWithoutGpu = new Configuration(testCpu, testMotherboardD4, null,
                 testPowerSupply, 300);
+        testBlankConfig = new Configuration(null, null, null, null, 0);
     }
 
     @Test
@@ -49,5 +51,30 @@ public class ConfigurationTest {
         assertEquals(500, testConfiguration.getRamBudget());
     }
 
+    @Test
+    void testEquals() {
+        assertTrue(testConfiguration.equals(testConfiguration));
+        assertTrue(testConfiguration.equals(new Configuration(testCpu, testMotherboard, testGpu, testPowerSupply, 500)));
+        assertFalse(testConfiguration.equals(testBlankConfig));
+        assertFalse(testConfiguration.equals(testCpu));
+        assertFalse(testConfiguration.equals(new Configuration(null, testMotherboard, testGpu, testPowerSupply, 500)));
+        assertFalse(testConfiguration.equals(new Configuration(testCpu, null, testGpu, testPowerSupply, 500)));
+        assertFalse(testConfiguration.equals(new Configuration(testCpu, testMotherboard, null, testPowerSupply, 500)));
+        assertFalse(testConfiguration.equals(new Configuration(testCpu, testMotherboard, testGpu, null, 500)));
+        assertFalse(testConfiguration.equals(new Configuration(testCpu, testMotherboard, testGpu, testPowerSupply, 200)));
+    }
 
+    @Test
+    void testSetter() {
+        testBlankConfig.setCpu(testCpu);
+        testBlankConfig.setGpu(testGpu);
+        testBlankConfig.setMotherboard(testMotherboard);
+        testBlankConfig.setPowerSupply(testPowerSupply);
+        testBlankConfig.setRamBudget(200);
+        assertEquals(testCpu, testBlankConfig.getCpu());
+        assertEquals(testMotherboard, testBlankConfig.getMotherboard());
+        assertEquals(testGpu, testBlankConfig.getGpu());
+        assertEquals(testPowerSupply, testBlankConfig.getPowerSupply());
+        assertEquals(200, testBlankConfig.getRamBudget());
+    }
 }

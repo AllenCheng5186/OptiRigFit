@@ -1,5 +1,7 @@
 package model.component;
 
+import model.component.cpu.Cpu;
+import model.component.cpu.CpuMfr;
 import model.component.gpu.Gpu;
 import model.component.gpu.GpuMfr;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,5 +38,18 @@ public class GPUTest {
     void testCompareTo() {
         assertEquals(-5780, testGpu1.compareTo(testGpu2));
         assertEquals(5780, testGpu2.compareTo(testGpu1));
+    }
+
+    @Test
+    void testEquals() {
+        assertTrue(testGpu1.equals(testGpu1));
+        assertFalse(testGpu1.equals(testGpu2));
+        assertFalse(testGpu1.equals(new Cpu("i9-13900K", 150, 949.00, CpuMfr.INTEL, 62014)));
+        assertTrue(testGpu1.equals(new Gpu("GeForce RTX 4080", 320, 1599.99, GpuMfr.NVIDIA, 34820)));
+        assertFalse(testGpu1.equals(new Gpu("GeForce RTX 40801", 320, 1599.99, GpuMfr.NVIDIA, 34820)));
+        assertFalse(testGpu1.equals(new Gpu("GeForce RTX 4080", 321, 1599.99, GpuMfr.NVIDIA, 34820)));
+        assertFalse(testGpu1.equals(new Gpu("GeForce RTX 4080", 320, 1598.99, GpuMfr.NVIDIA, 34820)));
+        assertFalse(testGpu1.equals(new Gpu("GeForce RTX 4080", 320, 1599.99, GpuMfr.AMD, 34820)));
+        assertFalse(testGpu1.equals(new Gpu("GeForce RTX 4080", 320, 1599.99, GpuMfr.NVIDIA, 34821)));
     }
 }

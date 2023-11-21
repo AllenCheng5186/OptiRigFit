@@ -39,4 +39,20 @@ public class PowerSupplyTest {
         assertEquals(-800, testPowerSupply1.compareTo(testPowerSupply2));
         assertEquals(800, testPowerSupply2.compareTo(testPowerSupply1));
     }
+
+    @Test
+    void testEquals() {
+        assertTrue(testPowerSupply1.equals(testPowerSupply1));
+        assertFalse(testPowerSupply1.equals(testPowerSupply2));
+        assertTrue(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
+                FormSize.ATX, 400, false, 89.99)));
+        assertFalse(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.1",
+                FormSize.ITX, 400, false, 89.99)));
+        assertFalse(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
+                FormSize.ATX, 401, false, 89.99)));
+        assertFalse(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
+                FormSize.ATX, 400, true, 89.99)));
+        assertFalse(testPowerSupply1.equals(new PowerSupply("Cooler Master Elite 400W Ver.3",
+                FormSize.ATX, 400, false, 89.98)));
+    }
 }
