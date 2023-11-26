@@ -1,0 +1,35 @@
+{"savedConfig": [{
+    "ramBudget": 4000,
+    "components": [
+        {
+            "cpuMfr": "AMD",
+            "basePower": 105,
+            "price": 439.99,
+            "benchMark": 36353,
+            "model": "R7-7700X",
+            "integratedGraphics": true
+        },
+        {
+            "basePower": 300,
+            "price": 999.99,
+            "bench mark": 28627,
+            "model": "Radeon RX 6950 XT",
+            "gpuMfr": "AMD"
+        },
+        {
+            "maxRam": 96,
+            "price": 579.99,
+            "model": "Asus ROG STRIX X670E-I GAMING WIFI",
+            "socket": "AM5",
+            "formSize": "ITX",
+            "ramSlot": 2
+        },
+        {
+            "wattage": 650,
+            "price": 74.99,
+            "model": "EVGA 650 N1",
+            "isModular": false,
+            "formSize": "ATX"
+        }
+    ]
+}]}
