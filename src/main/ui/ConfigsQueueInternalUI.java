@@ -1,5 +1,6 @@
 package ui;
 
+import model.ConfigSavingQueue;
 import model.Configuration;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -21,7 +22,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
     private static final int WIDTH = 300;
     private static final DefaultListModel<String> savedConfigs = new DefaultListModel<>();
     private JList<String> jsavelist;
-    private static final List<Configuration> savingList = new ArrayList<>();
+    private static final ConfigSavingQueue savingList = new ConfigSavingQueue();
     private static final String JSON_STORE = "./data/configurations.json";
     private final JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
     private final JsonReader jsonReader = new JsonReader(JSON_STORE);
@@ -73,7 +74,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
      */
     public void addConfigToQueue(int configId, Configuration newConfig) {
         savedConfigs.addElement("Configuration #" + configId);
-        savingList.add(newConfig);
+        savingList.add(newConfig, configId);
 
     }
 
@@ -94,7 +95,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Configuration config = savingList.get(jsavelist.getSelectedIndex());
+            Configuration config = savingList.getConfig(jsavelist.getSelectedIndex());
             ConfigInternalUI showAgainUI = new ConfigInternalUI(jsavelist.getSelectedValue(),
                     config, ConfigsQueueInternalUI.this);
             if (!ConfigBuilderAppUI.getWorkspaceConfigIds().contains(showAgainUI.getConfigId())) {
@@ -118,7 +119,7 @@ public class ConfigsQueueInternalUI extends JInternalFrame {
     public void saveToFile() {
         try {
             jsonWriter.open();
-            jsonWriter.write(savingList);
+            jsonWriter.write(ConfigSavingQueue.getSavingList());
             jsonWriter.close();
             JOptionPane.showConfirmDialog(null, "Save to file successful!",
                     "Config Queue Saving",

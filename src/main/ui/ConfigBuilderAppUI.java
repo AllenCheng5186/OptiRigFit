@@ -2,12 +2,14 @@ package ui;
 
 import model.Configuration;
 import model.ConfigurationGenerator;
+import model.Event;
+import model.EventLog;
 import model.Purpose;
 import model.component.motherboard.FormSize;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,11 +35,22 @@ public class ConfigBuilderAppUI extends JFrame {
         desktop = new JDesktopPane();
         desktop.setDesktopManager(new MainDesktopManager(desktop.getDesktopManager()));
 
+
         setContentPane(desktop);
         setVisible(true);
         setSize(WIDTH,HEIGHT);
         setTitle("OptiRigFit -Config Builder App");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                for (Event event : EventLog.getInstance()) {
+                    System.out.println(event.getDate() + event.getDescription());
+                }
+                System.exit(0);
+            }
+        });
+
         setResizable(false);
 
         addMenu();

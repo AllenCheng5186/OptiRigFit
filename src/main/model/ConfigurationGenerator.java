@@ -11,7 +11,6 @@ import model.component.motherboard.MotherboardList;
 import model.component.motherboard.Socket;
 import model.component.psu.PowerSuppliesList;
 import model.component.psu.PowerSupply;
-import ui.ConfigEditor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,22 +20,23 @@ import static model.Purpose.*;
 
 // Represent a configuration generator using given budget, size preference and purpose
 public class ConfigurationGenerator {
-    private CpuList cpuList;
-    private List<Cpu> properCPUs;
-    private MotherboardList motherboardList;
-    private List<Motherboard> properMotherBoards;
-    private PowerSuppliesList powerSuppliesList;
-    private List<PowerSupply> properPowerSupplies;
-    private GpuList gpuList;
-    private List<Gpu> properGpus;
-    private FormSize formSize;
-    private Purpose purpose;
-    private double totalBudget;
+    private final CpuList cpuList;
+    private final List<Cpu> properCPUs;
+    private final MotherboardList motherboardList;
+    private final List<Motherboard> properMotherBoards;
+    private final PowerSuppliesList powerSuppliesList;
+    private final List<PowerSupply> properPowerSupplies;
+    private final GpuList gpuList;
+    private final List<Gpu> properGpus;
+    private final FormSize formSize;
+    private final Purpose purpose;
+    private final double totalBudget;
     private double cpuBudget;
     private double ramBudget;
     private double motherboardBudget;
     private double psuBudget;
     private double gpuBudget;
+    private int minWatt;
 
     //EFFECTS: construct a ConfigurationGenerator object with given totalBudget,
     // formSize and purpose
@@ -79,30 +79,47 @@ public class ConfigurationGenerator {
     //fourth, calculate the lowest watt require to boot and get best psu
     //construct above as a Configuration object
     public Configuration configGenerate() {
+        EventLog.getInstance().logEvent(new Event(" New Config generation start!"));
         budgetDistribution();
         Cpu configCpu = getConfigCpu();
         Socket cpuSocket = getCpuSocket(configCpu);
         Motherboard configMotherboard = getConfigMotherboard(cpuSocket);
-        int minWatt = configCpu.getBasePower() + 150 + 100;
+        minWatt = configCpu.getBasePower() + 150 + 100;
+        Gpu configGpu = getConfigGpu();
+        PowerSupply configPsu = getConfigPowerSupply(minWatt);
+        logEventOfNewConfigGenerateSuccessfully();
+        return new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
+    }
+
+    // MODIFIES: EventLog
+    // EFFECTS: log the event of new config generated successfully,
+    // recording new config of given cpu, motherboard, gpu, power supply
+    private void logEventOfNewConfigGenerateSuccessfully() {
+        EventLog.getInstance().logEvent(new Event(" New configuration is generated successfully!"));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: return the first gpu which within budget interval
+    private Gpu getConfigGpu() {
         Gpu configGpu = null;
         if (gpuBudget != 0) {
             List<Gpu> budgetFriendGpus = gpuList.filterGpusInPriceInterval(properGpus, (gpuBudget + totalBudget * 0.1),
                     gpuBudget);
-            if (gpuBudget > properGpus.get(0).getPrice()) {
-                configGpu = properGpus.get(0);
-            } else {
-                configGpu = budgetFriendGpus.get(0);
+            try {
+                if (gpuBudget > properGpus.get(0).getPrice()) {
+                    configGpu = properGpus.get(0);
+                } else {
+                    configGpu = budgetFriendGpus.get(0);
+                }
+                EventLog.getInstance().logEvent(new Event(" Fitted GPU found: " + configGpu.getModel()));
+            } catch (IndexOutOfBoundsException e) {
+                EventLog.getInstance().logEvent(new Event(" Fail to find fitted Gpu!"));
+                throw e;
             }
             minWatt += configGpu.getBasePower();
         }
-        PowerSupply configPsu = getConfigPowerSupply(minWatt);
-//        Configuration config = new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
-//        config.printOutConfiguration();
-//        config = callEditorAfterEachConfigGenerated(config);
-        return new Configuration(configCpu, configMotherboard, configGpu, configPsu, ramBudget);
+        return configGpu;
     }
-
-
 
     //REQUIRE: minWatt >= 400;
     //EFFECTS: return the first power supply which above the lowest watt require to boot
@@ -113,11 +130,19 @@ public class ConfigurationGenerator {
                 compatiblePowerSupplies);
         List<PowerSupply> budgetFriendPowerSupplies = powerSuppliesList.filterPowerSupplyInPriceInterval(
                 correctSizePowerSupplies, (psuBudget + totalBudget * 0.05), psuBudget);
-        if (psuBudget >= properPowerSupplies.get(properPowerSupplies.size() - 2).getPrice()) {
-            return properPowerSupplies.get(properPowerSupplies.size() - 2);
-        } else {
-            return budgetFriendPowerSupplies.get(0);
+        PowerSupply returnedPsu = null;
+        try {
+            if (psuBudget >= properPowerSupplies.get(properPowerSupplies.size() - 2).getPrice()) {
+                returnedPsu =  properPowerSupplies.get(properPowerSupplies.size() - 2);
+            } else {
+                returnedPsu =  budgetFriendPowerSupplies.get(0);
+            }
+            EventLog.getInstance().logEvent(new Event(" Fitted power supply found: " + returnedPsu.getModel()));
+        } catch (IndexOutOfBoundsException e) {
+            EventLog.getInstance().logEvent(new Event(" Fail to find fitted power supply!"));
+            throw e;
         }
+        return returnedPsu;
     }
 
     //REQUIRE: cpuSocket in LGA1700 & AM5
@@ -129,11 +154,19 @@ public class ConfigurationGenerator {
                 compatibleMotherboards, formSize);
         List<Motherboard> budgetFriendMotherboards = motherboardList.filterMotherboardsInPriceInterval(
                 correctSizeMotherboards, (motherboardBudget + totalBudget * 0.05), (motherboardBudget * 0.7));
-        if (motherboardBudget >= properMotherBoards.get(0).getPrice()) {
-            return properMotherBoards.get(0);
-        } else {
-            return budgetFriendMotherboards.get(0);
+        Motherboard returnedMb = null;
+        try {
+            if (motherboardBudget >= properMotherBoards.get(0).getPrice()) {
+                returnedMb = properMotherBoards.get(0);
+            } else {
+                returnedMb = budgetFriendMotherboards.get(0);
+            }
+            EventLog.getInstance().logEvent(new Event(" Fitted motherboard found: " + returnedMb.getModel()));
+        } catch (IndexOutOfBoundsException e) {
+            EventLog.getInstance().logEvent(new Event(" Fail to find fitted motherboard!"));
+            throw e;
         }
+        return returnedMb;
     }
 
     //EFFECTS: return the most powerful cpu within budget interval and has the highest benchmark
@@ -147,11 +180,19 @@ public class ConfigurationGenerator {
         List<Cpu> withinBudgetCpus = cpuList.filterCPUsPriceInterval(cpusWithIG, (cpuBudget + totalBudget * 0.05),
                 cpuBudget);
         Collections.sort(withinBudgetCpus);
-        if (cpuBudget >= properCPUs.get(0).getPrice()) {
-            return properCPUs.get(0);
-        } else {
-            return withinBudgetCpus.get(0);
+        Cpu returnedCpu = null;
+        try {
+            if (cpuBudget >= properCPUs.get(0).getPrice()) {
+                returnedCpu = properCPUs.get(0);
+            } else {
+                returnedCpu = withinBudgetCpus.get(0);
+            }
+            EventLog.getInstance().logEvent(new Event(" Fitted cpu found: " + returnedCpu.getModel()));
+        } catch (IndexOutOfBoundsException e) {
+            EventLog.getInstance().logEvent(new Event(" Fail to find fitted cpu!"));
+            throw e;
         }
+        return returnedCpu;
     }
 
     //REQUIRE: configCpu 12 & 13th Intel core CPU or 7000 series AMD Reyzen CPU
