@@ -1,6 +1,7 @@
 package model;
 
 import model.component.motherboard.FormSize;
+import model.component.psu.PowerSupply;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -87,26 +88,31 @@ public class ConfigGeneratorTest {
         ConfigurationGenerator failConfig = new ConfigurationGenerator(0, FormSize.ATX, Purpose.GAMING);
         try {
             Configuration fail = failConfig.configGenerate();
+            fail("Exception was not thrown!");
         } catch (IndexOutOfBoundsException e) {
             // expected cpu
         }
         failConfig = new ConfigurationGenerator(500, FormSize.ITX, Purpose.GAMING);
         try {
             Configuration fail = failConfig.configGenerate();
+            fail("Exception was not thrown!");
         } catch (IndexOutOfBoundsException e) {
             // expected motherboard
         }
         failConfig = new ConfigurationGenerator(750, FormSize.ATX, Purpose.GAMING);
         try {
             Configuration fail = failConfig.configGenerate();
+            fail("Exception was not thrown!");
         } catch (IndexOutOfBoundsException e) {
             // expected gpu
         }
         failConfig = new ConfigurationGenerator(450, FormSize.ATX, Purpose.ENTRY_LEVEL);
         failConfig.setPsuBudget(0);
         assertEquals(0, failConfig.getPsuBudget());
+        PowerSupply failPsu = null;
         try {
-            Configuration fail = failConfig.configGenerate();
+            failPsu = failConfig.getConfigPowerSupply(100);
+            fail("Exception was not thrown!");
         } catch (IndexOutOfBoundsException e) {
             // expected power supply
         }

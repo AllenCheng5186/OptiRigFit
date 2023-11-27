@@ -123,7 +123,7 @@ public class ConfigurationGenerator {
 
     //REQUIRE: minWatt >= 400;
     //EFFECTS: return the first power supply which above the lowest watt require to boot
-    private PowerSupply getConfigPowerSupply(int minWatt) {
+    public PowerSupply getConfigPowerSupply(int minWatt) {
         List<PowerSupply> compatiblePowerSupplies = powerSuppliesList.filterGreaterWattPSUs(minWatt,
                 properPowerSupplies);
         List<PowerSupply> correctSizePowerSupplies = powerSuppliesList.filterFormSizePSUs(formSize,
