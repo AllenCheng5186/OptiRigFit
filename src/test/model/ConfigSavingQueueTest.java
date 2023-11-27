@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigSavingQueueTest {
     private ConfigSavingQueue csq;
     private Configuration config;
+    private Configuration config2;
 
 
     @BeforeEach
@@ -29,6 +30,7 @@ public class ConfigSavingQueueTest {
         PowerSupply testPowerSupply = new PowerSupply("Corsair SF1000L ", FormSize.ITX, 1000, true,
                 269.99);
         config = new Configuration(testCpu, testMotherboard, testGpu, testPowerSupply, 500);
+        config2 = new Configuration(testCpu, testMotherboard, null, testPowerSupply, 200);
     }
 
     @Test
@@ -39,8 +41,10 @@ public class ConfigSavingQueueTest {
     @Test
     void testAdd() {
         csq.add(config, 1);
-        assertEquals(1, csq.getSavingList().size());
+        csq.add(config2, 2);
+        assertEquals(2, csq.getSavingList().size());
         assertEquals(config, csq.getConfig(0));
+        assertEquals(config2, csq.getConfig(1));
     }
 
     @Test

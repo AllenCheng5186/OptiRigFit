@@ -206,6 +206,12 @@ public class ConfigurationGenerator {
         }
         return cpuSocket;
     }
+    // setter
+
+    public void setPsuBudget(double psuBudget) {
+        this.psuBudget = psuBudget;
+    }
+
 
     // getter
 

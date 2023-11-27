@@ -81,4 +81,34 @@ public class ConfigGeneratorTest {
         assertEquals("GeForce RTX 4090", configHighWSEATX.getGpu().getModel());
         assertEquals("EVGA Supernova 1300 G+", configHighWSEATX.getPowerSupply().getModel());
     }
+
+    @Test
+    void testConfigGenerateTryCatch() {
+        ConfigurationGenerator failConfig = new ConfigurationGenerator(0, FormSize.ATX, Purpose.GAMING);
+        try {
+            Configuration fail = failConfig.configGenerate();
+        } catch (IndexOutOfBoundsException e) {
+            // expected cpu
+        }
+        failConfig = new ConfigurationGenerator(500, FormSize.ITX, Purpose.GAMING);
+        try {
+            Configuration fail = failConfig.configGenerate();
+        } catch (IndexOutOfBoundsException e) {
+            // expected motherboard
+        }
+        failConfig = new ConfigurationGenerator(750, FormSize.ATX, Purpose.GAMING);
+        try {
+            Configuration fail = failConfig.configGenerate();
+        } catch (IndexOutOfBoundsException e) {
+            // expected gpu
+        }
+        failConfig = new ConfigurationGenerator(450, FormSize.ATX, Purpose.ENTRY_LEVEL);
+        failConfig.setPsuBudget(0);
+        assertEquals(0, failConfig.getPsuBudget());
+        try {
+            Configuration fail = failConfig.configGenerate();
+        } catch (IndexOutOfBoundsException e) {
+            // expected power supply
+        }
+    }
 }
