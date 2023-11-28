@@ -6,7 +6,7 @@ import model.component.gpu.Gpu;
 import model.component.motherboard.Motherboard;
 import model.component.psu.PowerSupply;
 
-public class ConfigPrinter {
+public abstract class ConfigPrinter {
 
     // EFFECTS: print out the configuration in the console
     protected void printOutConfiguration(Configuration config) {

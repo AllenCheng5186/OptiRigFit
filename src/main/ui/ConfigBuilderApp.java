@@ -1,6 +1,7 @@
 package ui;
 
 
+import model.ConfigSavingQueue;
 import model.Configuration;
 import model.ConfigurationGenerator;
 import model.Purpose;
@@ -21,7 +22,7 @@ public class ConfigBuilderApp extends ConfigPrinter {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    private List<Configuration> savedConfigs;
+    private ConfigSavingQueue savedConfigs;
     private Scanner input;
 
     // EFFECTS: runs the teller application
@@ -72,7 +73,7 @@ public class ConfigBuilderApp extends ConfigPrinter {
     //MODIFIES: this
     //EFFECTS: initialize user input sensor and configuration storage list
     private void init() {
-        savedConfigs = new ArrayList<>();
+        savedConfigs = new ConfigSavingQueue();
         System.out.println("Welcome to use OptiRigFit \n"
                 + "-Java-Driven Personalized PC Hardware Configuration Builder");
         input = new Scanner(System.in);
@@ -91,7 +92,7 @@ public class ConfigBuilderApp extends ConfigPrinter {
 
     //EFFECTS: display user's saved configuration
     private void checkOutSavedConfig() {
-        if (!savedConfigs.isEmpty()) {
+        if (!ConfigSavingQueue.getSavingList().isEmpty()) {
             showSaveConfigsOneByOne();
 //            saveListOfConfigurations();
         } else {
@@ -105,8 +106,8 @@ public class ConfigBuilderApp extends ConfigPrinter {
         boolean keepCheckingNext = true;
         int nextConfigIndex = 0;
         while (keepCheckingNext) {
-            printOutConfiguration(savedConfigs.get(nextConfigIndex));
-            if ((nextConfigIndex + 2) > savedConfigs.size()) {
+            printOutConfiguration(savedConfigs.getConfig(nextConfigIndex));
+            if ((nextConfigIndex + 2) > ConfigSavingQueue.getSavingList().size()) {
                 System.out.println("\n No more saved configurations");
                 break;
             } else {
@@ -178,7 +179,7 @@ public class ConfigBuilderApp extends ConfigPrinter {
             String saveOrNot = input.next();
             saveOrNot = saveOrNot.toLowerCase();
             if (saveOrNot.equals("y")) {
-                savedConfigs.add(usrConfig);
+                ConfigSavingQueue.getSavingList().add(usrConfig);
                 break;
             } else if (saveOrNot.equals("n")) {
                 System.out.println("Configuration does not save!");
@@ -270,7 +271,7 @@ public class ConfigBuilderApp extends ConfigPrinter {
         JSONObject json = new JSONObject();
         try {
             jsonWriter.open();
-            jsonWriter.write(savedConfigs);
+            jsonWriter.write(ConfigSavingQueue.getSavingList());
             jsonWriter.close();
             System.out.println("The printed list of configurations saved to " + JSON_STORE);
         } catch (FileNotFoundException e) {
@@ -286,11 +287,15 @@ public class ConfigBuilderApp extends ConfigPrinter {
             List<Configuration> loadConfigsList = jsonReader.read();
             System.out.println("\nLoaded saved configuration list from " + JSON_STORE);
             for (Configuration config:loadConfigsList) {
-                savedConfigs.add(config);
+                ConfigSavingQueue.getSavingList().add(config);
             }
             System.out.println("The saved configurations has been added to the end of list");
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
+    }
+
+    public static void main(String[] args) {
+        ConfigBuilderApp configBuilderApp = new ConfigBuilderApp();
     }
 }
