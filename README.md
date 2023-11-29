@@ -17,6 +17,7 @@ and achieve optimal PC performance.
 - [Instructions for Grader](#instructions-for-grader)
   1. [Generate required action related to the user story](#1generate-the-required-action-related-to-the-user-story)
   2. [Visual component](#2-visual-component)
+- [Phase 4: Task 3](#phase-4-task-3)
 - [Data Sources](#data-sources)
 
 ## Project Expectation & ToDoList
@@ -28,7 +29,7 @@ and achieve optimal PC performance.
 
 ## Installation & Manual
 Java Desktop App
-- Clone the repo from the Github: https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r.git
+- Clone the repo from the GitHub: https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r.git
 - Open with Intellij
 - Change to package view
 - Navigate to **ui** package under main folder in src
@@ -101,6 +102,17 @@ Java Desktop App
 ### 2. Visual component
 - Relative dictionary: [./data/resource](./data/resource)
 - Github dictionary: [https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r/blob/dcdd99538e6691cc203fa92e40d5f332f1c63355/data/resource](https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r/blob/dcdd99538e6691cc203fa92e40d5f332f1c63355/data/resource)
+
+## Phase 4: Task 3
+For those classes for components, they could be refactored to reduce the redundant lists of components database class to reduce the coupling and increase the cohesion.
+Extract a general abstract class of component with model name, sale price, and base power. Extract a general list of components which has filter methods to filter the compatible 
+component during the configuration generation. All concrete component class extends the abstract class of general components to increase cohesion. Only add unique property to concrete
+component class, like socket for cpu and motherboard, size for motherboard and power supply, etc. This could improve the efficiency of algorithm for figuring out the 
+best fit configuration when this app was deployed on web with high demand of request. 
+
+For configuration saving queue, it could be improved by applying singleton pattern to keep only one instance in both console and Ui class. The saving queue is the only one which store
+the list of configuration. It is modified only when user generate new configurations or load the list of saved configurations to the workspace. Maintain the single instance would be 
+helpful to reduce the coupling. 
 
 ## Data Sources
 - Prices Reference: (CAD$)：
