@@ -114,6 +114,11 @@ For configuration saving queue, it could be improved by applying singleton patte
 the list of configuration. It is modified only when user generate new configurations or load the list of saved configurations to the workspace. Maintain the single instance would be 
 helpful to reduce the coupling. 
 
+## UML diagram
+<p align="left">
+  <img src="data/cpsc210 project uml.jpg" width="700" title="OptiRigFit®">
+</p>
+
 ## Data Sources
 - Prices Reference: (CAD$)：
 - Amazon: https://amazon.ca 

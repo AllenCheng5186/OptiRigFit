@@ -7,17 +7,17 @@
         <key>CFBundleExecutable</key>
         <string>universalJavaApplicationStub</string><!-- relative to Contents/MacOS -->
         <key>CFBundleGetInfoString</key>
-        <string>OptiRigFit -v1.0.1</string>
+        <string>OptiRigFit -v1.1.1</string>
         <key>CFBundleIconFile</key>
         <string>OptiRigFit</string><!-- relative to Contents/Resources -->
         <key>CFBundleInfoDictionaryVersion</key>
-        <string>1.0.1</string>
+        <string>1.1.1</string>
         <key>CFBundleName</key>
         <string>OptiRigFit</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleVersion</key>
-        <string> 1.0.1 </string>        
+        <string> 1.1.1 </string>        
         <key>JVMMainClassName</key>
         <string>ui.ConfigBuilderAppUI</string>
 </dict>
