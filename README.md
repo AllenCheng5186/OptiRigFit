@@ -17,6 +17,7 @@ and achieve optimal PC performance.
 - [Instructions for Grader](#instructions-for-grader)
   1. [Generate required action related to the user story](#1generate-the-required-action-related-to-the-user-story)
   2. [Visual component](#2-visual-component)
+- [Phase 4 Task 2](#phase-4-task-2)
 - [Phase 4: Task 3](#phase-4-task-3)
 - [Data Sources](#data-sources)
 
@@ -102,6 +103,33 @@ Java Desktop App
 ### 2. Visual component
 - Relative dictionary: [./data/resource](./data/resource)
 - Github dictionary: [https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r/blob/dcdd99538e6691cc203fa92e40d5f332f1c63355/data/resource](https://github.students.cs.ubc.ca/CPSC210-2023W-T1/project_h9k6r/blob/dcdd99538e6691cc203fa92e40d5f332f1c63355/data/resource)
+
+## Phase 4 Task 2
+Fri Dec 01 10:47:48 PST 2023 configuration #1 added to queue
+Fri Dec 01 10:47:48 PST 2023 The added configuration has cpu of R7-7700X,
+budget for ram 4000.0,
+motherboard of Asus ROG STRIX X670E-I GAMING WIFI,
+gpu of Radeon RX 6950 XT
+power supply of EVGA 650 N1
+total price of 6597
+Fri Dec 01 10:47:54 PST 2023 New Config generation start!
+Fri Dec 01 10:47:54 PST 2023 Fail to find fitted cpu!
+Fri Dec 01 10:48:07 PST 2023 New Config generation start!
+Fri Dec 01 10:48:07 PST 2023 Fail to find fitted cpu!
+Fri Dec 01 10:49:07 PST 2023 New Config generation start!
+Fri Dec 01 10:49:07 PST 2023 Fitted cpu found: i5-13600K
+Fri Dec 01 10:49:07 PST 2023 Fitted motherboard found: Asus ROG STRIX Z690-E GAMING WIFI
+Fri Dec 01 10:49:07 PST 2023 Fitted GPU found: Radeon RX 7800 XT
+Fri Dec 01 10:49:07 PST 2023 Fitted power supply found: Cooler Master XG750 Plus
+Fri Dec 01 10:49:07 PST 2023 New configuration is generated successfully!
+Fri Dec 01 10:49:09 PST 2023 configuration #2 added to queue
+Fri Dec 01 10:49:09 PST 2023 The added configuration has cpu of i5-13600K,
+budget for ram 170.0,
+motherboard of Asus ROG STRIX Z690-E GAMING WIFI,
+gpu of Radeon RX 7800 XT
+power supply of Cooler Master XG750 Plus
+total price of 1982
+
 
 ## Phase 4: Task 3
 For those classes for components, they could be refactored to reduce the redundant lists of components database class to reduce the coupling and increase the cohesion.
