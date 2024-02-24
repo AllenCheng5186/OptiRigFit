@@ -16,6 +16,7 @@ import java.util.Objects;
 
 /**
  * Represents application's main window frame.
+ * test move
  */
 public class ConfigBuilderAppUI extends JFrame {
     public static final int WIDTH = 800;
